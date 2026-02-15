@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Host: sira-452b7.web.app
+
+# Sitemap Location
+Sitemap: https://sira-452b7.web.app/sitemap.xml

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Merge PDF | SiRa Convert</title>
+<meta name="description" content="Merge multiple PDF files into one output document with private browser-side processing and quick export.">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+<meta name="keywords" content="merge PDF, combine PDF files, PDF merger online, private PDF merge tool">
+<meta name="author" content="SiRa Convert">
+<meta name="theme-color" content="#0f6cff">
+<link rel="canonical" href="https://sira-452b7.web.app/merge-pdf.html">
+<meta property="og:title" content="Merge PDF | SiRa Convert">
+<meta property="og:description" content="Combine PDFs securely in your browser with queue controls and instant download.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sira-452b7.web.app/merge-pdf.html">
+<meta property="og:site_name" content="SiRa Convert">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sira-452b7.web.app/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Merge PDF | SiRa Convert">
+<meta name="twitter:description" content="Merge PDFs quickly and securely without uploads.">
+<meta name="twitter:image" content="https://sira-452b7.web.app/logo.png">
+<meta name="twitter:site" content="@sira_convert">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&family=Outfit:wght@600;900&display=swap" rel="stylesheet" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SiRa Convert Merge PDF",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web Browser",
+  "url": "https://sira-452b7.web.app/merge-pdf.html",
+  "description": "Merge multiple PDF files into one high-quality output in your browser with private processing.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<style>
+:root{
+    --bg: #050a14;
+    --surface: rgba(14, 23, 39, 0.72);
+    --accent: #00b8ff;
+    --border: rgba(126, 157, 198, 0.28);
+    --text-main: #e9f1ff;
+    --text-dim: #9bb0cc;
+    --glass: rgba(9, 15, 29, 0.78);
+    --shadow: 0 28px 70px rgba(0, 6, 16, 0.62);
+    --card-hover: rgba(18, 31, 52, 0.88);
+    --tool-bg:
+        radial-gradient(1300px 700px at -8% -18%, rgba(0,184,255,.27), transparent 60%),
+        radial-gradient(900px 600px at 110% 4%, rgba(37,99,235,.2), transparent 62%),
+        radial-gradient(700px 520px at 50% 110%, rgba(6,182,212,.16), transparent 60%),
+        linear-gradient(180deg, #02040b 0%, #040914 44%, #04060f 100%);
+    --tool-panel: rgba(7, 13, 25, 0.75);
+    --tool-surface: rgba(16, 29, 47, 0.75);
+    --tool-surface-soft: rgba(13, 24, 40, 0.92);
+    --tool-surface-deep: rgba(10, 18, 31, 0.92);
+    --tool-border: rgba(134, 164, 202, 0.24);
+    --tool-border-strong: rgba(95, 192, 255, 0.5);
+    --tool-text-soft: #c5d5ec;
+    --tool-text-muted: #89a0bc;
+    --tool-input-bg: rgba(5, 14, 26, 0.9);
+    --tool-pill-bg: rgba(11, 23, 39, 0.9);
+    --tool-pill-border: rgba(109, 174, 224, 0.35);
+    --tool-progress-track: rgba(95, 123, 163, 0.3);
+}
+
+[data-theme="light"]{
+    --bg: #edf4ff;
+    --surface: rgba(255, 255, 255, 0.84);
+    --accent: #0f6cff;
+    --border: rgba(15, 108, 255, 0.2);
+    --text-main: #0f2340;
+    --text-dim: #5f7390;
+    --glass: rgba(255, 255, 255, 0.86);
+    --shadow: 0 22px 56px rgba(17, 61, 135, 0.15);
+    --card-hover: #eef5ff;
+    --tool-bg:
+        radial-gradient(1200px 620px at -10% -15%, rgba(56,189,248,.18), transparent 62%),
+        radial-gradient(900px 550px at 110% 2%, rgba(99,102,241,.13), transparent 62%),
+        radial-gradient(700px 420px at 48% 115%, rgba(14,165,233,.1), transparent 65%),
+        linear-gradient(180deg, #f6f9ff 0%, #f2f7ff 46%, #edf4ff 100%);
+    --tool-panel: rgba(255, 255, 255, 0.88);
+    --tool-surface: rgba(255, 255, 255, 0.9);
+    --tool-surface-soft: rgba(255, 255, 255, 0.96);
+    --tool-surface-deep: rgba(221, 237, 255, 0.86);
+    --tool-border: rgba(32, 86, 168, 0.24);
+    --tool-border-strong: rgba(10, 129, 246, 0.58);
+    --tool-text-soft: #163660;
+    --tool-text-muted: #47668f;
+    --tool-input-bg: rgba(255, 255, 255, 0.98);
+    --tool-pill-bg: rgba(245, 250, 255, 0.9);
+    --tool-pill-border: rgba(41, 114, 211, 0.26);
+    --tool-progress-track: rgba(118, 148, 186, 0.35);
+}
+
+body{ position: relative; background: var(--tool-bg); color: var(--text-main); }
+body::before, body::after{ content:""; position:fixed; border-radius:999px; filter:blur(56px); opacity:.4; pointer-events:none; z-index:0; }
+body::before{ width:260px; height:260px; left:-70px; top:18%; background:rgba(56,189,248,.35); animation:floatPulse 7s ease-in-out infinite alternate; }
+body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(37,99,235,.28); animation:floatPulse 8s ease-in-out infinite alternate-reverse; }
+
+.main-header{ padding:14px 4%; position:sticky; top:0; z-index:1000; }
+.header-glass{ max-width:1240px; margin:0 auto; padding:11px 16px; border-radius:20px; border:1px solid var(--tool-border); background:linear-gradient(145deg, rgba(17,30,50,.85), rgba(8,17,30,.86)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:0 14px 36px rgba(0,10,28,.4); }
+[data-theme="light"] .header-glass{ background:linear-gradient(145deg, rgba(255,255,255,.92), rgba(246,251,255,.9)); }
+.brand{ gap:10px; }
+.brand-name{ font-size:1rem; font-weight:800; letter-spacing:.02em; }
+.accent{ background:linear-gradient(120deg, #0ea5e9, #22d3ee 40%, #38bdf8 70%, #93c5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.nav-right{ gap:12px; }
+.theme-toggle, .profile-box{ width:40px; height:40px; border-radius:12px; border:1px solid var(--tool-border); background:linear-gradient(145deg, rgba(18,31,52,.9), rgba(9,20,35,.9)); color:var(--text-main); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+[data-theme="light"] .theme-toggle, [data-theme="light"] .profile-box{ background:linear-gradient(145deg, #ffffff, #edf5ff); }
+.theme-toggle:hover, .profile-box:hover{ border-color:var(--tool-border-strong); transform:translateY(-1px); }
+
+.settings-menu{ border:1px solid var(--tool-border); background:linear-gradient(165deg, rgba(15,28,46,.95), rgba(8,18,34,.95)); border-radius:14px; box-shadow:0 18px 34px rgba(0,8,22,.4); }
+[data-theme="light"] .settings-menu{ background:linear-gradient(165deg, #ffffff, #f2f8ff); }
+.user-menu-top{ padding:5px 5px 12px; border-bottom:1px solid var(--tool-border); margin-bottom:10px; }
+.user-name{ display:block; font-weight:800; font-size:.88rem; }
+.user-mode{ color:var(--tool-text-muted); font-size:.75rem; }
+.user-menu-home{ width:100%; padding:10px; background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.35); border-radius:10px; color:var(--accent); font-weight:700; cursor:pointer; }
+
+.tool-wrapper{ max-width:1240px; margin:auto; padding:30px 18px 76px; width:100%; position:relative; z-index:1; }
+.pro-card{ background:linear-gradient(165deg, rgba(255,255,255,.03), transparent 35%), var(--tool-panel); border:1px solid var(--tool-border); border-radius:28px; padding:28px; box-shadow:var(--shadow); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); animation:liftIn .5s ease; }
+.tool-head{ margin-bottom:24px; }
+.tool-kicker{ display:inline-flex; align-items:center; gap:8px; margin-bottom:10px; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; font-weight:800; color:#d6ebff; border:1px solid var(--tool-pill-border); background:var(--tool-pill-bg); border-radius:999px; padding:6px 12px; }
+[data-theme="light"] .tool-kicker{ color:#215792; }
+.tool-head h1{ margin-bottom:6px; line-height:1.05; }
+.tool-head p{ color:var(--tool-text-muted); margin-top:8px; max-width:860px; font-size:.95rem; }
+
+.layout-grid{ display:grid; gap:22px; grid-template-columns:1.1fr .9fr; }
+.drop-zone{ border:1px solid var(--tool-border-strong); border-radius:22px; background:radial-gradient(500px 200px at 10% -18%, rgba(56,189,248,.2), transparent 72%), linear-gradient(155deg, var(--tool-surface), var(--tool-surface-deep)); padding:34px 24px; text-align:center; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(56,189,248,.12); }
+.drop-zone:hover, .drop-zone.dragging{ transform:translateY(-2px); border-color:#22d3ee; box-shadow:0 18px 40px rgba(8,53,102,.3), inset 0 0 0 1px rgba(56,189,248,.25); }
+.drop-zone h2{ font-family:Outfit, sans-serif; margin-bottom:8px; }
+.drop-zone p{ color:var(--tool-text-muted); margin-bottom:12px; }
+.hint{ display:inline-block; font-size:.8rem; padding:6px 12px; border-radius:999px; color:#d9f4ff; background:rgba(14,165,233,.15); border:1px solid rgba(34,211,238,.34); }
+.upload-actions{ margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.file-meta{ margin-top:14px; display:none; gap:10px; flex-wrap:wrap; }
+.pill{ font-size:.8rem; color:var(--tool-text-soft); background:var(--tool-pill-bg); border:1px solid var(--tool-pill-border); border-radius:999px; padding:7px 12px; }
+
+.side-column{ position:sticky; top:95px; align-self:start; display:grid; gap:14px; }
+.action-panel{ background:var(--tool-surface); border:1px solid var(--tool-border); border-radius:18px; padding:12px; box-shadow:0 12px 28px rgba(0,9,22,.28); }
+.action-head{ margin:0 0 10px; font-size:.82rem; color:var(--tool-text-muted); font-weight:700; }
+.action-grid{ display:grid; grid-template-columns:1fr; gap:8px; }
+.side-column .btn{ width:100%; }
+
+.settings{ background:var(--tool-surface); border:1px solid var(--tool-border); border-radius:20px; overflow:hidden; box-shadow:0 16px 32px rgba(0,9,22,.34); }
+.settings-summary{ list-style:none; cursor:pointer; padding:15px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:linear-gradient(145deg, rgba(56,189,248,.18), rgba(37,99,235,.1)); }
+.settings-summary::-webkit-details-marker{ display:none; }
+.settings-summary h3{ font-family:Outfit, sans-serif; font-size:1.05rem; margin:0; }
+.settings-state{ font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--tool-text-soft); background:var(--tool-pill-bg); border:1px solid var(--tool-pill-border); border-radius:999px; padding:5px 10px; }
+.settings[open] .settings-summary{ border-bottom:1px solid var(--tool-border); }
+.settings-body{ padding:14px 18px 18px; display:grid; gap:8px; }
+.field{ margin-bottom:12px; }
+.field label{ font-size:.88rem; color:var(--tool-text-soft); display:flex; justify-content:space-between; gap:12px; margin-bottom:6px; }
+.field select, .field input[type="text"]{ width:100%; border:1px solid var(--tool-border); background:var(--tool-input-bg); color:var(--text-main); border-radius:10px; padding:9px 12px; }
+.field input[type="checkbox"]{ width:16px; height:16px; accent-color:#38bdf8; }
+.check-row{ display:flex; align-items:center; gap:8px; color:var(--tool-text-soft); font-size:.85rem; }
+
+.btn{ border:0; border-radius:12px; padding:12px 18px; font-weight:700; font-size:.84rem; cursor:pointer; letter-spacing:.01em; }
+.btn-primary{ color:#fff; background:linear-gradient(130deg, #0ea5e9, #2563eb); box-shadow:0 8px 22px rgba(14,165,233,.3); }
+.btn-primary:disabled{ cursor:not-allowed; opacity:.45; box-shadow:none; }
+.btn-ghost{ background:var(--tool-surface-soft); color:var(--text-main); border:1px solid var(--tool-border); }
+.btn-ghost:hover{ border-color:var(--tool-border-strong); background:var(--card-hover); }
+
+.status{ margin-top:14px; color:var(--tool-text-muted); font-size:.9rem; }
+.progress-wrap{ margin-top:9px; height:10px; border-radius:999px; background:var(--tool-progress-track); overflow:hidden; }
+.progress-bar{ width:0%; height:100%; border-radius:inherit; background:linear-gradient(90deg, #38bdf8, #2563eb 55%, #60a5fa); }
+
+.preview-details{ margin-top:24px; border:1px solid var(--tool-border); border-radius:20px; overflow:hidden; background:var(--tool-surface); box-shadow:0 14px 28px rgba(0,10,22,.28); }
+.preview-summary{ list-style:none; display:flex; justify-content:space-between; align-items:center; gap:12px; cursor:pointer; padding:14px 16px; background:linear-gradient(145deg, rgba(56,189,248,.18), rgba(37,99,235,.1)); }
+.preview-summary::-webkit-details-marker{ display:none; }
+.preview-summary h3{ margin:0; font-family:Outfit, sans-serif; font-size:1.05rem; }
+.preview-body{ padding:16px; }
+.result-head{ margin-top:0; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; }
+.result-head p{ color:var(--tool-text-muted); }
+.result-panel{ margin-top:10px; display:grid; gap:16px; grid-template-columns:1.1fr .9fr; }
+.preview-stage{ border:1px solid var(--tool-border); border-radius:18px; background:var(--tool-surface-soft); min-height:320px; display:grid; grid-template-rows:auto 1fr; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(56,189,248,.1); }
+.preview-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-bottom:1px solid var(--tool-border); background:linear-gradient(140deg, rgba(56,189,248,.16), rgba(37,99,235,.06)); }
+.preview-title{ margin:0; font-size:.94rem; color:var(--text-main); font-weight:700; }
+.preview-meta{ margin:3px 0 0; font-size:.78rem; color:var(--tool-text-muted); }
+.preview-nav{ display:flex; align-items:center; gap:8px; }
+.preview-nav button{ border:1px solid var(--tool-border); background:var(--tool-pill-bg); color:var(--text-main); border-radius:10px; font-size:.76rem; font-weight:700; padding:8px 10px; cursor:pointer; }
+.preview-nav button:disabled{ opacity:.45; cursor:not-allowed; }
+.preview-canvas{ display:flex; align-items:center; justify-content:center; padding:14px; background:linear-gradient(180deg, rgba(0,0,0,.09), transparent 35%), radial-gradient(500px 220px at 50% -10%, rgba(56,189,248,.1), transparent 72%), var(--tool-surface-soft); }
+.pdf-file-card{ border:1px solid var(--tool-border); border-radius:14px; background:linear-gradient(155deg, var(--tool-surface), var(--tool-surface-deep)); padding:16px; min-width:min(100%, 360px); text-align:center; }
+.pdf-icon{ font-size:2rem; margin-bottom:8px; }
+.preview-empty{ color:var(--tool-text-muted); font-size:.9rem; text-align:center; }
+
+.gallery-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.gallery-head h3{ margin:0; font-family:Outfit, sans-serif; font-size:1rem; }
+.gallery-count{ font-size:.76rem; color:var(--tool-text-soft); background:var(--tool-pill-bg); border:1px solid var(--tool-pill-border); border-radius:999px; padding:5px 10px; }
+.gallery{ display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(165px, 1fr)); max-height:460px; overflow:auto; padding-right:4px; }
+.thumb{ background:linear-gradient(160deg, var(--tool-surface-soft), var(--tool-surface-deep)); border:1px solid var(--tool-border); border-radius:14px; padding:10px; box-shadow:0 10px 22px rgba(4,14,32,.2); position:relative; }
+.thumb.active{ border-color:#22d3ee; box-shadow:0 0 0 2px rgba(56,189,248,.28); }
+.thumb.drag-over{ border-color:#38bdf8; box-shadow:0 0 0 2px rgba(56,189,248,.28); }
+.thumb .caption{ margin:4px 2px 4px; font-size:.8rem; color:var(--text-main); font-weight:700; }
+.thumb .meta{ margin:0 2px 8px; font-size:.72rem; color:var(--tool-text-muted); }
+.thumb .remove{ position:absolute; top:6px; right:6px; width:24px; height:24px; border-radius:999px; border:1px solid rgba(248,113,113,.55); background:rgba(127,29,29,.65); color:#fff; font-weight:900; cursor:pointer; }
+
+.cross-tools{ max-width:1240px; margin:0 auto 14px; padding:0 18px 8px; }
+.cross-tools-grid{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+.cross-tool-btn{ display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; border:1px solid var(--tool-border-strong); border-radius:14px; padding:14px 16px; font-weight:800; font-size:.88rem; color:var(--text-main); background:radial-gradient(220px 80px at 15% -20%, rgba(56,189,248,.22), transparent 70%), linear-gradient(150deg, var(--tool-surface), var(--tool-surface-deep)); box-shadow:0 12px 24px rgba(5,18,38,.2); text-align:center; }
+.cross-tool-btn:hover{ border-color:#22d3ee; transform:translateY(-1px); }
+.tool-mini-logo{ width:22px; height:22px; border-radius:7px; object-fit:cover; border:1px solid rgba(255,255,255,.45); }
+.cross-tools-note{ margin-top:12px; border:1px solid var(--tool-border); border-radius:16px; padding:16px; background:linear-gradient(150deg, var(--tool-surface), var(--tool-surface-deep)); }
+.cross-tools-note h3{ margin:0 0 8px; font-family:Outfit, sans-serif; font-size:1.08rem; }
+.cross-tools-note p{ margin:0; color:var(--tool-text-muted); font-size:.9rem; }
+.feature-grid{ margin-top:12px; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
+.feature-item{ border:1px solid var(--tool-pill-border); border-radius:12px; background:var(--tool-pill-bg); padding:10px; }
+.feature-item strong{ display:block; font-size:.82rem; color:var(--tool-text-soft); margin-bottom:3px; }
+.feature-item span{ font-size:.75rem; color:var(--tool-text-muted); }
+
+.ultra-footer{ margin-top:auto; padding:60px 6% 24px; border-top:1px solid var(--tool-border); background:radial-gradient(circle at 14% 24%, rgba(56,189,248,.2), transparent 42%), radial-gradient(circle at 84% 80%, rgba(37,99,235,.16), transparent 40%), linear-gradient(180deg, rgba(4,11,21,.8), rgba(3,9,18,.94)); }
+[data-theme="light"] .ultra-footer{ background:radial-gradient(circle at 14% 24%, rgba(56,189,248,.12), transparent 42%), radial-gradient(circle at 84% 80%, rgba(37,99,235,.12), transparent 40%), linear-gradient(180deg, rgba(247,251,255,.96), rgba(239,247,255,.98)); }
+.footer-grid{ max-width:1240px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr 1.25fr; gap:30px; }
+.f-logo{ font-size:2.2rem; line-height:1; margin-bottom:8px; background:linear-gradient(120deg, #22d3ee 0%, #0ea5e9 40%, #2563eb 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.f-tag{ font-size:.92rem; color:var(--tool-text-soft); }
+.f-owner{ margin-top:8px; font-size:.78rem; color:var(--tool-text-muted); }
+.f-col h4,.f-contact-card h4{ font-size:.95rem; margin-bottom:10px; color:var(--tool-text-soft); }
+.f-col a{ display:block; text-decoration:none; color:var(--tool-text-muted); margin-bottom:8px; font-size:.87rem; }
+.f-col a:hover{ color:var(--accent); }
+.f-contact-card{ padding:16px; border-radius:16px; background:var(--glass); border:1px solid var(--tool-border); }
+.contact-btn{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; font-size:.84rem; font-weight:700; text-decoration:none; }
+.contact-btn svg{ width:18px; height:18px; }
+.f-bottom{ max-width:1240px; margin:34px auto 0; font-size:.77rem; color:var(--tool-text-muted); text-align:center; }
+.install-footer-panel{ max-width:1240px; margin:20px auto 0; padding:14px 16px; border:1px solid var(--tool-border); border-radius:14px; background:var(--glass); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.install-footer-text{ margin:0; color:var(--tool-text-soft); font-size:.88rem; }
+.install-footer-btn{ border:1px solid var(--tool-border-strong); border-radius:12px; background:linear-gradient(130deg, #0ea5e9, #2563eb); color:#fff; font-weight:800; font-size:.78rem; letter-spacing:.02em; padding:10px 14px; cursor:pointer; }
+.install-notice{ position:fixed; right:20px; bottom:20px; width:min(360px, calc(100vw - 32px)); border:1px solid var(--tool-border); border-radius:14px; background:var(--tool-surface-soft); box-shadow:0 18px 40px rgba(0,0,0,.35); padding:12px; z-index:10000; }
+.install-notice strong{ display:block; margin-bottom:4px; }
+.install-notice p{ margin:0; font-size:.84rem; color:var(--tool-text-muted); }
+.install-notice-actions{ margin-top:10px; display:flex; gap:8px; }
+.install-action-btn,.install-close-btn{ border:1px solid var(--tool-border); border-radius:10px; padding:8px 10px; font-size:.78rem; font-weight:700; cursor:pointer; }
+.install-action-btn{ color:#fff; border-color:transparent; background:linear-gradient(130deg, #0ea5e9, #2563eb); }
+.install-close-btn{ color:var(--text-main); background:var(--tool-surface); }
+
+.toast{ position:fixed; right:20px; bottom:20px; max-width:360px; padding:12px 14px; border-radius:12px; font-size:.9rem; font-weight:600; color:#fff; box-shadow:0 18px 40px rgba(0,0,0,.35); transform:translateY(20px); opacity:0; pointer-events:none; transition:.25s ease; z-index:9999; }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast.info{ background:#2563eb; } .toast.success{ background:#059669; } .toast.warn{ background:#d97706; } .toast.error{ background:#dc2626; }
+
+[data-theme="light"]{
+    --tool-panel: rgba(255, 255, 255, 0.94);
+    --tool-surface: rgba(255, 255, 255, 0.95);
+    --tool-surface-soft: rgba(255, 255, 255, 0.99);
+    --tool-surface-deep: rgba(232, 243, 255, 0.94);
+    --tool-border: rgba(33, 86, 168, 0.24);
+    --tool-border-strong: rgba(12, 128, 238, 0.62);
+    --tool-text-soft: #123b67;
+    --tool-text-muted: #3a5f88;
+    --tool-pill-bg: rgba(246, 251, 255, 0.96);
+    --tool-pill-border: rgba(33, 108, 205, 0.28);
+}
+[data-theme="light"] body::before,
+[data-theme="light"] body::after{ opacity:.28; }
+[data-theme="light"] .pro-card{ box-shadow:0 20px 46px rgba(36, 91, 170, 0.16); }
+[data-theme="light"] .drop-zone{
+    background:radial-gradient(520px 220px at 10% -18%, rgba(56,189,248,.24), transparent 72%), linear-gradient(160deg, #ffffff, #e8f2ff);
+    box-shadow:inset 0 0 0 1px rgba(56,189,248,.18), 0 14px 30px rgba(34, 92, 173, 0.12);
+}
+[data-theme="light"] .drop-zone:hover,
+[data-theme="light"] .drop-zone.dragging{ box-shadow:0 18px 34px rgba(30, 90, 173, 0.2), inset 0 0 0 1px rgba(56,189,248,.3); }
+[data-theme="light"] .hint{ color:#0f4f88; background:rgba(186, 230, 253, 0.58); border-color:rgba(33, 129, 223, 0.45); }
+[data-theme="light"] .settings-summary,
+[data-theme="light"] .preview-summary{ background:linear-gradient(145deg, rgba(56,189,248,.22), rgba(37,99,235,.14)); }
+[data-theme="light"] .btn-primary{ background:linear-gradient(120deg, #0284c7, #2563eb); box-shadow:0 10px 22px rgba(37,99,235,.3); }
+[data-theme="light"] .btn-ghost{ background:linear-gradient(145deg, #ffffff, #eff6ff); }
+[data-theme="light"] .btn-ghost:hover{ background:linear-gradient(145deg, #f9fcff, #e7f1ff); }
+[data-theme="light"] .preview-stage{ box-shadow:inset 0 0 0 1px rgba(56,189,248,.13), 0 14px 26px rgba(32, 82, 160, 0.1); }
+[data-theme="light"] .preview-canvas{
+    background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(241,247,255,.98) 54%), radial-gradient(520px 240px at 50% -10%, rgba(56,189,248,.14), transparent 72%), #f9fcff;
+}
+[data-theme="light"] .preview-nav button{ background:#ffffff; }
+[data-theme="light"] .thumb{ box-shadow:0 10px 20px rgba(36, 90, 168, 0.14); }
+[data-theme="light"] .thumb .remove{ background:rgba(220, 38, 38, 0.92); border-color:rgba(239, 68, 68, 0.65); }
+[data-theme="light"] .cross-tool-btn{ background:radial-gradient(220px 90px at 15% -20%, rgba(56,189,248,.3), transparent 70%), linear-gradient(150deg, #ffffff, #dbeeff); box-shadow:0 12px 24px rgba(37,99,235,.16); }
+[data-theme="light"] .cross-tools-note{ background:linear-gradient(150deg, #ffffff, #e9f3ff); }
+[data-theme="light"] .feature-item{ background:#f7fbff; }
+[data-theme="light"] .tool-mini-logo{ border-color:rgba(30, 86, 168, 0.4); }
+[data-theme="light"] .action-panel,
+[data-theme="light"] .settings,
+[data-theme="light"] .preview-details{ box-shadow:0 14px 28px rgba(33,84,165,.16); }
+
+@keyframes liftIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+@keyframes floatPulse{ from{transform:translateY(0) scale(1);} to{transform:translateY(-20px) scale(1.08);} }
+
+@media (max-width:980px){
+    .layout-grid, .result-panel{ grid-template-columns:1fr; }
+    .gallery{ max-height:none; }
+    .side-column{ position:static; }
+    .action-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+}
+
+@media (max-width:640px){
+    .main-header{ padding:12px 12px; }
+    .header-glass{ border-radius:16px; padding:9px 12px; }
+    .brand-name{ font-size:.92rem; }
+    .pro-card{ padding:20px 14px; border-radius:20px; }
+    .drop-zone{ padding:28px 15px; }
+    .action-grid, .cross-tools-grid, .feature-grid{ grid-template-columns:1fr; }
+    .btn{ padding:11px 14px; }
+    .toast{ left:16px; right:16px; max-width:none; }
+    .preview-toolbar{ flex-direction:column; align-items:flex-start; }
+    .footer-grid{ grid-template-columns:1fr; gap:24px; }
+    .install-footer-panel{ flex-direction:column; text-align:center; }
+    .install-footer-btn{ width:100%; }
+}
+</style>
+</head>
+<body>
+<header class="main-header">
+    <nav class="header-glass">
+        <a href="index.html" class="brand" aria-label="Go to homepage">
+            <img src="logo.png" class="logo" alt="SiRa" />
+            <span class="brand-name">SiRa <span class="accent">Convert</span></span>
+        </a>
+
+        <div class="nav-right">
+            <button id="themeToggleBtn" class="theme-toggle" onclick="toggleThemeIcon()" title="Theme" aria-label="Toggle color theme">🌙</button>
+            <button id="profileBox" type="button" class="profile-box" onclick="handleProfileClick()" aria-label="Open profile menu">
+                <div id="profileDisplay">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+            </button>
+
+            <div id="userMenu" class="settings-menu">
+                <div class="user-menu-top">
+                    <span class="user-name">Guest User</span>
+                    <small class="user-mode">Tool-only mode</small>
+                </div>
+                <button onclick="location.href='index.html'" class="user-menu-home">Go Home</button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="tool-wrapper">
+    <section class="pro-card">
+        <div class="tool-head">
+            <span class="tool-kicker">Vision Engine · AI-ready Workflow</span>
+            <h1>Merge <span class="accent">PDF</span></h1>
+            <p>Combine multiple PDFs into one document with secure browser-side merging, preview queue, and instant export.</p>
+        </div>
+
+        <div class="layout-grid">
+            <div>
+                <div id="dropZone" class="drop-zone">
+                    <h2>Upload or Paste PDFs</h2>
+                    <p>Drag and drop here, click to browse, or paste with Ctrl+V</p>
+                    <span class="hint">Use 2 or more PDFs. Drag queue cards to reorder before merging.</span>
+                    <input type="file" id="pdfInput" hidden accept="application/pdf,.pdf" multiple />
+                    <div class="upload-actions">
+                        <button id="uploadBtn" type="button" class="btn btn-primary">Upload PDFs</button>
+                        <button id="pasteBtn" type="button" class="btn btn-ghost">Paste PDF</button>
+                    </div>
+                </div>
+
+                <div id="fileMeta" class="file-meta"></div>
+
+                <div class="status" id="statusText">Waiting for PDF upload/paste.</div>
+                <div class="progress-wrap" aria-hidden="true">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <aside class="side-column">
+                <div class="action-panel">
+                    <p class="action-head">Quick Actions</p>
+                    <div class="action-grid">
+                        <button id="mergeBtn" class="btn btn-primary" disabled>Merge PDFs</button>
+                        <button id="downloadPdfBtn" class="btn btn-ghost" disabled>Download Merged PDF</button>
+                        <button id="sharePdfBtn" class="btn btn-ghost" disabled>Share Merged PDF</button>
+                        <button id="clearBtn" class="btn btn-ghost">Clear</button>
+                    </div>
+                </div>
+
+                <details class="settings" id="controlsPanel">
+                    <summary class="settings-summary">
+                        <h3>Conversion Controls</h3>
+                        <span id="controlsState" class="settings-state">Closed</span>
+                    </summary>
+                    <div class="settings-body">
+                        <div class="field">
+                            <label for="sortInput">
+                                <span>Sort files</span>
+                                <strong id="sortValue">As uploaded</strong>
+                            </label>
+                            <select id="sortInput">
+                                <option value="uploaded">As uploaded</option>
+                                <option value="name-asc">Name A → Z</option>
+                                <option value="name-desc">Name Z → A</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="outputNameInput">
+                                <span>Output filename</span>
+                                <strong>.pdf auto-added</strong>
+                            </label>
+                            <input type="text" id="outputNameInput" value="sira-merged-pdf" placeholder="Enter output name" />
+                        </div>
+
+                        <label class="check-row">
+                            <input type="checkbox" id="skipLockedInput" />
+                            <span>Skip password-protected/invalid files</span>
+                        </label>
+                    </div>
+                </details>
+            </aside>
+        </div>
+
+        <details class="preview-details" id="previewPanel">
+            <summary class="preview-summary">
+                <h3>PDF Queue Preview</h3>
+                <span id="previewState" class="settings-state">Closed</span>
+            </summary>
+            <div class="preview-body">
+                <div class="result-head">
+                    <p id="resultInfo">No PDF files selected yet.</p>
+                </div>
+                <div class="result-panel">
+                    <div id="previewStage" class="preview-stage">
+                        <div class="preview-toolbar">
+                            <div>
+                                <p id="previewTitle" class="preview-title">No file selected</p>
+                                <p id="previewMeta" class="preview-meta">Upload PDFs to inspect queue details.</p>
+                            </div>
+                            <div class="preview-nav">
+                                <button id="prevPreviewBtn" type="button" disabled>Prev</button>
+                                <button id="nextPreviewBtn" type="button" disabled>Next</button>
+                            </div>
+                        </div>
+                        <div class="preview-canvas" id="previewCanvas">
+                            <p id="previewEmpty" class="preview-empty">Your selected PDF file details will appear here.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="gallery-head">
+                            <h3>PDF Queue</h3>
+                            <span id="galleryCount" class="gallery-count">0 files</span>
+                        </div>
+                        <div id="gallery" class="gallery"></div>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </section>
+</main>
+
+<section class="cross-tools" aria-label="Other tools">
+    <div class="cross-tools-grid">
+        <a class="cross-tool-btn" href="jpg-to-pdf.html"><img src="logo.png" class="tool-mini-logo" alt="SiRa logo" /> JPG to PDF</a>
+        <a class="cross-tool-btn" href="pdf-to-jpg.html"><img src="logo.png" class="tool-mini-logo" alt="SiRa logo" /> PDF to JPG</a>
+    </div>
+    <div class="cross-tools-note">
+        <h3>About This Page</h3>
+        <p>This web app merges multiple PDF files into one output document with queue controls, sorting, and one-click export.</p>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <strong>Accurate Merge</strong>
+                <span>Copies all pages from each selected file in your chosen order.</span>
+            </div>
+            <div class="feature-item">
+                <strong>Queue Controls</strong>
+                <span>Inspect files, remove entries, and set naming/sort preferences.</span>
+            </div>
+            <div class="feature-item">
+                <strong>Fast Output</strong>
+                <span>Download or share the final merged PDF right after processing.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="ultra-footer">
+    <div class="footer-grid">
+        <div class="f-brand">
+            <h2 class="f-logo">SiRa</h2>
+            <p class="f-tag">Next-Gen Document Toolkit</p>
+            <p class="f-owner">Crafted by <strong>Raghav Pratap</strong></p>
+        </div>
+
+        <div class="f-col">
+            <h4>Tools</h4>
+            <a href="jpg-to-pdf.html">JPG → PDF</a>
+            <a href="pdf-to-jpg.html">PDF → JPG</a>
+            <a href="merge-pdf.html">Merge PDF</a>
+        </div>
+
+        <div class="f-col">
+            <h4>Company</h4>
+            <a href="about.html">About</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a href="blog.html">Blog</a>
+        </div>
+
+        <div class="f-contact-card">
+            <h4>Contact Me</h4>
+            <a class="contact-btn gmail" href="mailto:sirahelppoint@gmail.com">
+                <svg viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12 13.5L0 6v12h24V6z"></path>
+                    <path fill="#FBBC05" d="M12 13.5L24 6V0H0v6z"></path>
+                </svg>
+                Email Support
+            </a>
+
+            <a class="contact-btn whatsapp" target="_blank" rel="noopener noreferrer" href="https://whatsapp.com/channel/0029VbC1m6o77qVLGOjUAj1H">
+                <svg viewBox="0 0 24 24">
+                    <path fill="white" d="M20.5 3.5A11 11 0 0 0 3.3 17.6L2 22l4.6-1.2A11 11 0 1 0 20.5 3.5zM12 20a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.7.7-2.6-.2-.3A8 8 0 1 1 12 20z"></path>
+                </svg>
+                WhatsApp Channel
+            </a>
+        </div>
+    </div>
+
+    <div id="installFooterPanel" class="install-footer-panel" hidden>
+        <p class="install-footer-text">Get faster launch and offline support. Install SiRa app.</p>
+        <button id="installAppBtn" type="button" class="install-footer-btn" aria-label="Install app">Install App</button>
+    </div>
+
+    <div class="f-bottom">© 2026 SiRa Convert • Built for speed & privacy</div>
+</footer>
+
+<div id="installNotice" class="install-notice" role="status" aria-live="polite" hidden>
+    <div>
+        <strong>Install SiRa App</strong>
+        <p id="installNoticeText">Install this app for faster access and offline support.</p>
+    </div>
+    <div class="install-notice-actions">
+        <button id="installNoticeAction" type="button" class="install-action-btn">Install</button>
+        <button id="installNoticeClose" type="button" class="install-close-btn" aria-label="Close install notification">Close</button>
+    </div>
+</div>
+
+<div id="toast" class="toast info" role="status" aria-live="polite"></div>
+
+<script>
+const { PDFDocument } = window.PDFLib;
+
+const state = {
+    files: [],
+    busy: false,
+    activeIndex: -1,
+    mergedBlob: null,
+    mergedUrl: null,
+    dragIndex: -1
+};
+
+const PERF_LIMITS = {
+    maxFilesDesktop: 80,
+    maxFilesMobile: 40,
+    maxTotalBytes: 500 * 1024 * 1024
+};
+
+const pdfInput = document.getElementById("pdfInput");
+const dropZone = document.getElementById("dropZone");
+const uploadBtn = document.getElementById("uploadBtn");
+const pasteBtn = document.getElementById("pasteBtn");
+const fileMeta = document.getElementById("fileMeta");
+const mergeBtn = document.getElementById("mergeBtn");
+const clearBtn = document.getElementById("clearBtn");
+const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+const sharePdfBtn = document.getElementById("sharePdfBtn");
+const gallery = document.getElementById("gallery");
+const galleryCount = document.getElementById("galleryCount");
+const previewEmpty = document.getElementById("previewEmpty");
+const previewCanvas = document.getElementById("previewCanvas");
+const previewTitle = document.getElementById("previewTitle");
+const previewMeta = document.getElementById("previewMeta");
+const prevPreviewBtn = document.getElementById("prevPreviewBtn");
+const nextPreviewBtn = document.getElementById("nextPreviewBtn");
+const statusText = document.getElementById("statusText");
+const resultInfo = document.getElementById("resultInfo");
+const progressBar = document.getElementById("progressBar");
+const sortInput = document.getElementById("sortInput");
+const outputNameInput = document.getElementById("outputNameInput");
+const skipLockedInput = document.getElementById("skipLockedInput");
+const sortValue = document.getElementById("sortValue");
+const toast = document.getElementById("toast");
+const themeBtn = document.getElementById("themeToggleBtn");
+const installAppBtn = document.getElementById("installAppBtn");
+const installPanel = document.getElementById("installFooterPanel");
+const installNotice = document.getElementById("installNotice");
+const installNoticeText = document.getElementById("installNoticeText");
+const installNoticeAction = document.getElementById("installNoticeAction");
+const installNoticeClose = document.getElementById("installNoticeClose");
+const controlsPanel = document.getElementById("controlsPanel");
+const controlsState = document.getElementById("controlsState");
+const previewPanel = document.getElementById("previewPanel");
+const previewState = document.getElementById("previewState");
+const smallScreenQuery = window.matchMedia("(max-width: 980px)");
+
+const applyTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("sira-theme", theme);
+    themeBtn.textContent = theme === "dark" ? "🌙" : "⭐";
+};
+
+window.toggleThemeIcon = () => {
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    applyTheme(current === "dark" ? "light" : "dark");
+};
+
+applyTheme(localStorage.getItem("sira-theme") || "dark");
+
+window.handleProfileClick = () => {
+    document.getElementById("userMenu").classList.toggle("active");
+};
+
+window.addEventListener("click", (event) => {
+    if (!event.target.closest(".nav-right")) {
+        document.querySelectorAll(".settings-menu").forEach((menu) => menu.classList.remove("active"));
+    }
+});
+
+controlsPanel.addEventListener("toggle", () => {
+    controlsState.textContent = controlsPanel.open ? "Open" : "Closed";
+});
+previewPanel.addEventListener("toggle", () => {
+    previewState.textContent = previewPanel.open ? "Open" : "Closed";
+});
+
+function syncPanelDefaults() {
+    const isSmallScreen = smallScreenQuery.matches;
+    controlsPanel.open = false;
+    previewPanel.open = !isSmallScreen;
+    controlsState.textContent = controlsPanel.open ? "Open" : "Closed";
+    previewState.textContent = previewPanel.open ? "Open" : "Closed";
+}
+
+syncPanelDefaults();
+if (typeof smallScreenQuery.addEventListener === "function") {
+    smallScreenQuery.addEventListener("change", syncPanelDefaults);
+} else if (typeof smallScreenQuery.addListener === "function") {
+    smallScreenQuery.addListener(syncPanelDefaults);
+}
+
+sortInput.addEventListener("change", () => {
+    sortValue.textContent = sortInput.selectedOptions[0].text;
+});
+
+uploadBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    pdfInput.click();
+});
+dropZone.addEventListener("click", () => pdfInput.click());
+dropZone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropZone.classList.add("dragging");
+});
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragging"));
+dropZone.addEventListener("drop", async (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("dragging");
+    if (event.dataTransfer && event.dataTransfer.files) {
+        await addFiles(Array.from(event.dataTransfer.files));
+    }
+});
+
+pasteBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    handlePasteButton();
+});
+document.addEventListener("paste", handlePasteShortcut);
+
+pdfInput.addEventListener("change", async () => {
+    if (pdfInput.files && pdfInput.files.length) {
+        await addFiles(Array.from(pdfInput.files));
+    }
+});
+
+clearBtn.addEventListener("click", resetAll);
+mergeBtn.addEventListener("click", mergePdfFiles);
+downloadPdfBtn.addEventListener("click", downloadMergedPdf);
+sharePdfBtn.addEventListener("click", shareMergedPdf);
+prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
+nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
+
+async function handlePasteButton() {
+    if (!navigator.clipboard || !navigator.clipboard.read) {
+        showToast("Clipboard button not supported. Use Ctrl+V.", "warn");
+        return;
+    }
+
+    try {
+        const clipboardItems = await navigator.clipboard.read();
+        const files = [];
+        for (const item of clipboardItems) {
+            if (!item.types.includes("application/pdf")) continue;
+            const blob = await item.getType("application/pdf");
+            files.push(new File([blob], `clipboard-${Date.now()}.pdf`, { type: "application/pdf" }));
+        }
+        if (!files.length) {
+            showToast("No PDF found in clipboard.", "warn");
+            return;
+        }
+        await addFiles(files);
+    } catch (error) {
+        showToast("Clipboard access blocked. Try Ctrl+V.", "warn");
+    }
+}
+
+async function handlePasteShortcut(event) {
+    const items = event.clipboardData && event.clipboardData.items;
+    if (!items) return;
+
+    const files = [];
+    for (const item of items) {
+        if (item.kind !== "file") continue;
+        const file = item.getAsFile();
+        if (!file) continue;
+        const isPdf = file.type === "application/pdf" || (file.name || "").toLowerCase().endsWith(".pdf");
+        if (isPdf) files.push(file);
+    }
+
+    if (files.length) {
+        event.preventDefault();
+        await addFiles(files);
+    }
+}
+
+async function addFiles(files) {
+    if (state.busy) return;
+
+    const pdfFiles = files.filter((file) => file.type === "application/pdf" || (file.name || "").toLowerCase().endsWith(".pdf"));
+    if (!pdfFiles.length) {
+        showToast("Only PDF files are supported.", "error");
+        return;
+    }
+    validateIncomingPdfCount(pdfFiles.length);
+
+    setStatus("Reading PDF files...");
+    for (const file of pdfFiles) {
+        const loaded = await inspectPdf(file);
+        if (loaded) state.files.push(loaded);
+    }
+
+    state.mergedBlob = null;
+    revokeMergedUrl();
+    downloadPdfBtn.disabled = true;
+    sharePdfBtn.disabled = true;
+    mergeBtn.disabled = state.files.length < 2;
+
+    renderQueue();
+    updateFileMeta();
+    resultInfo.textContent = state.files.length ? `${state.files.length} PDF file(s) queued.` : "No PDF files selected yet.";
+    setStatus(state.files.length ? "PDF files ready. Click Merge PDFs." : "Waiting for PDF upload/paste.");
+    showToast(`${pdfFiles.length} PDF file(s) added.`, "success");
+}
+
+async function inspectPdf(file) {
+    try {
+        const pdf = await PDFDocument.load(await file.arrayBuffer());
+        return {
+            id: cryptoRandom(),
+            file,
+            name: file.name || "document.pdf",
+            size: file.size,
+            pages: pdf.getPageCount()
+        };
+    } catch (error) {
+        showToast(`${file.name || "A file"} could not be read.`, "warn");
+        return null;
+    }
+}
+
+function getSortedFiles() {
+    const list = [...state.files];
+    const mode = sortInput.value;
+
+    if (mode === "name-asc") {
+        list.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (mode === "name-desc") {
+        list.sort((a, b) => b.name.localeCompare(a.name));
+    }
+    return list;
+}
+
+function renderQueue() {
+    gallery.innerHTML = "";
+    galleryCount.textContent = `${state.files.length} file${state.files.length > 1 ? "s" : ""}`;
+
+    state.files.forEach((fileItem, index) => {
+        const card = document.createElement("article");
+        card.className = "thumb";
+        card.draggable = true;
+        card.innerHTML = `
+            <button class="remove" type="button" aria-label="Remove PDF">×</button>
+            <p class="caption">${escapeHtml(shortName(fileItem.name))}</p>
+            <p class="meta">${fileItem.pages} pages • ${formatBytes(fileItem.size)}</p>
+        `;
+
+        const removeBtn = card.querySelector(".remove");
+        removeBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            removePdf(index);
+        });
+        card.addEventListener("click", () => setPreviewByIndex(index));
+        card.addEventListener("dragstart", () => {
+            state.dragIndex = index;
+        });
+        card.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            card.classList.add("drag-over");
+        });
+        card.addEventListener("dragleave", () => {
+            card.classList.remove("drag-over");
+        });
+        card.addEventListener("drop", (event) => {
+            event.preventDefault();
+            card.classList.remove("drag-over");
+            reorderPdfFiles(state.dragIndex, index);
+        });
+        card.addEventListener("dragend", () => {
+            state.dragIndex = -1;
+            card.classList.remove("drag-over");
+        });
+        gallery.appendChild(card);
+    });
+
+    if (state.files.length) {
+        setPreviewByIndex(Math.max(0, Math.min(state.activeIndex, state.files.length - 1)));
+    } else {
+        clearPreview();
+    }
+}
+
+function setPreviewByIndex(index) {
+    if (index < 0 || index >= state.files.length) return;
+    const item = state.files[index];
+    state.activeIndex = index;
+
+    previewEmpty.hidden = true;
+    previewTitle.textContent = `File ${index + 1} selected`;
+    previewMeta.textContent = `${item.pages} pages • ${formatBytes(item.size)} • ${item.name}`;
+    prevPreviewBtn.disabled = index === 0;
+    nextPreviewBtn.disabled = index === state.files.length - 1;
+
+    previewCanvas.innerHTML = `
+        <div class="pdf-file-card">
+            <div class="pdf-icon">📄</div>
+            <p class="caption">${escapeHtml(item.name)}</p>
+            <p class="meta">${item.pages} pages • ${formatBytes(item.size)}</p>
+        </div>
+    `;
+
+    Array.from(gallery.children).forEach((card, idx) => {
+        card.classList.toggle("active", idx === index);
+    });
+}
+
+function removePdf(index) {
+    state.files.splice(index, 1);
+
+    state.mergedBlob = null;
+    revokeMergedUrl();
+    downloadPdfBtn.disabled = true;
+    sharePdfBtn.disabled = true;
+    mergeBtn.disabled = state.files.length < 2;
+
+    renderQueue();
+    updateFileMeta();
+    resultInfo.textContent = state.files.length ? `${state.files.length} PDF file(s) queued.` : "No PDF files selected yet.";
+    setStatus(state.files.length ? "PDF removed." : "Waiting for PDF upload/paste.");
+}
+
+function reorderPdfFiles(fromIndex, toIndex) {
+    if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return;
+    if (fromIndex >= state.files.length || toIndex >= state.files.length) return;
+
+    const [moved] = state.files.splice(fromIndex, 1);
+    state.files.splice(toIndex, 0, moved);
+    renderQueue();
+    setPreviewByIndex(toIndex);
+    state.mergedBlob = null;
+    revokeMergedUrl();
+    downloadPdfBtn.disabled = true;
+    sharePdfBtn.disabled = true;
+    setStatus("Queue order updated.");
+}
+
+async function mergePdfFiles() {
+    if (state.files.length < 2 || state.busy) return;
+
+    state.busy = true;
+    mergeBtn.disabled = true;
+    downloadPdfBtn.disabled = true;
+    sharePdfBtn.disabled = true;
+    progressBar.style.width = "0%";
+
+    try {
+        const orderedFiles = getSortedFiles();
+        const mergedPdf = await PDFDocument.create();
+        mergedPdf.setCreator("SiRa Convert");
+        mergedPdf.setProducer("SiRa Convert Merge Engine");
+        mergedPdf.setTitle("Merged PDF - SiRa Convert");
+        const skipLocked = skipLockedInput.checked;
+        validateMergeBudget(orderedFiles);
+
+        let mergedCount = 0;
+        for (let i = 0; i < orderedFiles.length; i += 1) {
+            const fileItem = orderedFiles[i];
+
+            try {
+                const donorBytes = await fileItem.file.arrayBuffer();
+                const donor = await PDFDocument.load(donorBytes);
+                const pages = await mergedPdf.copyPages(donor, donor.getPageIndices());
+                pages.forEach((page) => mergedPdf.addPage(page));
+                mergedCount += 1;
+            } catch (error) {
+                if (!skipLocked) {
+                    throw new Error(`${fileItem.name} is locked or invalid.`);
+                }
+            }
+
+            const progress = Math.round(((i + 1) / orderedFiles.length) * 100);
+            progressBar.style.width = `${progress}%`;
+            setStatus(`Processing ${i + 1}/${orderedFiles.length} file(s)...`);
+            await yieldToUi();
+        }
+
+        if (mergedCount < 1) {
+            throw new Error("No valid PDFs could be merged.");
+        }
+
+        const bytes = await mergedPdf.save({
+            useObjectStreams: false,
+            addDefaultPage: false,
+            updateFieldAppearances: false
+        });
+        state.mergedBlob = new Blob([bytes], { type: "application/pdf" });
+        revokeMergedUrl();
+        state.mergedUrl = URL.createObjectURL(state.mergedBlob);
+
+        resultInfo.textContent = `Merged ${mergedCount} PDF file(s) successfully.`;
+        setStatus("Merge complete. Original page quality preserved. You can download or share merged PDF.");
+        downloadPdfBtn.disabled = false;
+        sharePdfBtn.disabled = false;
+        showToast("PDF merge completed successfully.", "success");
+    } catch (error) {
+        setStatus(error.message || "Merge failed.");
+        showToast(error.message || "Merge failed.", "error");
+    } finally {
+        state.busy = false;
+        mergeBtn.disabled = state.files.length < 2;
+    }
+}
+
+function downloadMergedPdf() {
+    if (!state.mergedBlob || !state.mergedUrl) return;
+
+    const link = document.createElement("a");
+    link.href = state.mergedUrl;
+    link.download = buildOutputName();
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToast("Merged PDF downloaded.", "success");
+}
+
+async function shareMergedPdf() {
+    if (!state.mergedBlob) return;
+
+    try {
+        const file = new File([state.mergedBlob], buildOutputName(), { type: "application/pdf" });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: "Merged PDF",
+                text: "Created with SiRa Convert"
+            });
+            showToast("Merged PDF shared successfully.", "success");
+            return;
+        }
+
+        showToast("Sharing is not supported on this browser.", "warn");
+    } catch (error) {
+        if (error.name !== "AbortError") showToast("Failed to share merged PDF.", "error");
+    }
+}
+
+function buildOutputName() {
+    const base = (outputNameInput.value || "sira-merged-pdf").trim() || "sira-merged-pdf";
+    return base.toLowerCase().endsWith(".pdf") ? base : `${base}.pdf`;
+}
+
+function updateFileMeta() {
+    if (!state.files.length) {
+        fileMeta.style.display = "none";
+        fileMeta.innerHTML = "";
+        return;
+    }
+
+    const totalBytes = state.files.reduce((sum, item) => sum + item.size, 0);
+    const totalPages = state.files.reduce((sum, item) => sum + item.pages, 0);
+    fileMeta.style.display = "flex";
+    fileMeta.innerHTML = `
+        <span class="pill">Files: ${state.files.length}</span>
+        <span class="pill">Total pages: ${totalPages}</span>
+        <span class="pill">Total size: ${formatBytes(totalBytes)}</span>
+    `;
+}
+
+function resetAll() {
+    state.files = [];
+    state.activeIndex = -1;
+    state.busy = false;
+    state.mergedBlob = null;
+    revokeMergedUrl();
+
+    pdfInput.value = "";
+    gallery.innerHTML = "";
+    galleryCount.textContent = "0 files";
+    clearPreview();
+    updateFileMeta();
+
+    progressBar.style.width = "0%";
+    mergeBtn.disabled = true;
+    downloadPdfBtn.disabled = true;
+    sharePdfBtn.disabled = true;
+    resultInfo.textContent = "No PDF files selected yet.";
+    setStatus("Waiting for PDF upload/paste.");
+}
+
+function clearPreview() {
+    previewCanvas.innerHTML = `<p id="previewEmpty" class="preview-empty">Your selected PDF file details will appear here.</p>`;
+    previewTitle.textContent = "No file selected";
+    previewMeta.textContent = "Upload PDFs to inspect queue details.";
+    prevPreviewBtn.disabled = true;
+    nextPreviewBtn.disabled = true;
+}
+
+function revokeMergedUrl() {
+    if (state.mergedUrl) {
+        URL.revokeObjectURL(state.mergedUrl);
+        state.mergedUrl = null;
+    }
+}
+
+function setStatus(message) {
+    statusText.textContent = message;
+}
+
+function validateIncomingPdfCount(newCount) {
+    const maxFiles = window.matchMedia("(max-width: 900px)").matches
+        ? PERF_LIMITS.maxFilesMobile
+        : PERF_LIMITS.maxFilesDesktop;
+
+    if (state.files.length + newCount > maxFiles) {
+        throw new Error(`Please merge up to ${maxFiles} files at once for stable performance.`);
+    }
+}
+
+function validateMergeBudget(files) {
+    const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+    if (totalBytes > PERF_LIMITS.maxTotalBytes) {
+        throw new Error("Selected files are too large for one merge. Split into smaller batches.");
+    }
+}
+
+function yieldToUi() {
+    return new Promise((resolve) => {
+        if (typeof requestAnimationFrame === "function") {
+            requestAnimationFrame(() => resolve());
+            return;
+        }
+        setTimeout(resolve, 0);
+    });
+}
+
+function showToast(message, type = "info") {
+    toast.textContent = message;
+    toast.className = `toast ${type}`;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2600);
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function shortName(name) {
+    if (name.length <= 24) return name;
+    return `${name.slice(0, 21)}...`;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function cryptoRandom() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+        try {
+            const registration = await navigator.serviceWorker.register("sw.js", { updateViaCache: "none" });
+            if (registration.waiting) {
+                showToast("App update ready. Refresh to use the latest version.", "info");
+            }
+            registration.addEventListener("updatefound", () => {
+                const nextWorker = registration.installing;
+                if (!nextWorker) return;
+                nextWorker.addEventListener("statechange", () => {
+                    if (nextWorker.state === "installed" && navigator.serviceWorker.controller) {
+                        showToast("New version available. Refresh to update.", "info");
+                    }
+                });
+            });
+            setInterval(() => {
+                registration.update().catch(() => {});
+            }, 60 * 60 * 1000);
+        } catch (error) {
+            console.error("Service worker registration failed:", error);
+        }
+    });
+}
+
+const dismissedKey = "sira-install-dismissed";
+const installedKey = "sira-installed";
+let deferredInstallPrompt = null;
+
+const isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+const isSafariBrowser =
+    /safari/i.test(window.navigator.userAgent) &&
+    !/crios|fxios|edgios|opr\//i.test(window.navigator.userAgent);
+
+const isStandaloneMode = () =>
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+const isInstalled = () => isStandaloneMode() || localStorage.getItem(installedKey) === "true";
+
+const detectInstalledRelatedApps = async () => {
+    if (!("getInstalledRelatedApps" in navigator)) {
+        return false;
+    }
+
+    try {
+        const relatedApps = await navigator.getInstalledRelatedApps();
+        if (Array.isArray(relatedApps) && relatedApps.length > 0) {
+            localStorage.setItem(installedKey, "true");
+            return true;
+        }
+    } catch (error) {
+        console.debug("Related app detection unavailable:", error);
+    }
+
+    return false;
+};
+
+const hideInstallExperience = () => {
+    installPanel.hidden = true;
+    installNotice.hidden = true;
+};
+
+const showInstallExperience = ({ manualInstall = false } = {}) => {
+    if (isInstalled()) {
+        hideInstallExperience();
+        return;
+    }
+
+    installPanel.hidden = false;
+
+    if (sessionStorage.getItem(dismissedKey) === "true") {
+        installNotice.hidden = true;
+        return;
+    }
+
+    installNoticeText.textContent = manualInstall
+        ? 'Tap Share and then "Add to Home Screen" to install this app.'
+        : "Install this app for faster access and offline support.";
+    installNotice.hidden = false;
+};
+
+const markAsInstalled = () => {
+    localStorage.setItem(installedKey, "true");
+    hideInstallExperience();
+};
+
+const triggerInstall = async () => {
+    if (isInstalled()) {
+        hideInstallExperience();
+        return;
+    }
+
+    if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice.catch(() => null);
+        if (choice && choice.outcome === "accepted") {
+            markAsInstalled();
+            showToast("SiRa app installed successfully.", "success");
+        }
+        deferredInstallPrompt = null;
+        return;
+    }
+
+    if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
+        showInstallExperience({ manualInstall: true });
+        showToast('Use Share → "Add to Home Screen" to install.', "info");
+        return;
+    }
+
+    installNotice.hidden = true;
+    installPanel.hidden = true;
+};
+
+installAppBtn.addEventListener("click", triggerInstall);
+installNoticeAction.addEventListener("click", triggerInstall);
+installNoticeClose.addEventListener("click", () => {
+    sessionStorage.setItem(dismissedKey, "true");
+    installNotice.hidden = true;
+});
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    showInstallExperience();
+    showToast("Install SiRa for app-like speed and offline use.", "info");
+});
+
+window.addEventListener("appinstalled", () => {
+    markAsInstalled();
+    showToast("SiRa app installed successfully.", "success");
+});
+
+window.addEventListener("load", async () => {
+    if (isInstalled()) {
+        hideInstallExperience();
+        return;
+    }
+
+    if (await detectInstalledRelatedApps()) {
+        hideInstallExperience();
+        return;
+    }
+
+    if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
+        showInstallExperience({ manualInstall: true });
+        return;
+    }
+
+    if (deferredInstallPrompt) {
+        showInstallExperience();
+        return;
+    }
+
+    installPanel.hidden = true;
+    installNotice.hidden = true;
+});
+</script>
+</body>
+</html>

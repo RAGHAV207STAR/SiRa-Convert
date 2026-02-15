@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiRa Convert | Professional Document Suite</title>
+    <meta name="description" content="SiRa Convert is a private browser-based document toolkit to convert JPG to PDF, PDF to JPG, and merge PDF files fast.">
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+    <meta name="keywords" content="PDF tools, JPG to PDF, PDF to JPG, Merge PDF, online PDF converter, private PDF converter, PWA PDF app">
+    <meta name="author" content="SiRa Convert">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="canonical" href="https://sira-452b7.web.app/">
+    <meta property="og:title" content="SiRa Convert | Professional Document Suite">
+    <meta property="og:description" content="Fast and private browser-based PDF tools. Convert, merge, and export instantly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sira-452b7.web.app/">
+    <meta property="og:site_name" content="SiRa Convert">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://sira-452b7.web.app/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SiRa Convert">
+    <meta name="twitter:description" content="Professional PDF and image conversion tools in your browser.">
+    <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png">
+    <meta name="twitter:site" content="@sira_convert">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "SiRa Convert",
+          "url": "https://sira-452b7.web.app/",
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "Organization",
+          "name": "SiRa Convert",
+          "url": "https://sira-452b7.web.app/",
+          "logo": "https://sira-452b7.web.app/logo.png"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "SiRa Convert",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web Browser, Android, iOS, Windows, macOS",
+          "description": "Private browser-based suite to convert JPG to PDF, PDF to JPG, and merge PDF files.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "url": "https://sira-452b7.web.app/"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+
+    <div id="splashScreen">
+        <div class="splash-content" style="text-align: center; color: white;">
+            <img src="logo.png" width="80" alt="SiRa">
+            <h1 style="letter-spacing: 3px; margin-top: 15px;">SIRA <span style="color:#3b82f6">CONVERT</span></h1>
+        </div>
+    </div>
+
+   <div id="loginPanel" class="login-overlay">
+
+    <div class="login-card-pro">
+
+        <button onclick="toggleLoginPanel()" class="close-login">&times;</button>
+
+        <img src="logo.png" width="60" class="login-logo">
+
+        <h2 class="login-title">Welcome to SiRa</h2>
+        <p class="login-sub">Sign in to continue</p>
+
+        <button onclick="loginWithGoogle()" class="google-btn-pro">
+            <img src="https://img.icons8.com/color/48/google-logo.png">
+            <span> Google</span>
+        </button>
+
+    </div>
+
+</div>
+
+    <header class="main-header">
+        <nav class="header-glass">
+            <a href="index.html" class="brand" aria-label="Go to homepage">
+                <img src="logo.png" class="logo" alt="SiRa">
+                <span class="brand-name">SiRa <span class="accent">Convert</span></span>
+            </a>
+            
+           <div class="nav-right">
+
+         <button id="themeToggleBtn" class="theme-toggle" onclick="toggleThemeIcon()" title="Theme" aria-label="Toggle color theme">
+                🌙
+              </button>
+                    <button id="profileBox" type="button" onclick="handleProfileClick()" aria-label="Open profile menu" style="width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--border); overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                    <div id="profileDisplay">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                </button>
+
+                <div id="userMenu" class="settings-menu">
+                    <div style="padding:5px 5px 15px; border-bottom:1px solid var(--border); margin-bottom:10px;">
+                        <span id="userNameDisplay" style="display:block; font-weight:800; font-size:0.9rem;">Guest User</span>
+                        <small id="userEmailDisplay" style="color:var(--text-dim); font-size:0.75rem;"></small>
+                    </div>
+                    <button onclick="handleLogout()" style="width:100%; padding:10px; background:rgba(255, 71, 87, 0.1); border:none; border-radius:10px; color:#ff4757; font-weight:700; cursor:pointer; text-align:center;">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <section class="hero">
+            <div class="badge">PRO EDITION 2026</div>
+            <h1>The Smart Way to <br><span class="accent">Manage Documents.</span></h1>
+            <p style="color:var(--text-dim); margin-bottom: 40px;">Industrial-grade PDF tools. Fast, secure, and 100% private.</p>
+        </section>
+
+        <div class="tool-grid">
+            <a href="jpg-to-pdf.html" class="tool-card">
+                <div class="icon">🖼️</div>
+                <div>
+                    <h3>JPG to PDF</h3>
+                    <p style="color:var(--text-dim); font-size:0.8rem;">Images to professional PDF.</p>
+                </div>
+            </a>
+            <a href="pdf-to-jpg.html" class="tool-card">
+                <div class="icon">📄</div>
+                <div>
+                    <h3>PDF to JPG</h3>
+                    <p style="color:var(--text-dim); font-size:0.8rem;">Extract images from PDF.</p>
+                </div>
+            </a>
+            <a href="merge-pdf.html" class="tool-card">
+                <div class="icon">📚</div>
+                <div>
+                    <h3>Merge PDF</h3>
+                    <p style="color:var(--text-dim); font-size:0.8rem;">Combine multiple files.</p>
+                </div>
+            </a>
+        </div>
+    </main>
+
+<footer class="ultra-footer">
+
+    <div class="footer-grid">
+
+        <!-- BRAND -->
+        <div class="f-brand">
+            <h2 class="f-logo">SiRa</h2>
+            <p class="f-tag">Next-Gen Document Toolkit</p>
+            <p class="f-owner">Crafted by <strong>Raghav Pratap</strong></p>
+        </div>
+
+
+        <!-- TOOLS -->
+        <div class="f-col">
+            <h4>Tools</h4>
+            <a href="jpg-to-pdf.html">JPG → PDF</a>
+            <a href="pdf-to-jpg.html">PDF → JPG</a>
+            <a href="merge-pdf.html">Merge PDF</a>
+        </div>
+
+
+        <!-- COMPANY -->
+        <div class="f-col">
+            <h4>Company</h4>
+            <a href="about.html">About</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a href="blog.html">Blog</a>
+        </div>
+
+
+        <!-- CONTACT (CARD STYLE) -->
+        <div class="f-contact-card">
+
+            <h4>Contact Me</h4>
+
+            <!-- Gmail Button -->
+            <a class="contact-btn gmail"
+               href="mailto:sirahelppoint@gmail.com">
+
+                <!-- Gmail SVG -->
+                <svg viewBox="0 0 24 24">
+                    <path fill="#EA4335"
+                        d="M12 13.5L0 6v12h24V6z"/>
+                    <path fill="#FBBC05"
+                        d="M12 13.5L24 6V0H0v6z"/>
+                </svg>
+
+                Email Support
+            </a>
+
+
+            <!-- WhatsApp Button -->
+            <a class="contact-btn whatsapp"
+               target="_blank"
+               rel="noopener noreferrer"
+               href="https://whatsapp.com/channel/0029VbC1m6o77qVLGOjUAj1H">
+
+                <!-- WhatsApp SVG -->
+                <svg viewBox="0 0 24 24">
+                    <path fill="white"
+                        d="M20.5 3.5A11 11 0 0 0 3.3 17.6L2 22l4.6-1.2A11 11 0 1 0 20.5 3.5zM12 20a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.7.7-2.6-.2-.3A8 8 0 1 1 12 20z"/>
+                </svg>
+
+                WhatsApp Channel
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div id="installFooterPanel" class="install-footer-panel" hidden>
+        <p class="install-footer-text">Get the full app experience with one-tap install.</p>
+        <button id="installAppBtn" type="button" class="install-footer-btn">Install App</button>
+    </div>
+
+
+    <div class="f-bottom">
+        © 2026 SiRa Convert • Built for speed & privacy
+    </div>
+
+</footer>
+
+<div id="installNotice" class="install-notice" role="status" aria-live="polite" hidden>
+    <div>
+        <strong>Install SiRa App</strong>
+        <p id="installNoticeText">Install this app for faster access and offline support.</p>
+    </div>
+    <div class="install-notice-actions">
+        <button id="installNoticeAction" type="button" class="install-action-btn">Install</button>
+        <button id="installNoticeClose" type="button" class="install-close-btn" aria-label="Close install notification">Close</button>
+    </div>
+</div>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPHV8YPr4_6wOBbUhgL_GKVeeEB_u3pnI",
+            authDomain: "sira-452b7.firebaseapp.com",
+            projectId: "sira-452b7",
+            storageBucket: "sira-452b7.firebasestorage.app",
+            messagingSenderId: "430519769070",
+            appId: "1:430519769070:web:c9a3d4ccc962f6f46ee0ff"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        auth.useDeviceLanguage();
+        const provider = new GoogleAuthProvider();
+
+       // --- THEME ICON ENGINE (Moon ↔ Star) ---
+const themeBtn = document.getElementById('themeToggleBtn');
+
+const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('sira-theme', theme);
+    themeBtn.innerHTML = (theme === 'dark') ? '🌙' : '⭐';
+};
+
+window.toggleThemeIcon = () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+};
+
+applyTheme(localStorage.getItem('sira-theme') || 'dark');
+
+
+        // --- UI MENUS ---
+
+        window.toggleLoginPanel = () => {
+    document.getElementById('loginPanel').classList.toggle('active');
+};
+
+       // --- AUTH LOGIC ---
+       window.loginWithGoogle = async () => {
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error('Google login failed:', error);
+        alert('Login failed. Please allow popups and try again.');
+    }
+};
+        window.handleLogout = () => signOut(auth).then(() => location.reload());
+
+  onAuthStateChanged(auth, (user) => {
+
+    const profileDisplay = document.getElementById('profileDisplay');
+
+    if (user) {
+        profileDisplay.innerHTML =
+            `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">`;
+
+        document.getElementById('userNameDisplay').innerText = user.displayName;
+        document.getElementById('userEmailDisplay').innerText = user.email;
+
+        document.getElementById('loginPanel').classList.remove('active');
+    }
+});
+
+
+        window.handleProfileClick = () => {
+            if (!auth.currentUser) toggleLoginPanel();
+            else {
+                document.getElementById('userMenu').classList.toggle('active');
+            }
+        };
+
+        // Click outside to close menus
+        window.onclick = (e) => {
+            if (!e.target.closest('.nav-right')) {
+                document.querySelectorAll('.settings-menu').forEach(m => m.classList.remove('active'));
+            }
+        };
+
+        // Splash
+        window.addEventListener('load', () => setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            splash.style.opacity = '0';
+            setTimeout(() => splash.style.display = 'none', 500);
+        }, 1200));
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch((error) => {
+                    console.error('Service worker registration failed:', error);
+                });
+            });
+        }
+
+        // PWA install engine
+        const installButton = document.getElementById('installAppBtn');
+        const installPanel = document.getElementById('installFooterPanel');
+        const installNotice = document.getElementById('installNotice');
+        const installNoticeText = document.getElementById('installNoticeText');
+        const installNoticeAction = document.getElementById('installNoticeAction');
+        const installNoticeClose = document.getElementById('installNoticeClose');
+        const dismissedKey = 'sira-install-dismissed';
+        const installedKey = 'sira-installed';
+        let deferredInstallPrompt = null;
+
+        const isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+        const isSafariBrowser =
+            /safari/i.test(window.navigator.userAgent) &&
+            !/crios|fxios|edgios|opr\//i.test(window.navigator.userAgent);
+
+        const isStandaloneMode = () =>
+            window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true;
+
+        const isInstalled = () => isStandaloneMode() || localStorage.getItem(installedKey) === 'true';
+
+        const detectInstalledRelatedApps = async () => {
+            if (!('getInstalledRelatedApps' in navigator)) {
+                return false;
+            }
+
+            try {
+                const relatedApps = await navigator.getInstalledRelatedApps();
+                if (Array.isArray(relatedApps) && relatedApps.length > 0) {
+                    localStorage.setItem(installedKey, 'true');
+                    return true;
+                }
+            } catch (error) {
+                console.debug('Related app detection unavailable:', error);
+            }
+
+            return false;
+        };
+
+        const hideInstallExperience = () => {
+            installPanel.hidden = true;
+            installNotice.hidden = true;
+        };
+
+        const showInstallExperience = ({ manualInstall = false } = {}) => {
+            if (isInstalled()) {
+                hideInstallExperience();
+                return;
+            }
+
+            installPanel.hidden = false;
+
+            if (sessionStorage.getItem(dismissedKey) === 'true') {
+                installNotice.hidden = true;
+                return;
+            }
+
+            installNoticeText.textContent = manualInstall
+                ? 'Tap Share and then "Add to Home Screen" to install this app.'
+                : 'Install this app for faster access and offline support.';
+            installNotice.hidden = false;
+        };
+
+        const markAsInstalled = () => {
+            localStorage.setItem(installedKey, 'true');
+            hideInstallExperience();
+        };
+
+        const triggerInstall = async () => {
+            if (isInstalled()) {
+                hideInstallExperience();
+                return;
+            }
+
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    markAsInstalled();
+                }
+                deferredInstallPrompt = null;
+                return;
+            }
+
+            if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
+                showInstallExperience({ manualInstall: true });
+                return;
+            }
+
+            installNotice.hidden = true;
+            installPanel.hidden = true;
+        };
+
+        installButton.addEventListener('click', triggerInstall);
+        installNoticeAction.addEventListener('click', triggerInstall);
+        installNoticeClose.addEventListener('click', () => {
+            sessionStorage.setItem(dismissedKey, 'true');
+            installNotice.hidden = true;
+        });
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            showInstallExperience();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            markAsInstalled();
+        });
+
+        window.addEventListener('load', async () => {
+            if (isInstalled()) {
+                hideInstallExperience();
+                return;
+            }
+
+            if (await detectInstalledRelatedApps()) {
+                hideInstallExperience();
+                return;
+            }
+
+            if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
+                showInstallExperience({ manualInstall: true });
+            } else if (deferredInstallPrompt) {
+                showInstallExperience();
+            } else {
+                installPanel.hidden = true;
+                installNotice.hidden = true;
+            }
+        });
+    </script>
+</body>
+</html>
