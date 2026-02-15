@@ -1,70 +1,245 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>About | SiRa Convert</title>
-<meta name="description" content="Learn about SiRa Convert, a private browser-based PDF and image toolkit." />
+<meta name="description" content="About SiRa Convert: mission, approach, and product principles for private document conversion." />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
-<meta name="author" content="SiRa Convert" />
-<meta name="theme-color" content="#3b82f6" />
+<meta name="author" content="Raghav Pratap" />
+<meta name="theme-color" content="#2563eb" />
 <link rel="canonical" href="https://sira-452b7.web.app/about.html" />
 <meta property="og:title" content="About | SiRa Convert" />
-<meta property="og:description" content="Learn about SiRa Convert and its browser-first private document workflows." />
+<meta property="og:description" content="Discover the mission and values behind SiRa Convert." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sira-452b7.web.app/about.html" />
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="About | SiRa Convert" />
-<meta name="twitter:description" content="Learn about SiRa Convert and how it handles private document processing." />
+<meta name="twitter:description" content="Learn how SiRa Convert is built for speed, privacy, and productivity." />
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="logo.png" type="image/png" />
 <link rel="stylesheet" href="style.css" />
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-7RQ1PPS64C");
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "name": "About SiRa Convert",
-  "url": "https://sira-452b7.web.app/about.html",
-  "description": "About SiRa Convert, a browser-based document conversion toolkit."
-}
-</script>
+<script src="gtag-init.js"></script>
+<script src="structured-data.js" defer></script>
 <style>
-.legal-wrap { max-width: 900px; margin: 0 auto; padding: 48px 20px 72px; }
-.legal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); }
-.legal-card h1 { margin-bottom: 14px; }
-.legal-card p, .legal-card li { color: var(--text-dim); font-size: 0.95rem; }
-.legal-card ul { padding-left: 20px; margin: 10px 0 0; }
-.legal-back { display: inline-flex; margin-top: 20px; text-decoration: none; color: var(--accent); font-weight: 700; }
+.page-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 36px 20px 72px;
+}
+.top-nav {
+  position: sticky;
+  top: 16px;
+  z-index: 25;
+  margin-bottom: 18px;
+}
+.top-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 14px;
+}
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+.nav-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.nav-link[aria-current="page"] {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.hero {
+  background: linear-gradient(145deg, rgba(37,99,235,0.2), rgba(16,185,129,0.12));
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+}
+.badge {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16,185,129,0.2);
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 2.9rem);
+  margin-bottom: 10px;
+}
+.hero p {
+  color: var(--text-dim);
+  max-width: 760px;
+}
+.grid {
+  margin-top: 20px;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+}
+.card h2 {
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+.card p,
+.card li {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.card ul {
+  padding-left: 18px;
+  margin-top: 8px;
+}
+.owner {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(15,23,42,0.82), rgba(37,99,235,0.2));
+}
+.owner h2 {
+  margin-bottom: 8px;
+}
+.owner p {
+  color: #e2e8f0;
+}
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.back-link {
+  text-decoration: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.secondary-link {
+  text-decoration: none;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .top-nav-inner { flex-direction: column; align-items: flex-start; }
+  .grid { grid-template-columns: 1fr; }
+}
 </style>
 <script src="analytics.js" defer></script>
 </head>
 <body>
-<main class="legal-wrap">
-    <article class="legal-card">
-        <h1>About SiRa Convert</h1>
-        <p>SiRa Convert is a browser-first document toolkit focused on speed, privacy, and clear workflows for PDF and image conversions.</p>
-        <ul>
-            <li>Client-side processing for core conversions.</li>
-            <li>Simple UI with practical controls and export options.</li>
-            <li>Designed for mobile and desktop productivity.</li>
-        </ul>
-        <a class="legal-back" href="index.html">Back to Home</a>
+<main class="page-shell">
+  <nav class="top-nav" aria-label="Page navigation">
+    <div class="top-nav-inner">
+      <a class="brand-link" href="index.html">
+        <img class="brand-logo" src="logo.png" alt="SiRa Convert logo" />
+        <span>SiRa Convert</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html" aria-current="page">About</a>
+        <a class="nav-link" href="blog.html">Blog</a>
+        <a class="nav-link" href="privacy.html">Privacy</a>
+        <a class="nav-link" href="terms.html">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="badge">About the Product</span>
+    <h1>About SiRa Convert</h1>
+    <p>SiRa Convert is a focused toolkit that helps users transform and manage PDF/image files quickly, directly from the web, with a clean and practical interface.</p>
+  </section>
+
+  <section class="grid" aria-label="About details">
+    <article class="card">
+      <h2>Our Mission</h2>
+      <p>Build fast, straightforward document tools that are easy to use for students, professionals, and creators on both desktop and mobile.</p>
     </article>
+
+    <article class="card">
+      <h2>What Makes It Useful</h2>
+      <ul>
+        <li>Simple workflows with minimal clicks.</li>
+        <li>Browser-first experience for convenience.</li>
+        <li>Consistent design across all tools and info pages.</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <h2>Core Principles</h2>
+      <ul>
+        <li>Speed: complete tasks quickly.</li>
+        <li>Clarity: remove confusion from each step.</li>
+        <li>Privacy-minded design: avoid unnecessary complexity.</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <h2>Roadmap Direction</h2>
+      <p>SiRa Convert continues to improve output quality, UI accessibility, and additional utilities around PDF and image handling.</p>
+    </article>
+  </section>
+
+  <section class="owner">
+    <h2>Ownership</h2>
+    <p>This app is owned and operated by <strong>RAGHAV PRATAP</strong>. Product strategy, updates, and policy oversight are managed by the owner.</p>
+  </section>
+
+  <div class="actions">
+    <a class="back-link" href="index.html">Back to Home</a>
+    <a class="secondary-link" href="blog.html">Read Blog</a>
+  </div>
 </main>
-<script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-}
-</script>
+<script src="simple-sw-register.js"></script>
 </body>
 </html>

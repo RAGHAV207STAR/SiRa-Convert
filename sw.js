@@ -1,4 +1,4 @@
-const SW_VERSION = "v7";
+const SW_VERSION = "v9";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;
@@ -14,6 +14,14 @@ const APP_SHELL = [
     "/terms.html",
     "/blog.html",
     "/style.css",
+    "/shared-ui.js",
+    "/index.js",
+    "/jpg-to-pdf.js",
+    "/merge-pdf.js",
+    "/pdf-to-jpg.js",
+    "/gtag-init.js",
+    "/structured-data.js",
+    "/simple-sw-register.js",
     "/logo.png",
     "/manifest.json"
 ];

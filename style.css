@@ -1,51 +1,35 @@
 :root {
-
-/* Dark Mode - Deep Space */
-
---bg: #020617;
-
---surface: #0f172a;
-
---accent: #3b82f6;
-
---border: rgba(255, 255, 255, 0.06);
-
---text-main: #f8fafc;
-
---text-dim: #94a3b8;
-
---glass: rgba(15, 23, 42, 0.8);
-
---shadow: 0 20px 50px rgba(0,0,0,0.5);
-
---card-hover: #1e293b;
-
+/* Bright mode defaults */
+--bg: #eef5ff;
+--surface: #ffffff;
+--accent: #2563eb;
+--border: rgba(37, 99, 235, 0.14);
+--text-main: #0f1f3b;
+--text-dim: #587091;
+--glass: rgba(255, 255, 255, 0.88);
+--shadow: 0 16px 36px rgba(30, 84, 184, 0.12);
+--card-hover: #f3f8ff;
+--tile-bg: linear-gradient(155deg, rgba(255,255,255,0.96), rgba(240,248,255,0.95));
+--tile-shadow: 0 15px 34px rgba(25, 78, 173, 0.14);
+--tile-hover-shadow: 0 22px 42px rgba(18, 72, 167, 0.2);
 }
 
 
 
-[data-theme="light"] {
-
-/* Bright Mode - Professional Blue/White (Inspired by iLovePDF) */
-
---bg: #f3f7ff;
-
---surface: #ffffff;
-
---accent: #2563eb;
-
---border: rgba(37, 99, 235, 0.1);
-
---text-main: #1e293b;
-
---text-dim: #64748b;
-
---glass: rgba(255, 255, 255, 0.9);
-
---shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
-
---card-hover: #f8faff;
-
+[data-theme="dark"] {
+/* Deep dark mode */
+--bg: #020617;
+--surface: #0f172a;
+--accent: #3b82f6;
+--border: rgba(255, 255, 255, 0.08);
+--text-main: #f8fafc;
+--text-dim: #94a3b8;
+--glass: rgba(15, 23, 42, 0.8);
+--shadow: 0 20px 50px rgba(0,0,0,0.5);
+--card-hover: #1e293b;
+--tile-bg: linear-gradient(155deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+--tile-shadow: 0 15px 40px rgba(0,0,0,0.35);
+--tile-hover-shadow: 0 25px 60px rgba(0,0,0,0.55);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,6 +43,31 @@ line-height: 1.6;
 min-height: 100vh;
 display: flex;
 flex-direction: column;
+position: relative;
+overflow-x: hidden;
+}
+body::before,
+body::after {
+content: "";
+position: fixed;
+pointer-events: none;
+z-index: -1;
+border-radius: 999px;
+filter: blur(70px);
+}
+body::before {
+width: 340px;
+height: 340px;
+left: -100px;
+top: 10%;
+background: rgba(14, 165, 233, 0.18);
+}
+body::after {
+width: 360px;
+height: 360px;
+right: -130px;
+top: 45%;
+background: rgba(37, 99, 235, 0.14);
 }
 
 
@@ -197,7 +206,7 @@ margin-bottom: 20px; display: inline-block;
     color: var(--text-main);
 
     /* GLASS LOOK */
-    background: rgba(255,255,255,0.03);
+    background: var(--tile-bg);
     backdrop-filter: blur(14px);
 
     border: 1px solid var(--border);
@@ -205,8 +214,7 @@ margin-bottom: 20px; display: inline-block;
     min-height: 130px;
 
     /* DEPTH */
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.35);
+    box-shadow: var(--tile-shadow);
 
     transition: all 0.30s cubic-bezier(.4,0,.2,1);
 
@@ -245,9 +253,7 @@ margin-bottom: 20px; display: inline-block;
 
     border-color: var(--accent);
 
-    box-shadow:
-        0 25px 60px rgba(0,0,0,0.55),
-        0 0 30px rgba(59,130,246,0.35);
+    box-shadow: var(--tile-hover-shadow), 0 0 30px rgba(59,130,246,0.2);
 }
 
 
@@ -637,6 +643,13 @@ main {
 .install-close-btn {
     background: var(--surface);
     color: var(--text-main);
+}
+
+@media (display-mode: standalone) {
+    #installFooterPanel,
+    #installNotice {
+        display: none !important;
+    }
 }
 
 

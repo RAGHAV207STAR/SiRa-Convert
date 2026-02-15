@@ -18,40 +18,15 @@
   "icons": [
     {
       "src": "logo.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "192x192",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -59,44 +34,19 @@
       "name": "Merge PDF",
       "short_name": "Merge",
       "url": "/merge-pdf.html",
-      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     },
     {
       "name": "JPG to PDF",
       "short_name": "JPG2PDF",
       "url": "/jpg-to-pdf.html",
-      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     },
     {
       "name": "PDF to JPG",
       "short_name": "PDF2JPG",
       "url": "/pdf-to-jpg.html",
-      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     }
-  ],
-  "screenshots": [
-    {
-      "src": "logo.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "SiRa PRO Desktop Workspace"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "720x1280",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "SiRa PRO Mobile Experience"
-    }
-  ],
-  "share_target": {
-    "action": "/index.html?share=1",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  }
+  ]
 }

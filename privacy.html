@@ -1,70 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Privacy | SiRa Convert</title>
-<meta name="description" content="SiRa Convert privacy policy and data handling practices." />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
+<title>Privacy Policy | SiRa Convert</title>
+<meta name="description" content="Privacy policy for SiRa Convert, including data handling, storage behavior, and user controls." />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
-<meta name="author" content="SiRa Convert" />
-<meta name="theme-color" content="#3b82f6" />
+<meta name="author" content="Raghav Pratap" />
+<meta name="theme-color" content="#2563eb" />
 <link rel="canonical" href="https://sira-452b7.web.app/privacy.html" />
 <meta property="og:title" content="Privacy Policy | SiRa Convert" />
-<meta property="og:description" content="Read SiRa Convert privacy policy and data handling practices." />
+<meta property="og:description" content="See how SiRa Convert handles your files and privacy." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sira-452b7.web.app/privacy.html" />
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Privacy Policy | SiRa Convert" />
-<meta name="twitter:description" content="See how SiRa Convert handles data and privacy in browser-based tools." />
+<meta name="twitter:description" content="Privacy-first document conversion with clear data handling rules." />
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="logo.png" type="image/png" />
 <link rel="stylesheet" href="style.css" />
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-7RQ1PPS64C");
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Privacy Policy - SiRa Convert",
-  "url": "https://sira-452b7.web.app/privacy.html",
-  "description": "Privacy policy and data handling practices for SiRa Convert."
-}
-</script>
+<script src="gtag-init.js"></script>
+<script src="structured-data.js" defer></script>
 <style>
-.legal-wrap { max-width: 900px; margin: 0 auto; padding: 48px 20px 72px; }
-.legal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); }
-.legal-card h1 { margin-bottom: 14px; }
-.legal-card p, .legal-card li { color: var(--text-dim); font-size: 0.95rem; }
-.legal-card ul { padding-left: 20px; margin-top: 10px; }
-.legal-back { display: inline-flex; margin-top: 20px; text-decoration: none; color: var(--accent); font-weight: 700; }
+.page-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 36px 20px 72px;
+}
+.top-nav {
+  position: sticky;
+  top: 16px;
+  z-index: 25;
+  margin-bottom: 18px;
+}
+.top-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 14px;
+}
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+.nav-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.nav-link[aria-current="page"] {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.hero {
+  background: linear-gradient(140deg, rgba(2,132,199,0.2), rgba(37,99,235,0.16));
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+}
+.badge {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(14,165,233,0.2);
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 2.9rem);
+  margin-bottom: 10px;
+}
+.hero p {
+  color: var(--text-dim);
+}
+.highlights {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.highlight {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+.grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+}
+.card h2 {
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+.card p,
+.card li {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.card ul {
+  margin-top: 8px;
+  padding-left: 18px;
+}
+.note {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  background: rgba(15,23,42,0.72);
+  border-radius: 14px;
+  padding: 16px;
+}
+.note p {
+  color: #e2e8f0;
+  font-size: 0.94rem;
+}
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.back-link {
+  text-decoration: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.secondary-link {
+  text-decoration: none;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .top-nav-inner { flex-direction: column; align-items: flex-start; }
+  .highlights { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+}
 </style>
 <script src="analytics.js" defer></script>
 </head>
 <body>
-<main class="legal-wrap">
-    <article class="legal-card">
-        <h1>Privacy Policy</h1>
-        <p>SiRa Convert is built for private document workflows. Most file processing occurs directly in your browser.</p>
-        <ul>
-            <li>Uploaded files are processed locally for conversion tools.</li>
-            <li>Authentication may use third-party providers when you choose to sign in.</li>
-            <li>No hidden tracking is intentionally added in core conversion flow.</li>
-        </ul>
-        <a class="legal-back" href="index.html">Back to Home</a>
+<main class="page-shell">
+  <nav class="top-nav" aria-label="Page navigation">
+    <div class="top-nav-inner">
+      <a class="brand-link" href="index.html">
+        <img class="brand-logo" src="logo.png" alt="SiRa Convert logo" />
+        <span>SiRa Convert</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="blog.html">Blog</a>
+        <a class="nav-link" href="privacy.html" aria-current="page">Privacy</a>
+        <a class="nav-link" href="terms.html">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="badge">Privacy First</span>
+    <h1>Privacy Policy</h1>
+    <p>SiRa Convert is designed for safe document workflows with browser-first processing and transparent policy practices.</p>
+
+    <div class="highlights" aria-label="Privacy highlights">
+      <div class="highlight">Most file processing is performed directly in your browser.</div>
+      <div class="highlight">We focus on minimal data collection for product analytics and reliability.</div>
+      <div class="highlight">You control what you upload, process, and keep on your device.</div>
+    </div>
+  </section>
+
+  <section class="grid" aria-label="Privacy details">
+    <article class="card">
+      <h2>1. Data We Process</h2>
+      <p>Files selected in conversion tools are processed by app logic to generate outputs. File names and metadata may be handled temporarily in browser memory while you use a tool.</p>
     </article>
+
+    <article class="card">
+      <h2>2. Local Processing</h2>
+      <p>Core conversion actions are intended to run client-side. This architecture is designed to reduce unnecessary transfer of your document content.</p>
+    </article>
+
+    <article class="card">
+      <h2>3. Analytics and Diagnostics</h2>
+      <p>We may use basic analytics (such as Google Analytics) to understand page traffic and product quality. This does not change your control over documents you process in the app.</p>
+    </article>
+
+    <article class="card">
+      <h2>4. Third-Party Services</h2>
+      <ul>
+        <li>Hosting and infrastructure providers may process standard technical logs.</li>
+        <li>Authentication providers may apply their own privacy practices when sign-in is used.</li>
+        <li>Third-party services are governed by their own terms and policies.</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <h2>5. Retention and Security</h2>
+      <p>Temporary processing data should not be retained longer than needed for app function. You remain responsible for secure storage and handling of exported files.</p>
+    </article>
+
+    <article class="card">
+      <h2>6. Policy Owner</h2>
+      <p>This app and policy are managed by <strong>RAGHAV PRATAP</strong>. Policy updates may occur as legal or product requirements change.</p>
+    </article>
+  </section>
+
+  <section class="note">
+    <p>Last updated: February 15, 2026. Continued use of SiRa Convert after policy updates means you accept the revised policy.</p>
+  </section>
+
+  <div class="actions">
+    <a class="back-link" href="index.html">Back to Home</a>
+    <a class="secondary-link" href="terms.html">View Terms of Use</a>
+  </div>
 </main>
-<script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-}
-</script>
+<script src="simple-sw-register.js"></script>
 </body>
 </html>

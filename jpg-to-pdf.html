@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>JPG to PDF | SiRa Convert</title>
 <meta name="description" content="Convert JPG, PNG, and WEBP images into a single PDF with custom layout options in your browser.">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
@@ -31,28 +32,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&family=Outfit:wght@600;900&display=swap" rel="stylesheet" />
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-7RQ1PPS64C");
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "SiRa Convert JPG to PDF",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web Browser",
-  "url": "https://sira-452b7.web.app/jpg-to-pdf.html",
-  "description": "Convert JPG, PNG, and WEBP images to high-quality PDF in-browser with advanced quality controls.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
-}
-</script>
+<script src="gtag-init.js"></script>
+<script src="structured-data.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
@@ -134,7 +115,7 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 .user-menu-top{ padding:5px 5px 12px; border-bottom:1px solid var(--tool-border); margin-bottom:10px; }
 .user-name{ display:block; font-weight:800; font-size:.88rem; }
 .user-mode{ color:var(--tool-text-muted); font-size:.75rem; }
-.user-menu-home{ width:100%; padding:10px; background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.35); border-radius:10px; color:var(--accent); font-weight:700; cursor:pointer; }
+.user-menu-home{ width:100%; padding:10px; background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.35); border-radius:10px; color:var(--accent); font-weight:700; cursor:pointer; display:block; text-decoration:none; text-align:center; }
 
 .tool-wrapper{ max-width:1240px; margin:auto; padding:30px 18px 76px; width:100%; position:relative; z-index:1; }
 .pro-card{ background:linear-gradient(165deg, rgba(255,255,255,.03), transparent 35%), var(--tool-panel); border:1px solid var(--tool-border); border-radius:28px; padding:28px; box-shadow:var(--shadow); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); animation:liftIn .5s ease; }
@@ -200,6 +181,11 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
 .preview-canvas{ display:flex; align-items:center; justify-content:center; padding:14px; background:linear-gradient(180deg, rgba(0,0,0,.09), transparent 35%), radial-gradient(500px 220px at 50% -10%, rgba(56,189,248,.1), transparent 72%), var(--tool-surface-soft); }
 .preview-stage img{ max-width:100%; max-height:450px; border-radius:10px; object-fit:contain; border:1px solid var(--tool-border); }
 .preview-empty{ color:var(--tool-text-muted); font-size:.9rem; text-align:center; }
+.output-preview .preview-summary{ background:linear-gradient(145deg, rgba(34,197,94,.2), rgba(20,184,166,.12)); }
+.output-preview .preview-canvas{ min-height:210px; }
+.output-preview-card{ width:100%; max-width:520px; border:1px solid var(--tool-border); border-radius:14px; padding:16px; background:var(--tool-surface-soft); box-shadow:0 10px 24px rgba(0,12,28,.2); }
+.output-preview-card h4{ margin:0 0 8px; font-family:Outfit, sans-serif; }
+.output-preview-card p{ margin:0; color:var(--tool-text-muted); font-size:.85rem; }
 
 .gallery-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
 .gallery-head h3{ margin:0; font-family:Outfit, sans-serif; font-size:1rem; }
@@ -278,6 +264,7 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
 [data-theme="light"] .hint{ color:#0f4f88; background:rgba(186, 230, 253, 0.58); border-color:rgba(33, 129, 223, 0.45); }
 [data-theme="light"] .settings-summary,
 [data-theme="light"] .preview-summary{ background:linear-gradient(145deg, rgba(56,189,248,.22), rgba(37,99,235,.14)); }
+[data-theme="light"] .output-preview .preview-summary{ background:linear-gradient(145deg, rgba(34,197,94,.18), rgba(20,184,166,.1)); }
 [data-theme="light"] .btn-primary{ background:linear-gradient(120deg, #0284c7, #2563eb); box-shadow:0 10px 22px rgba(37,99,235,.3); }
 [data-theme="light"] .btn-ghost{ background:linear-gradient(145deg, #ffffff, #eff6ff); }
 [data-theme="light"] .btn-ghost:hover{ background:linear-gradient(145deg, #f9fcff, #e7f1ff); }
@@ -333,8 +320,8 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
         </a>
 
         <div class="nav-right">
-            <button id="themeToggleBtn" class="theme-toggle" onclick="toggleThemeIcon()" title="Theme" aria-label="Toggle color theme">🌙</button>
-            <button id="profileBox" type="button" class="profile-box" onclick="handleProfileClick()" aria-label="Open profile menu">
+            <button id="themeToggleBtn" class="theme-toggle" title="Theme" aria-label="Toggle color theme">🌙</button>
+            <button id="profileBox" type="button" class="profile-box" aria-label="Open profile menu">
                 <div id="profileDisplay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
@@ -345,7 +332,7 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
                     <span class="user-name">Guest User</span>
                     <small class="user-mode">Tool-only mode</small>
                 </div>
-                <button onclick="location.href='index.html'" class="user-menu-home">Go Home</button>
+                <a href="index.html" class="user-menu-home">Go Home</a>
             </div>
         </div>
     </nav>
@@ -469,10 +456,10 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
             </aside>
         </div>
 
-        <details class="preview-details" id="previewPanel">
+        <details class="preview-details" id="uploadedPreviewPanel">
             <summary class="preview-summary">
-                <h3>Image Preview Section</h3>
-                <span id="previewState" class="settings-state">Closed</span>
+                <h3>Uploaded Image Preview</h3>
+                <span id="uploadedPreviewState" class="settings-state">Closed</span>
             </summary>
             <div class="preview-body">
                 <div class="result-head">
@@ -505,13 +492,42 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
                 </div>
             </div>
         </details>
+
+        <details class="preview-details output-preview" id="outputPreviewPanel">
+            <summary class="preview-summary">
+                <h3>Output PDF Preview</h3>
+                <span id="outputPreviewState" class="settings-state">Closed</span>
+            </summary>
+            <div class="preview-body">
+                <div class="result-head">
+                    <p id="outputResultInfo">Create PDF to view output details.</p>
+                </div>
+                <div class="preview-stage">
+                    <div class="preview-canvas" id="outputPreviewCanvas">
+                        <p class="preview-empty">Your generated PDF summary will appear here after conversion.</p>
+                    </div>
+                </div>
+            </div>
+        </details>
     </section>
 </main>
 
 <section class="cross-tools" aria-label="Other tools">
     <div class="cross-tools-grid">
-        <a class="cross-tool-btn" href="pdf-to-jpg.html"><img src="logo.png" class="tool-mini-logo" alt="SiRa logo" /> PDF to JPG</a>
-        <a class="cross-tool-btn" href="merge-pdf.html"><img src="logo.png" class="tool-mini-logo" alt="SiRa logo" /> PDF Merge</a>
+         <a href="pdf-to-jpg.html" class="tool-card">
+                <div class="icon">📄</div>
+                <div>
+                    <h3>PDF to JPG</h3>
+                    <p style="color:var(--text-dim); font-size:0.8rem;">Extract images from PDF.</p>
+                </div>
+            </a>
+            <a href="merge-pdf.html" class="tool-card">
+                <div class="icon">📚</div>
+                <div>
+                    <h3>Merge PDF</h3>
+                    <p style="color:var(--text-dim); font-size:0.8rem;">Combine multiple files.</p>
+                </div>
+            </a>
     </div>
     <div class="cross-tools-note">
         <h3>About This Page</h3>
@@ -536,7 +552,7 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
 <footer class="ultra-footer">
     <div class="footer-grid">
         <div class="f-brand">
-            <h2 class="f-logo">SiRa</h2>
+            <h2 class="f-logo">SiRa Convert</h2>
             <p class="f-tag">Next-Gen Document Toolkit</p>
             <p class="f-owner">Crafted by <strong>Raghav Pratap</strong></p>
         </div>
@@ -596,856 +612,7 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
 
 <div id="toast" class="toast info" role="status" aria-live="polite"></div>
 
-<script>
-const state = {
-    images: [],
-    busy: false,
-    activeIndex: -1,
-    pdfBlob: null,
-    pdfUrl: null,
-    dragIndex: -1
-};
-
-const PERF_LIMITS = {
-    maxImagesDesktop: 100,
-    maxImagesMobile: 50,
-    maxPixelsPerImage: 36_000_000,
-    maxPixelsTotal: 240_000_000
-};
-
-const imageInput = document.getElementById("imageInput");
-const dropZone = document.getElementById("dropZone");
-const uploadBtn = document.getElementById("uploadBtn");
-const pasteBtn = document.getElementById("pasteBtn");
-const fileMeta = document.getElementById("fileMeta");
-const convertBtn = document.getElementById("convertBtn");
-const clearBtn = document.getElementById("clearBtn");
-const downloadPdfBtn = document.getElementById("downloadPdfBtn");
-const sharePdfBtn = document.getElementById("sharePdfBtn");
-const gallery = document.getElementById("gallery");
-const galleryCount = document.getElementById("galleryCount");
-const previewEmpty = document.getElementById("previewEmpty");
-const previewImage = document.getElementById("previewImage");
-const previewTitle = document.getElementById("previewTitle");
-const previewMeta = document.getElementById("previewMeta");
-const prevPreviewBtn = document.getElementById("prevPreviewBtn");
-const nextPreviewBtn = document.getElementById("nextPreviewBtn");
-const statusText = document.getElementById("statusText");
-const resultInfo = document.getElementById("resultInfo");
-const progressBar = document.getElementById("progressBar");
-const pageSizeInput = document.getElementById("pageSizeInput");
-const orientationInput = document.getElementById("orientationInput");
-const fitInput = document.getElementById("fitInput");
-const marginInput = document.getElementById("marginInput");
-const qualityInput = document.getElementById("qualityInput");
-const compressionInput = document.getElementById("compressionInput");
-const outputNameInput = document.getElementById("outputNameInput");
-const pageSizeValue = document.getElementById("pageSizeValue");
-const orientationValue = document.getElementById("orientationValue");
-const fitValue = document.getElementById("fitValue");
-const marginValue = document.getElementById("marginValue");
-const qualityValue = document.getElementById("qualityValue");
-const compressionValue = document.getElementById("compressionValue");
-const toast = document.getElementById("toast");
-const themeBtn = document.getElementById("themeToggleBtn");
-const installAppBtn = document.getElementById("installAppBtn");
-const installPanel = document.getElementById("installFooterPanel");
-const installNotice = document.getElementById("installNotice");
-const installNoticeText = document.getElementById("installNoticeText");
-const installNoticeAction = document.getElementById("installNoticeAction");
-const installNoticeClose = document.getElementById("installNoticeClose");
-const controlsPanel = document.getElementById("controlsPanel");
-const controlsState = document.getElementById("controlsState");
-const previewPanel = document.getElementById("previewPanel");
-const previewState = document.getElementById("previewState");
-const smallScreenQuery = window.matchMedia("(max-width: 980px)");
-
-const applyTheme = (theme) => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("sira-theme", theme);
-    themeBtn.textContent = theme === "dark" ? "🌙" : "⭐";
-};
-
-window.toggleThemeIcon = () => {
-    const current = document.documentElement.getAttribute("data-theme") || "dark";
-    applyTheme(current === "dark" ? "light" : "dark");
-};
-
-applyTheme(localStorage.getItem("sira-theme") || "dark");
-
-window.handleProfileClick = () => {
-    document.getElementById("userMenu").classList.toggle("active");
-};
-
-window.addEventListener("click", (event) => {
-    if (!event.target.closest(".nav-right")) {
-        document.querySelectorAll(".settings-menu").forEach((menu) => menu.classList.remove("active"));
-    }
-});
-
-controlsPanel.addEventListener("toggle", () => {
-    controlsState.textContent = controlsPanel.open ? "Open" : "Closed";
-});
-previewPanel.addEventListener("toggle", () => {
-    previewState.textContent = previewPanel.open ? "Open" : "Closed";
-});
-
-function syncPanelDefaults() {
-    const isSmallScreen = smallScreenQuery.matches;
-    controlsPanel.open = false;
-    previewPanel.open = !isSmallScreen;
-    controlsState.textContent = controlsPanel.open ? "Open" : "Closed";
-    previewState.textContent = previewPanel.open ? "Open" : "Closed";
-}
-
-syncPanelDefaults();
-if (typeof smallScreenQuery.addEventListener === "function") {
-    smallScreenQuery.addEventListener("change", syncPanelDefaults);
-} else if (typeof smallScreenQuery.addListener === "function") {
-    smallScreenQuery.addListener(syncPanelDefaults);
-}
-
-marginInput.addEventListener("input", () => {
-    marginValue.textContent = `${marginInput.value} mm`;
-});
-qualityInput.addEventListener("input", () => {
-    qualityValue.textContent = `${qualityInput.value}%`;
-});
-compressionInput.addEventListener("change", () => {
-    compressionValue.textContent = compressionInput.selectedOptions[0].text;
-});
-pageSizeInput.addEventListener("change", () => {
-    pageSizeValue.textContent = pageSizeInput.selectedOptions[0].text;
-});
-orientationInput.addEventListener("change", () => {
-    orientationValue.textContent = orientationInput.selectedOptions[0].text;
-});
-fitInput.addEventListener("change", () => {
-    fitValue.textContent = fitInput.selectedOptions[0].text;
-});
-
-uploadBtn.addEventListener("click", (event) => {
-    event.stopPropagation();
-    imageInput.click();
-});
-dropZone.addEventListener("click", () => imageInput.click());
-dropZone.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    dropZone.classList.add("dragging");
-});
-dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragging"));
-dropZone.addEventListener("drop", async (event) => {
-    event.preventDefault();
-    dropZone.classList.remove("dragging");
-    if (event.dataTransfer && event.dataTransfer.files) {
-        await addFiles(Array.from(event.dataTransfer.files));
-    }
-});
-
-pasteBtn.addEventListener("click", (event) => {
-    event.stopPropagation();
-    handlePasteButton();
-});
-document.addEventListener("paste", handlePasteShortcut);
-
-imageInput.addEventListener("change", async () => {
-    if (imageInput.files && imageInput.files.length) {
-        await addFiles(Array.from(imageInput.files));
-    }
-});
-
-clearBtn.addEventListener("click", resetAll);
-convertBtn.addEventListener("click", createPdf);
-downloadPdfBtn.addEventListener("click", downloadPdf);
-sharePdfBtn.addEventListener("click", sharePdf);
-prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
-nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
-
-async function handlePasteButton() {
-    if (!navigator.clipboard || !navigator.clipboard.read) {
-        showToast("Clipboard button not supported. Use Ctrl+V.", "warn");
-        return;
-    }
-
-    try {
-        const clipboardItems = await navigator.clipboard.read();
-        const files = [];
-        for (const item of clipboardItems) {
-            const imageType = item.types.find((type) => type.startsWith("image/"));
-            if (!imageType) continue;
-            const blob = await item.getType(imageType);
-            files.push(new File([blob], `clipboard-${Date.now()}.png`, { type: imageType }));
-        }
-        if (!files.length) {
-            showToast("No image found in clipboard.", "warn");
-            return;
-        }
-        await addFiles(files);
-    } catch (error) {
-        showToast("Clipboard access blocked. Try Ctrl+V.", "warn");
-    }
-}
-
-async function handlePasteShortcut(event) {
-    const items = event.clipboardData && event.clipboardData.items;
-    if (!items) return;
-
-    const files = [];
-    for (const item of items) {
-        if (item.kind !== "file") continue;
-        const file = item.getAsFile();
-        if (!file || !file.type.startsWith("image/")) continue;
-        files.push(file);
-    }
-    if (files.length) {
-        event.preventDefault();
-        await addFiles(files);
-    }
-}
-
-async function addFiles(files) {
-    if (state.busy) return;
-
-    const valid = files.filter((file) => file.type.startsWith("image/"));
-    if (!valid.length) {
-        showToast("Only image files are supported.", "error");
-        return;
-    }
-    validateIncomingImages(valid.length);
-
-    setStatus("Reading images...");
-    for (const file of valid) {
-        const imageData = await buildImageData(file);
-        state.images.push(imageData);
-    }
-
-    state.pdfBlob = null;
-    revokePdfUrl();
-    downloadPdfBtn.disabled = true;
-    sharePdfBtn.disabled = true;
-    convertBtn.disabled = state.images.length === 0;
-
-    renderQueue();
-    updateFileMeta();
-    resultInfo.textContent = `${state.images.length} image(s) queued.`;
-    setStatus("Images ready. Click Create PDF.");
-    showToast(`${valid.length} image(s) added.`, "success");
-}
-
-async function buildImageData(file) {
-    const url = URL.createObjectURL(file);
-    try {
-        const dims = await getImageDimensions(url);
-        validateImageDimensions(dims, file.name || "image");
-        return {
-            id: cryptoRandom(),
-            file,
-            url,
-            name: file.name || "image",
-            width: dims.width,
-            height: dims.height,
-            size: file.size
-        };
-    } catch (error) {
-        URL.revokeObjectURL(url);
-        throw error;
-    }
-}
-
-function getImageDimensions(url) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
-        img.onerror = reject;
-        img.src = url;
-    });
-}
-
-function renderQueue() {
-    gallery.innerHTML = "";
-    galleryCount.textContent = `${state.images.length} file${state.images.length > 1 ? "s" : ""}`;
-
-    state.images.forEach((image, index) => {
-        const card = document.createElement("article");
-        card.className = "thumb";
-        card.draggable = true;
-        card.innerHTML = `
-            <button class="remove" type="button" aria-label="Remove image">×</button>
-            <img src="${image.url}" alt="${escapeHtml(image.name)}" loading="lazy" />
-            <p class="caption">${escapeHtml(shortName(image.name))}</p>
-            <p class="meta">${image.width}×${image.height} • ${formatBytes(image.size)}</p>
-        `;
-
-        const removeBtn = card.querySelector(".remove");
-        const imageEl = card.querySelector("img");
-        removeBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            removeImage(index);
-        });
-        imageEl.addEventListener("click", () => setPreviewByIndex(index));
-        card.addEventListener("dragstart", () => {
-            state.dragIndex = index;
-        });
-        card.addEventListener("dragover", (event) => {
-            event.preventDefault();
-            card.classList.add("drag-over");
-        });
-        card.addEventListener("dragleave", () => {
-            card.classList.remove("drag-over");
-        });
-        card.addEventListener("drop", (event) => {
-            event.preventDefault();
-            card.classList.remove("drag-over");
-            reorderImages(state.dragIndex, index);
-        });
-        card.addEventListener("dragend", () => {
-            state.dragIndex = -1;
-            card.classList.remove("drag-over");
-        });
-
-        gallery.appendChild(card);
-    });
-
-    if (state.images.length) {
-        setPreviewByIndex(Math.max(0, Math.min(state.activeIndex, state.images.length - 1)));
-    } else {
-        clearPreview();
-    }
-}
-
-function setPreviewByIndex(index) {
-    if (index < 0 || index >= state.images.length) return;
-    const image = state.images[index];
-    state.activeIndex = index;
-    previewImage.src = image.url;
-    previewImage.hidden = false;
-    previewImage.alt = `Preview of ${image.name}`;
-    previewEmpty.hidden = true;
-    previewTitle.textContent = `Image ${index + 1} selected`;
-    previewMeta.textContent = `${image.width}×${image.height} px • ${formatBytes(image.size)} • ${image.name}`;
-    prevPreviewBtn.disabled = index === 0;
-    nextPreviewBtn.disabled = index === state.images.length - 1;
-
-    Array.from(gallery.children).forEach((item, idx) => {
-        item.classList.toggle("active", idx === index);
-    });
-}
-
-function removeImage(index) {
-    const [removed] = state.images.splice(index, 1);
-    if (removed) URL.revokeObjectURL(removed.url);
-
-    state.pdfBlob = null;
-    revokePdfUrl();
-    downloadPdfBtn.disabled = true;
-    sharePdfBtn.disabled = true;
-    convertBtn.disabled = state.images.length === 0;
-
-    renderQueue();
-    updateFileMeta();
-    resultInfo.textContent = state.images.length ? `${state.images.length} image(s) queued.` : "No images selected yet.";
-    setStatus(state.images.length ? "Image removed." : "Waiting for image upload/paste.");
-}
-
-function reorderImages(fromIndex, toIndex) {
-    if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return;
-    if (fromIndex >= state.images.length || toIndex >= state.images.length) return;
-
-    const [moved] = state.images.splice(fromIndex, 1);
-    state.images.splice(toIndex, 0, moved);
-    renderQueue();
-    setPreviewByIndex(toIndex);
-    state.pdfBlob = null;
-    revokePdfUrl();
-    downloadPdfBtn.disabled = true;
-    sharePdfBtn.disabled = true;
-    setStatus("Image order updated.");
-}
-
-async function createPdf() {
-    if (!state.images.length || state.busy) return;
-
-    state.busy = true;
-    convertBtn.disabled = true;
-    downloadPdfBtn.disabled = true;
-    sharePdfBtn.disabled = true;
-    progressBar.style.width = "0%";
-
-    try {
-        setStatus("Generating PDF...");
-        const margin = Number(marginInput.value);
-        const imageQuality = Number(qualityInput.value);
-        const compression = compressionInput.value;
-        const sizeMode = pageSizeInput.value;
-        const orientationMode = orientationInput.value;
-        const fitMode = fitInput.value;
-        validatePdfBuildBudget(state.images, margin, imageQuality, compression);
-
-        let doc = null;
-
-        for (let i = 0; i < state.images.length; i += 1) {
-            const image = state.images[i];
-            const payload = await fileToPdfImagePayload(image.file, imageQuality);
-            const imgMm = pixelToMm(image.width, image.height);
-            const page = getPageConfig(sizeMode, orientationMode, imgMm.width, imgMm.height, margin);
-
-            if (!doc) {
-                doc = new window.jspdf.jsPDF({ unit: "mm", format: [page.width, page.height], orientation: page.width > page.height ? "l" : "p" });
-            } else {
-                doc.addPage([page.width, page.height], page.width > page.height ? "l" : "p");
-            }
-
-            const contentW = Math.max(10, page.width - margin * 2);
-            const contentH = Math.max(10, page.height - margin * 2);
-            const scale = fitMode === "cover"
-                ? Math.max(contentW / imgMm.width, contentH / imgMm.height)
-                : Math.min(contentW / imgMm.width, contentH / imgMm.height);
-            const drawW = imgMm.width * scale;
-            const drawH = imgMm.height * scale;
-            const x = margin + (contentW - drawW) / 2;
-            const y = margin + (contentH - drawH) / 2;
-
-            doc.addImage(payload.dataUrl, payload.format, x, y, drawW, drawH, undefined, compression);
-
-            const progress = Math.round(((i + 1) / state.images.length) * 100);
-            progressBar.style.width = `${progress}%`;
-            setStatus(`Processed image ${i + 1}/${state.images.length}.`);
-            await yieldToUi();
-        }
-
-        if (!doc) throw new Error("No pages generated.");
-
-        state.pdfBlob = doc.output("blob");
-        revokePdfUrl();
-        state.pdfUrl = URL.createObjectURL(state.pdfBlob);
-
-        resultInfo.textContent = `PDF created from ${state.images.length} image(s) at ${imageQuality}% quality.`;
-        setStatus("PDF is ready. You can download or share.");
-        downloadPdfBtn.disabled = false;
-        sharePdfBtn.disabled = false;
-        showToast("PDF created successfully.", "success");
-    } catch (error) {
-        setStatus("Failed to create PDF.");
-        showToast(error.message || "Failed to create PDF.", "error");
-    } finally {
-        state.busy = false;
-        convertBtn.disabled = state.images.length === 0;
-    }
-}
-
-function getPageConfig(sizeMode, orientationMode, imgW, imgH, margin) {
-    let width;
-    let height;
-
-    if (sizeMode === "auto") {
-        width = Math.max(60, imgW + margin * 2);
-        height = Math.max(60, imgH + margin * 2);
-    } else if (sizeMode === "letter") {
-        width = 215.9;
-        height = 279.4;
-    } else {
-        width = 210;
-        height = 297;
-    }
-
-    let landscape = imgW > imgH;
-    if (orientationMode === "portrait") landscape = false;
-    if (orientationMode === "landscape") landscape = true;
-
-    if (landscape && height > width) {
-        [width, height] = [height, width];
-    }
-    if (!landscape && width > height) {
-        [width, height] = [height, width];
-    }
-
-    return { width, height };
-}
-
-function pixelToMm(pxW, pxH) {
-    return { width: pxW * 0.264583, height: pxH * 0.264583 };
-}
-
-function fileToPdfImagePayload(file, qualityPercent) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        const reader = new FileReader();
-        const quality = Math.min(1, Math.max(0.8, qualityPercent / 100));
-        const type = String(file.type || "").toLowerCase();
-        const usePng = type === "image/png";
-
-        reader.onload = () => {
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                const ctx = canvas.getContext("2d", { alpha: false });
-                if (!usePng) {
-                    ctx.fillStyle = "#ffffff";
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                }
-                ctx.drawImage(img, 0, 0);
-                if (usePng) {
-                    resolve({ dataUrl: canvas.toDataURL("image/png"), format: "PNG" });
-                    return;
-                }
-                resolve({ dataUrl: canvas.toDataURL("image/jpeg", quality), format: "JPEG" });
-            };
-            img.onerror = reject;
-            img.src = reader.result;
-        };
-
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-function downloadPdf() {
-    if (!state.pdfBlob || !state.pdfUrl) return;
-    const link = document.createElement("a");
-    link.href = state.pdfUrl;
-    link.download = buildOutputName();
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    showToast("PDF downloaded.", "success");
-}
-
-async function sharePdf() {
-    if (!state.pdfBlob) return;
-
-    try {
-        const file = new File([state.pdfBlob], buildOutputName(), { type: "application/pdf" });
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-                files: [file],
-                title: "JPG to PDF",
-                text: "Created with SiRa Convert"
-            });
-            showToast("PDF shared successfully.", "success");
-            return;
-        }
-
-        showToast("Sharing is not supported on this browser.", "warn");
-    } catch (error) {
-        if (error.name !== "AbortError") showToast("Failed to share PDF.", "error");
-    }
-}
-
-function updateFileMeta() {
-    if (!state.images.length) {
-        fileMeta.style.display = "none";
-        fileMeta.innerHTML = "";
-        return;
-    }
-
-    const totalBytes = state.images.reduce((sum, img) => sum + img.size, 0);
-    fileMeta.style.display = "flex";
-    fileMeta.innerHTML = `
-        <span class="pill">Files: ${state.images.length}</span>
-        <span class="pill">Total size: ${formatBytes(totalBytes)}</span>
-        <span class="pill">Output: High-quality PDF</span>
-    `;
-}
-
-function resetAll() {
-    for (const image of state.images) URL.revokeObjectURL(image.url);
-    state.images = [];
-    state.activeIndex = -1;
-    state.busy = false;
-    state.pdfBlob = null;
-    revokePdfUrl();
-
-    imageInput.value = "";
-    gallery.innerHTML = "";
-    galleryCount.textContent = "0 files";
-    clearPreview();
-    updateFileMeta();
-
-    progressBar.style.width = "0%";
-    convertBtn.disabled = true;
-    downloadPdfBtn.disabled = true;
-    sharePdfBtn.disabled = true;
-    resultInfo.textContent = "No images selected yet.";
-    setStatus("Waiting for image upload/paste.");
-}
-
-function clearPreview() {
-    previewImage.hidden = true;
-    previewImage.removeAttribute("src");
-    previewEmpty.hidden = false;
-    previewTitle.textContent = "No image selected";
-    previewMeta.textContent = "Add images to inspect details before generating PDF.";
-    prevPreviewBtn.disabled = true;
-    nextPreviewBtn.disabled = true;
-}
-
-function revokePdfUrl() {
-    if (state.pdfUrl) {
-        URL.revokeObjectURL(state.pdfUrl);
-        state.pdfUrl = null;
-    }
-}
-
-function buildOutputName() {
-    const base = (outputNameInput.value || "sira-jpg-to-pdf").trim() || "sira-jpg-to-pdf";
-    return base.toLowerCase().endsWith(".pdf") ? base : `${base}.pdf`;
-}
-
-function setStatus(message) {
-    statusText.textContent = message;
-}
-
-function validateIncomingImages(newCount) {
-    const maxImages = window.matchMedia("(max-width: 900px)").matches
-        ? PERF_LIMITS.maxImagesMobile
-        : PERF_LIMITS.maxImagesDesktop;
-
-    if (state.images.length + newCount > maxImages) {
-        throw new Error(`Please keep up to ${maxImages} images per run for stable performance.`);
-    }
-}
-
-function validateImageDimensions(dims, name) {
-    const pixels = dims.width * dims.height;
-    if (!Number.isFinite(pixels) || pixels <= 0) {
-        throw new Error(`${name} could not be read.`);
-    }
-    if (pixels > PERF_LIMITS.maxPixelsPerImage) {
-        throw new Error(`${name} is too large. Resize the image before converting.`);
-    }
-}
-
-function validatePdfBuildBudget(images, margin, imageQuality, compression) {
-    if (!Number.isFinite(margin) || margin < 0 || margin > 50) {
-        throw new Error("Margin value is out of range.");
-    }
-    if (!Number.isFinite(imageQuality) || imageQuality < 80 || imageQuality > 100) {
-        throw new Error("Image quality must be between 80 and 100.");
-    }
-    if (!["FAST", "MEDIUM", "SLOW"].includes(compression)) {
-        throw new Error("Invalid PDF compression mode.");
-    }
-
-    let totalPixels = 0;
-    for (const image of images) {
-        const pixels = image.width * image.height;
-        if (!Number.isFinite(pixels) || pixels <= 0) {
-            throw new Error(`Invalid image dimensions: ${image.name}`);
-        }
-        if (pixels > PERF_LIMITS.maxPixelsPerImage) {
-            throw new Error(`${image.name} is too large for stable conversion.`);
-        }
-        totalPixels += pixels;
-    }
-
-    if (totalPixels > PERF_LIMITS.maxPixelsTotal) {
-        throw new Error("Total image size is too heavy for browser memory. Split into smaller batches.");
-    }
-}
-
-function yieldToUi() {
-    return new Promise((resolve) => {
-        if (typeof requestAnimationFrame === "function") {
-            requestAnimationFrame(() => resolve());
-            return;
-        }
-        setTimeout(resolve, 0);
-    });
-}
-
-function showToast(message, type = "info") {
-    toast.textContent = message;
-    toast.className = `toast ${type}`;
-    toast.classList.add("show");
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2600);
-}
-
-function formatBytes(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
-
-function shortName(name) {
-    if (name.length <= 22) return name;
-    return `${name.slice(0, 19)}...`;
-}
-
-function escapeHtml(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-function cryptoRandom() {
-    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-        try {
-            const registration = await navigator.serviceWorker.register("sw.js", { updateViaCache: "none" });
-            if (registration.waiting) {
-                showToast("App update ready. Refresh to use the latest version.", "info");
-            }
-            registration.addEventListener("updatefound", () => {
-                const nextWorker = registration.installing;
-                if (!nextWorker) return;
-                nextWorker.addEventListener("statechange", () => {
-                    if (nextWorker.state === "installed" && navigator.serviceWorker.controller) {
-                        showToast("New version available. Refresh to update.", "info");
-                    }
-                });
-            });
-            setInterval(() => {
-                registration.update().catch(() => {});
-            }, 60 * 60 * 1000);
-        } catch (error) {
-            console.error("Service worker registration failed:", error);
-        }
-    });
-}
-
-const dismissedKey = "sira-install-dismissed";
-const installedKey = "sira-installed";
-let deferredInstallPrompt = null;
-
-const isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-const isSafariBrowser =
-    /safari/i.test(window.navigator.userAgent) &&
-    !/crios|fxios|edgios|opr\//i.test(window.navigator.userAgent);
-
-const isStandaloneMode = () =>
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true;
-
-const isInstalled = () => isStandaloneMode() || localStorage.getItem(installedKey) === "true";
-
-const detectInstalledRelatedApps = async () => {
-    if (!("getInstalledRelatedApps" in navigator)) {
-        return false;
-    }
-
-    try {
-        const relatedApps = await navigator.getInstalledRelatedApps();
-        if (Array.isArray(relatedApps) && relatedApps.length > 0) {
-            localStorage.setItem(installedKey, "true");
-            return true;
-        }
-    } catch (error) {
-        console.debug("Related app detection unavailable:", error);
-    }
-
-    return false;
-};
-
-const hideInstallExperience = () => {
-    installPanel.hidden = true;
-    installNotice.hidden = true;
-};
-
-const showInstallExperience = ({ manualInstall = false } = {}) => {
-    if (isInstalled()) {
-        hideInstallExperience();
-        return;
-    }
-
-    installPanel.hidden = false;
-
-    if (sessionStorage.getItem(dismissedKey) === "true") {
-        installNotice.hidden = true;
-        return;
-    }
-
-    installNoticeText.textContent = manualInstall
-        ? 'Tap Share and then "Add to Home Screen" to install this app.'
-        : "Install this app for faster access and offline support.";
-    installNotice.hidden = false;
-};
-
-const markAsInstalled = () => {
-    localStorage.setItem(installedKey, "true");
-    hideInstallExperience();
-};
-
-const triggerInstall = async () => {
-    if (isInstalled()) {
-        hideInstallExperience();
-        return;
-    }
-
-    if (deferredInstallPrompt) {
-        deferredInstallPrompt.prompt();
-        const choice = await deferredInstallPrompt.userChoice.catch(() => null);
-        if (choice && choice.outcome === "accepted") {
-            markAsInstalled();
-            showToast("SiRa app installed successfully.", "success");
-        }
-        deferredInstallPrompt = null;
-        return;
-    }
-
-    if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
-        showInstallExperience({ manualInstall: true });
-        showToast('Use Share → "Add to Home Screen" to install.', "info");
-        return;
-    }
-
-    installNotice.hidden = true;
-    installPanel.hidden = true;
-};
-
-installAppBtn.addEventListener("click", triggerInstall);
-installNoticeAction.addEventListener("click", triggerInstall);
-installNoticeClose.addEventListener("click", () => {
-    sessionStorage.setItem(dismissedKey, "true");
-    installNotice.hidden = true;
-});
-
-window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-    showInstallExperience();
-    showToast("Install SiRa for app-like speed and offline use.", "info");
-});
-
-window.addEventListener("appinstalled", () => {
-    markAsInstalled();
-    showToast("SiRa app installed successfully.", "success");
-});
-
-window.addEventListener("load", async () => {
-    if (isInstalled()) {
-        hideInstallExperience();
-        return;
-    }
-
-    if (await detectInstalledRelatedApps()) {
-        hideInstallExperience();
-        return;
-    }
-
-    if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
-        showInstallExperience({ manualInstall: true });
-        return;
-    }
-
-    if (deferredInstallPrompt) {
-        showInstallExperience();
-        return;
-    }
-
-    installPanel.hidden = true;
-    installNotice.hidden = true;
-});
-</script>
+<script src="shared-ui.js"></script>
+<script src="jpg-to-pdf.js"></script>
 </body>
 </html>
