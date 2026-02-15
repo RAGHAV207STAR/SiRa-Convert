@@ -181,6 +181,7 @@
     var dismissedKey = opts.dismissedKey || "sira-install-dismissed";
     var installedKey = opts.installedKey || "sira-installed";
     var deferredInstallPrompt = null;
+    var fallbackNoticeTimer = null;
 
     var isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
     var isSafariBrowser =
@@ -200,7 +201,19 @@
       installNotice.hidden = true;
     }
 
-    function showInstallExperience(manualInstall) {
+    function setNoticeMessage(message) {
+      noticeText.textContent = message || "Install this app for faster access and offline support.";
+    }
+
+    function getManualInstallMessage() {
+      if (isIosDevice && isSafariBrowser) {
+        return 'Tap Share and then "Add to Home Screen" to install this app.';
+      }
+
+      return "Use your browser menu and choose Install App or Add to Home Screen.";
+    }
+
+    function showInstallExperience(message) {
       if (isInstalled()) {
         hideInstallExperience();
         return;
@@ -213,9 +226,7 @@
         return;
       }
 
-      noticeText.textContent = manualInstall
-        ? 'Tap Share and then "Add to Home Screen" to install this app.'
-        : "Install this app for faster access and offline support.";
+      setNoticeMessage(message);
       installNotice.hidden = false;
     }
 
@@ -266,14 +277,9 @@
         return;
       }
 
-      if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
-        showInstallExperience(true);
-        if (notify) notify('Use Share → "Add to Home Screen" to install.', "info");
-        return;
-      }
-
-      installNotice.hidden = true;
-      installPanel.hidden = true;
+      var manualMessage = getManualInstallMessage();
+      showInstallExperience(manualMessage);
+      if (notify) notify(manualMessage, "info");
     }
 
     installButton.addEventListener("click", triggerInstall);
@@ -290,7 +296,7 @@
       }
       event.preventDefault();
       deferredInstallPrompt = event;
-      showInstallExperience(false);
+      showInstallExperience("Install this app for faster access and offline support.");
       if (notify) notify("Install SiRa for app-like speed and offline use.", "info");
     });
 
@@ -324,19 +330,23 @@
           return;
         }
 
-        if (isIosDevice && isSafariBrowser && !isStandaloneMode()) {
-          showInstallExperience(true);
-          return;
-        }
-
+        showInstallExperience("Install this app for faster access and offline support.");
         if (deferredInstallPrompt) {
-          showInstallExperience(false);
           return;
         }
 
-        installPanel.hidden = true;
-        installNotice.hidden = true;
+        fallbackNoticeTimer = window.setTimeout(function () {
+          if (!deferredInstallPrompt && !isInstalled()) {
+            showInstallExperience(getManualInstallMessage());
+          }
+        }, 3000);
       });
+    });
+
+    window.addEventListener("beforeunload", function () {
+      if (fallbackNoticeTimer) {
+        window.clearTimeout(fallbackNoticeTimer);
+      }
     });
   }
 

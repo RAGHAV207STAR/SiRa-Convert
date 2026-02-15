@@ -1,4 +1,4 @@
-const SW_VERSION = "v9";
+const SW_VERSION = "v10";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;
@@ -23,6 +23,7 @@ const APP_SHELL = [
     "/structured-data.js",
     "/simple-sw-register.js",
     "/logo.png",
+    "/logo-192.png",
     "/manifest.json"
 ];
 
