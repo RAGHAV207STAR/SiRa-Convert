@@ -17,6 +17,14 @@
     }
   }
 
+  function safeRemove(storage, key) {
+    try {
+      storage.removeItem(key);
+    } catch (error) {
+      // Ignore storage failures (private mode/quota).
+    }
+  }
+
   function initTheme(options) {
     var opts = options || {};
     var themeKey = opts.storageKey || "sira-theme";
@@ -84,6 +92,88 @@
     });
   }
 
+  function initAuthBridge(options) {
+    var opts = options || {};
+    var storageKey = opts.storageKey || "sira-auth-user";
+    var profileDisplay = document.getElementById(opts.profileDisplayId || "profileDisplay");
+    var userNameDisplay = document.getElementById(opts.userNameId || "userNameDisplay");
+    var userEmailDisplay = document.getElementById(opts.userEmailId || "userEmailDisplay");
+    var loginLink = document.getElementById(opts.loginLinkId || "loginFromToolLink");
+    var logoutButton = document.getElementById(opts.logoutButtonId || "logoutBtn");
+    var logoutUrl = opts.logoutUrl || "index.html?logout=1";
+    var loginUrl = opts.loginUrl || "index.html?login=1";
+
+    function getStoredUser() {
+      var raw = safeGet(localStorage, storageKey);
+      if (!raw) return null;
+      try {
+        var parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return null;
+        return parsed;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setGuestAvatar() {
+      if (!profileDisplay) return;
+      profileDisplay.innerHTML =
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+    }
+
+    function setUserAvatar(photoURL, name) {
+      if (!profileDisplay) return;
+      profileDisplay.replaceChildren();
+      if (!photoURL) {
+        setGuestAvatar();
+        return;
+      }
+      var img = document.createElement("img");
+      img.src = photoURL;
+      img.alt = name || "User profile";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      img.referrerPolicy = "no-referrer";
+      profileDisplay.appendChild(img);
+    }
+
+    function render() {
+      var storedUser = getStoredUser();
+      if (storedUser) {
+        if (userNameDisplay) userNameDisplay.textContent = storedUser.displayName || "Signed-in User";
+        if (userEmailDisplay) userEmailDisplay.textContent = storedUser.email || "Signed in";
+        if (loginLink) {
+          loginLink.textContent = "Account";
+          loginLink.href = "index.html";
+        }
+        if (logoutButton) logoutButton.hidden = false;
+        setUserAvatar(storedUser.photoURL, storedUser.displayName);
+        return;
+      }
+
+      if (userNameDisplay) userNameDisplay.textContent = "Guest User";
+      if (userEmailDisplay) userEmailDisplay.textContent = "Tool-only mode";
+      if (loginLink) {
+        loginLink.textContent = "Sign in";
+        loginLink.href = loginUrl;
+      }
+      if (logoutButton) logoutButton.hidden = true;
+      setGuestAvatar();
+    }
+
+    if (logoutButton && !logoutButton.dataset.boundLogoutBridge) {
+      logoutButton.addEventListener("click", function () {
+        safeRemove(localStorage, storageKey);
+        window.location.href = logoutUrl;
+      });
+      logoutButton.dataset.boundLogoutBridge = "true";
+    }
+
+    render();
+    return { render: render };
+  }
+
   function initPanelToggles(options) {
     var opts = options || {};
     var controlsPanel = document.getElementById(opts.controlsPanelId || "controlsPanel");
@@ -131,7 +221,7 @@
     var opts = options || {};
     var onUpdateReady = typeof opts.onUpdateReady === "function" ? opts.onUpdateReady : null;
     var onError = typeof opts.onError === "function" ? opts.onError : null;
-    var swPath = opts.path || "sw.js";
+    var swPath = opts.path || "/sw.js";
 
     if (!("serviceWorker" in navigator)) return;
 
@@ -172,16 +262,28 @@
     var noticeText = document.getElementById(opts.noticeTextId || "installNoticeText");
     var noticeAction = document.getElementById(opts.noticeActionId || "installNoticeAction");
     var noticeClose = document.getElementById(opts.noticeCloseId || "installNoticeClose");
+    var installHeader = document.getElementById(opts.headerId || "installHeaderBanner");
+    var headerText = document.getElementById(opts.headerTextId || "installHeaderText");
+    var headerAction = document.getElementById(opts.headerActionId || "installHeaderAction");
+    var headerClose = document.getElementById(opts.headerCloseId || "installHeaderClose");
     var notify = typeof opts.notify === "function" ? opts.notify : null;
 
-    if (!installPanel || !installButton || !installNotice || !noticeText || !noticeAction || !noticeClose) {
+    var hasFooterInstall = !!(installPanel && installButton);
+    var hasBottomNotice = !!(installNotice && noticeText && noticeAction && noticeClose);
+    var hasHeaderNotice = !!(installHeader && headerText && headerAction && headerClose);
+
+    if (!hasFooterInstall && !hasBottomNotice && !hasHeaderNotice) {
       return;
     }
 
     var dismissedKey = opts.dismissedKey || "sira-install-dismissed";
+    var dismissedUntilKey = opts.dismissedUntilKey || "sira-install-dismissed-until";
     var installedKey = opts.installedKey || "sira-installed";
+    var dismissForMs = Number(opts.dismissForMs || 6 * 60 * 60 * 1000);
+    var bannerAutoHideMs = Number(opts.bannerAutoHideMs || 12000);
     var deferredInstallPrompt = null;
     var fallbackNoticeTimer = null;
+    var headerAutoHideTimer = null;
 
     var isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
     var isSafariBrowser =
@@ -196,13 +298,47 @@
       return isStandaloneMode() || safeGet(localStorage, installedKey) === "true";
     }
 
+    function isDismissed() {
+      var dismissedUntil = Number(safeGet(localStorage, dismissedUntilKey) || "0");
+      if (dismissedUntil > Date.now()) return true;
+      return safeGet(sessionStorage, dismissedKey) === "true";
+    }
+
+    function clearHeaderAutoHideTimer() {
+      if (!headerAutoHideTimer) return;
+      window.clearTimeout(headerAutoHideTimer);
+      headerAutoHideTimer = null;
+    }
+
     function hideInstallExperience() {
-      installPanel.hidden = true;
-      installNotice.hidden = true;
+      clearHeaderAutoHideTimer();
+      if (installPanel) installPanel.hidden = true;
+      if (installNotice) installNotice.hidden = true;
+      if (installHeader) {
+        installHeader.hidden = true;
+        installHeader.classList.remove("show");
+      }
+    }
+
+    function hideTransientPrompts() {
+      clearHeaderAutoHideTimer();
+      if (installNotice) installNotice.hidden = true;
+      if (installHeader) {
+        installHeader.hidden = true;
+        installHeader.classList.remove("show");
+      }
+    }
+
+    function dismissTransientPrompts() {
+      safeSet(sessionStorage, dismissedKey, "true");
+      safeSet(localStorage, dismissedUntilKey, String(Date.now() + dismissForMs));
+      hideTransientPrompts();
     }
 
     function setNoticeMessage(message) {
-      noticeText.textContent = message || "Install this app for faster access and offline support.";
+      var finalMessage = message || "Install this app for faster access and offline support.";
+      if (noticeText) noticeText.textContent = finalMessage;
+      if (headerText) headerText.textContent = finalMessage;
     }
 
     function getManualInstallMessage() {
@@ -219,19 +355,41 @@
         return;
       }
 
-      installPanel.hidden = false;
+      if (hasFooterInstall && installPanel) {
+        installPanel.hidden = false;
+      }
 
-      if (safeGet(sessionStorage, dismissedKey) === "true") {
-        installNotice.hidden = true;
+      if (isDismissed()) {
+        hideTransientPrompts();
         return;
       }
 
       setNoticeMessage(message);
-      installNotice.hidden = false;
+
+      if (hasHeaderNotice && installHeader) {
+        installHeader.hidden = false;
+        installHeader.classList.add("show");
+        clearHeaderAutoHideTimer();
+        headerAutoHideTimer = window.setTimeout(function () {
+          if (installHeader) {
+            installHeader.classList.remove("show");
+            installHeader.hidden = true;
+          }
+        }, bannerAutoHideMs);
+        if (hasBottomNotice && installNotice) {
+          installNotice.hidden = true;
+        }
+        return;
+      }
+
+      if (hasBottomNotice && installNotice) {
+        installNotice.hidden = false;
+      }
     }
 
     function markAsInstalled() {
       safeSet(localStorage, installedKey, "true");
+      safeRemove(localStorage, dismissedUntilKey);
       deferredInstallPrompt = null;
       hideInstallExperience();
     }
@@ -282,12 +440,26 @@
       if (notify) notify(manualMessage, "info");
     }
 
-    installButton.addEventListener("click", triggerInstall);
-    noticeAction.addEventListener("click", triggerInstall);
-    noticeClose.addEventListener("click", function () {
-      safeSet(sessionStorage, dismissedKey, "true");
-      installNotice.hidden = true;
-    });
+    if (installButton && !installButton.dataset.boundInstallPrompt) {
+      installButton.addEventListener("click", triggerInstall);
+      installButton.dataset.boundInstallPrompt = "true";
+    }
+    if (noticeAction && !noticeAction.dataset.boundInstallPrompt) {
+      noticeAction.addEventListener("click", triggerInstall);
+      noticeAction.dataset.boundInstallPrompt = "true";
+    }
+    if (headerAction && !headerAction.dataset.boundInstallPrompt) {
+      headerAction.addEventListener("click", triggerInstall);
+      headerAction.dataset.boundInstallPrompt = "true";
+    }
+    if (noticeClose && !noticeClose.dataset.boundInstallDismiss) {
+      noticeClose.addEventListener("click", dismissTransientPrompts);
+      noticeClose.dataset.boundInstallDismiss = "true";
+    }
+    if (headerClose && !headerClose.dataset.boundInstallDismiss) {
+      headerClose.addEventListener("click", dismissTransientPrompts);
+      headerClose.dataset.boundInstallDismiss = "true";
+    }
 
     window.addEventListener("beforeinstallprompt", function (event) {
       if (isInstalled()) {
@@ -344,6 +516,7 @@
     });
 
     window.addEventListener("beforeunload", function () {
+      clearHeaderAutoHideTimer();
       if (fallbackNoticeTimer) {
         window.clearTimeout(fallbackNoticeTimer);
       }
@@ -353,6 +526,7 @@
   window.SiRaShared = {
     initTheme: initTheme,
     initUserMenu: initUserMenu,
+    initAuthBridge: initAuthBridge,
     initPanelToggles: initPanelToggles,
     registerServiceWorker: registerServiceWorker,
     initInstallPrompt: initInstallPrompt

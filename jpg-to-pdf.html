@@ -9,6 +9,11 @@
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
 <meta name="keywords" content="JPG to PDF, PNG to PDF, image to PDF converter, convert photos to PDF online">
 <meta name="author" content="SiRa Convert">
+<meta name="application-name" content="SiRa Convert">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SiRa Convert">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#0f6cff">
 <link rel="canonical" href="https://sira-452b7.web.app/jpg-to-pdf.html">
 <meta property="og:title" content="JPG to PDF | SiRa Convert">
@@ -18,10 +23,12 @@
 <meta property="og:site_name" content="SiRa Convert">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png">
+<meta property="og:image:alt" content="SiRa Convert logo and branding">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="JPG to PDF | SiRa Convert">
 <meta name="twitter:description" content="Turn images into professional PDFs instantly.">
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png">
+<meta name="twitter:image:alt" content="SiRa Convert logo and branding">
 <meta name="twitter:site" content="@sira_convert">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png" type="image/png">
@@ -329,13 +336,25 @@ input[type="range"]{ width:100%; accent-color:#38bdf8; }
 
             <div id="userMenu" class="settings-menu">
                 <div class="user-menu-top">
-                    <span class="user-name">Guest User</span>
-                    <small class="user-mode">Tool-only mode</small>
+                    <span id="userNameDisplay" class="user-name">Guest User</span>
+                    <small id="userEmailDisplay" class="user-mode">Tool-only mode</small>
                 </div>
+                <a id="loginFromToolLink" href="index.html?login=1" class="user-menu-home">Sign in</a>
+                <button id="logoutBtn" type="button" class="user-menu-home" style="margin-top:8px; background:rgba(255, 71, 87, 0.12); border:1px solid rgba(255, 71, 87, 0.35); color:#ff6b81;" hidden>Logout</button>
                 <a href="index.html" class="user-menu-home">Go Home</a>
             </div>
         </div>
     </nav>
+    <div id="installHeaderBanner" class="install-header-banner" role="status" aria-live="polite" hidden>
+        <div class="install-header-content">
+            <strong>Install SiRa App</strong>
+            <p id="installHeaderText">Get app-like speed and offline support.</p>
+        </div>
+        <div class="install-header-actions">
+            <button id="installHeaderAction" type="button" class="install-header-install">Install</button>
+            <button id="installHeaderClose" type="button" class="install-header-close" aria-label="Close install notification">Close</button>
+        </div>
+    </div>
 </header>
 
 <main class="tool-wrapper">

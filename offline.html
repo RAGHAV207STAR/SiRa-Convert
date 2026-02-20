@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline | SiRa Convert</title>
+  <meta name="description" content="SiRa Convert is offline. Reconnect to continue converting files." />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #040b18 0%, #081528 100%);
+      color: #eaf2ff;
+      padding: 24px;
+      text-align: center;
+    }
+    .offline-card {
+      width: min(580px, 100%);
+      border: 1px solid rgba(120, 170, 240, 0.3);
+      border-radius: 16px;
+      padding: 28px;
+      background: rgba(10, 22, 40, 0.82);
+      box-shadow: 0 16px 46px rgba(0, 0, 0, 0.34);
+    }
+    .offline-card h1 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+    }
+    .offline-card p {
+      margin: 0 0 18px;
+      color: #b9c9e3;
+    }
+    .offline-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .offline-actions a {
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(110, 165, 240, 0.45);
+      color: #eaf2ff;
+      background: rgba(15, 40, 72, 0.76);
+    }
+  </style>
+</head>
+<body>
+  <main class="offline-card">
+    <img src="logo-192.png" width="56" height="56" alt="SiRa Convert logo" />
+    <h1>You are offline</h1>
+    <p>Reconnect to continue converting files. Installed app pages can still reopen when cached.</p>
+    <div class="offline-actions">
+      <a href="index.html">Home</a>
+      <a href="jpg-to-pdf.html">JPG to PDF</a>
+      <a href="pdf-to-jpg.html">PDF to JPG</a>
+      <a href="merge-pdf.html">Merge PDF</a>
+    </div>
+  </main>
+</body>
+</html>

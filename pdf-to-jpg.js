@@ -49,6 +49,10 @@ const uploadedInputCanvas = document.getElementById("uploadedInputCanvas");
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
+    window.SiRaShared.initAuthBridge({
+        loginUrl: "index.html?login=1",
+        logoutUrl: "index.html?logout=1"
+    });
     window.SiRaShared.initPanelToggles({
         controlsPanelId: "controlsPanel",
         controlsStateId: "controlsState",
@@ -204,7 +208,7 @@ async function handlePickedFile(file) {
     `;
     updateUploadedInputPreview(file, validation.numPages, sizeMB);
     resultInfo.textContent = "Ready to convert.";
-    setStatus("PDF loaded. Set options and click Convert PDF.");
+    setStatus("PDF loaded. Set options and click Convert JPG.");
     showToast("PDF accepted. Ready to convert.", "success");
 }
 

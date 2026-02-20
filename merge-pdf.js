@@ -45,6 +45,10 @@ const toast = document.getElementById("toast");
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
+    window.SiRaShared.initAuthBridge({
+        loginUrl: "index.html?login=1",
+        logoutUrl: "index.html?logout=1"
+    });
     window.SiRaShared.initPanelToggles({
         controlsPanelId: "controlsPanel",
         controlsStateId: "controlsState",

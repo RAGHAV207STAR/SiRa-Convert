@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://*.firebaseapp.com https://*.google.com https://*.gstatic.com https://apis.google.com; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
     <title>SiRa Convert | Professional Document Suite</title>
     <meta name="description" content="SiRa Convert is a private browser-based document toolkit to convert JPG to PDF, PDF to JPG, and merge PDF files fast.">
     <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
     <meta name="keywords" content="PDF tools, JPG to PDF, PDF to JPG, Merge PDF, online PDF converter, private PDF converter, PWA PDF app">
     <meta name="author" content="SiRa Convert">
+    <meta name="application-name" content="SiRa Convert">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SiRa Convert">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#3b82f6">
     <link rel="canonical" href="https://sira-452b7.web.app/">
     <meta property="og:title" content="SiRa Convert | Professional Document Suite">
@@ -18,10 +23,12 @@
     <meta property="og:site_name" content="SiRa Convert">
     <meta property="og:locale" content="en_US">
     <meta property="og:image" content="https://sira-452b7.web.app/logo.png">
+    <meta property="og:image:alt" content="SiRa Convert logo and branding">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SiRa Convert">
     <meta name="twitter:description" content="Professional PDF and image conversion tools in your browser.">
     <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png">
+    <meta name="twitter:image:alt" content="SiRa Convert logo and branding">
     <meta name="twitter:site" content="@sira_convert">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="logo.png" type="image/png">
@@ -92,6 +99,16 @@
                 </div>
             </div>
         </nav>
+        <div id="installHeaderBanner" class="install-header-banner" role="status" aria-live="polite" hidden>
+            <div class="install-header-content">
+                <strong>Install SiRa App</strong>
+                <p id="installHeaderText">Get app-like speed and offline support.</p>
+            </div>
+            <div class="install-header-actions">
+                <button id="installHeaderAction" type="button" class="install-header-install">Install</button>
+                <button id="installHeaderClose" type="button" class="install-header-close" aria-label="Close install notification">Close</button>
+            </div>
+        </div>
     </header>
 
     <main class="content">

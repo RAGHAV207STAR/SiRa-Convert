@@ -1,4 +1,4 @@
-const SW_VERSION = "v10";
+const SW_VERSION = "v12";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;
@@ -13,6 +13,7 @@ const APP_SHELL = [
     "/privacy.html",
     "/terms.html",
     "/blog.html",
+    "/offline.html",
     "/style.css",
     "/shared-ui.js",
     "/index.js",
@@ -28,9 +29,14 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (event) => {
-    event.waitUntil(
-        caches.open(STATIC_CACHE).then((cache) => cache.addAll(APP_SHELL))
-    );
+    event.waitUntil((async () => {
+        const cache = await caches.open(STATIC_CACHE);
+        await Promise.all(
+            APP_SHELL.map((assetUrl) =>
+                cache.add(new Request(assetUrl, { cache: "reload" })).catch(() => null)
+            )
+        );
+    })());
     self.skipWaiting();
 });
 
@@ -96,6 +102,8 @@ async function networkFirstNavigation(event) {
     } catch (error) {
         const cached = await caches.match(event.request);
         if (cached) return cached;
+        const offlineResponse = await caches.match("/offline.html");
+        if (offlineResponse) return offlineResponse;
         return (await caches.match("/index.html")) || new Response("Offline", { status: 503 });
     }
 }
