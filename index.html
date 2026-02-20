@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://*.firebaseapp.com https://*.google.com https://*.gstatic.com https://apis.google.com; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
     <title>SiRa Convert | Professional Document Suite</title>
     <meta name="description" content="SiRa Convert is a private browser-based document toolkit to convert JPG to PDF, PDF to JPG, and merge PDF files fast.">
@@ -16,6 +18,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#3b82f6">
     <link rel="canonical" href="https://sira-452b7.web.app/">
+<link rel="alternate" hreflang="en" href="https://sira-452b7.web.app/">
+<link rel="alternate" hreflang="x-default" href="https://sira-452b7.web.app/">
     <meta property="og:title" content="SiRa Convert | Professional Document Suite">
     <meta property="og:description" content="Fast and private browser-based PDF tools. Convert, merge, and export instantly.">
     <meta property="og:type" content="website">
@@ -32,6 +36,7 @@
     <meta name="twitter:site" content="@sira_convert">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
@@ -143,6 +148,45 @@
         </div>
     </main>
 
+<section class="home-insights" aria-labelledby="home-seo-heading">
+    <div class="home-insights-shell">
+        <span class="home-insights-kicker">Search + Learn</span>
+        <h2 id="home-seo-heading">Online PDF Tools for Fast Document Workflows</h2>
+        <p>SiRa Convert provides a focused browser toolkit for image-to-PDF conversion, PDF-to-image export, and PDF merging with quality controls and direct downloads.</p>
+        <div class="home-insights-grid">
+            <article class="home-insights-card">
+                <h3>Convert JPG to PDF</h3>
+                <p>Build one PDF from multiple images with margin, orientation, and quality controls.</p>
+                <a href="jpg-to-pdf.html">Open JPG to PDF</a>
+            </article>
+            <article class="home-insights-card">
+                <h3>Convert PDF to JPG</h3>
+                <p>Extract selected PDF pages to JPG or PNG and download all outputs as ZIP.</p>
+                <a href="pdf-to-jpg.html">Open PDF to JPG</a>
+            </article>
+            <article class="home-insights-card">
+                <h3>Merge PDF Files</h3>
+                <p>Combine multiple files into one merged PDF with sorting and queue controls.</p>
+                <a href="merge-pdf.html">Open Merge PDF</a>
+            </article>
+        </div>
+        <div class="home-insights-faq" aria-label="Home FAQ">
+            <details>
+                <summary>Is SiRa Convert free to use?</summary>
+                <p>Yes. Core tools are available without paid setup and can be used directly from your browser.</p>
+            </details>
+            <details>
+                <summary>Which file tasks are available right now?</summary>
+                <p>You can convert JPG to PDF, convert PDF to JPG, and merge multiple PDF files.</p>
+            </details>
+            <details>
+                <summary>Where can I read product updates?</summary>
+                <p>Visit the <a href="blog.html">SiRa Convert blog</a> for release notes, reliability updates, and roadmap updates.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
 <footer class="ultra-footer">
 
     <div class="footer-grid">
@@ -238,6 +282,7 @@
     </div>
 </div>
 
+<div id="toast" class="toast info" role="status" aria-live="polite"></div>
 
     <script src="shared-ui.js"></script>
     <script type="module" src="index.js"></script>

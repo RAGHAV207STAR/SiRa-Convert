@@ -198,7 +198,7 @@
       controlsPanel.open = false;
       previewPanel.open = !query.matches;
       if (secondaryPreviewPanel) {
-        secondaryPreviewPanel.open = !query.matches;
+        secondaryPreviewPanel.open = false;
       }
       syncLabels();
     }
@@ -523,12 +523,57 @@
     });
   }
 
+  function initInlineAlert(options) {
+    var opts = options || {};
+    var host = document.getElementById(opts.hostId || "") || document.getElementById("statusText");
+    if (!host || !host.parentNode) return null;
+
+    if (!document.getElementById("sira-inline-alert-style")) {
+      var style = document.createElement("style");
+      style.id = "sira-inline-alert-style";
+      style.textContent =
+        ".inline-alert{display:none;margin-top:10px;border-radius:10px;padding:10px 12px;font-size:.86rem;font-weight:600;border:1px solid transparent;}" +
+        ".inline-alert.show{display:block;}" +
+        ".inline-alert.error{background:rgba(220,38,38,.12);color:#fecaca;border-color:rgba(239,68,68,.5);}" +
+        ".inline-alert.info{background:rgba(37,99,235,.12);color:#bfdbfe;border-color:rgba(59,130,246,.45);}" +
+        "[data-theme='light'] .inline-alert.error{background:rgba(254,226,226,.9);color:#991b1b;border-color:rgba(239,68,68,.35);}" +
+        "[data-theme='light'] .inline-alert.info{background:rgba(219,234,254,.9);color:#1e3a8a;border-color:rgba(59,130,246,.3);}";
+      document.head.appendChild(style);
+    }
+
+    var alertEl = document.createElement("div");
+    alertEl.className = "inline-alert";
+    alertEl.setAttribute("role", "status");
+    alertEl.setAttribute("aria-live", "polite");
+    host.parentNode.insertBefore(alertEl, host.nextSibling);
+
+    function show(type, message) {
+      alertEl.className = "inline-alert show " + (type === "error" ? "error" : "info");
+      alertEl.textContent = String(message || "");
+    }
+    function clear() {
+      alertEl.className = "inline-alert";
+      alertEl.textContent = "";
+    }
+
+    return {
+      showError: function (message) {
+        show("error", message);
+      },
+      showInfo: function (message) {
+        show("info", message);
+      },
+      clear: clear
+    };
+  }
+
   window.SiRaShared = {
     initTheme: initTheme,
     initUserMenu: initUserMenu,
     initAuthBridge: initAuthBridge,
     initPanelToggles: initPanelToggles,
     registerServiceWorker: registerServiceWorker,
-    initInstallPrompt: initInstallPrompt
+    initInstallPrompt: initInstallPrompt,
+    initInlineAlert: initInlineAlert
   };
 })();

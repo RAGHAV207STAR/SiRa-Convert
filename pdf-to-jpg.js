@@ -1,20 +1,20 @@
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+const hasPdfJs = typeof window.pdfjsLib !== "undefined";
+const hasZip = typeof window.JSZip !== "undefined";
+
+if (hasPdfJs) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+}
 
 const state = {
     file: null,
-    pdfData: null,
     images: [],
     busy: false,
     lastZipBlob: null,
     activeIndex: -1
 };
-
-const PERF_LIMITS = {
-    maxPagesDesktop: 120,
-    maxPagesMobile: 60,
-    maxPixelsPerPage: 24_000_000,
-    maxPixelsTotal: 220_000_000
-};
+const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 100;
+const analytics = window.SiRaAnalytics || null;
 
 const pdfInput = document.getElementById("pdfInput");
 const dropZone = document.getElementById("dropZone");
@@ -23,6 +23,7 @@ const pasteBtn = document.getElementById("pasteBtn");
 const fileMeta = document.getElementById("fileMeta");
 const convertBtn = document.getElementById("convertBtn");
 const clearBtn = document.getElementById("clearBtn");
+const cancelUnlockBtn = document.getElementById("cancelUnlockBtn");
 const downloadZipBtn = document.getElementById("downloadZipBtn");
 const downloadAllBtn = document.getElementById("downloadAllBtn");
 const shareZipBtn = document.getElementById("shareZipBtn");
@@ -37,6 +38,7 @@ const nextPreviewBtn = document.getElementById("nextPreviewBtn");
 const statusText = document.getElementById("statusText");
 const resultInfo = document.getElementById("resultInfo");
 const progressBar = document.getElementById("progressBar");
+const modeInput = document.getElementById("modeInput");
 const scaleInput = document.getElementById("scaleInput");
 const qualityInput = document.getElementById("qualityInput");
 const formatInput = document.getElementById("formatInput");
@@ -44,8 +46,12 @@ const rangeInput = document.getElementById("rangeInput");
 const scaleValue = document.getElementById("scaleValue");
 const qualityValue = document.getElementById("qualityValue");
 const formatValue = document.getElementById("formatValue");
+const modeValue = document.getElementById("modeValue");
+const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
 const uploadedInputCanvas = document.getElementById("uploadedInputCanvas");
+let inlineAlert = null;
+let unlockCancelController = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -68,6 +74,9 @@ if (window.SiRaShared) {
     window.SiRaShared.initInstallPrompt({
         notify: (message, type) => showToast(message, type)
     });
+    if (typeof window.SiRaShared.initInlineAlert === "function") {
+        inlineAlert = window.SiRaShared.initInlineAlert({ hostId: "statusText" });
+    }
 }
 
 scaleInput.addEventListener("input", () => {
@@ -80,6 +89,10 @@ qualityInput.addEventListener("input", () => {
 formatInput.addEventListener("change", () => {
     formatValue.textContent = formatInput.selectedOptions[0].text;
 });
+modeInput.addEventListener("change", () => {
+    applyModePreset(modeInput.value);
+});
+initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -94,7 +107,13 @@ dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragging
 dropZone.addEventListener("drop", async (event) => {
     event.preventDefault();
     dropZone.classList.remove("dragging");
-    const dropped = event.dataTransfer.files && event.dataTransfer.files[0];
+    const droppedFiles = event.dataTransfer && event.dataTransfer.files
+        ? Array.from(event.dataTransfer.files)
+        : [];
+    if (droppedFiles.length > 1) {
+        showToast("PDF to JPG supports one PDF at a time. Using first file.", "warn");
+    }
+    const dropped = droppedFiles[0];
     if (dropped) {
         await handlePickedFile(dropped);
     }
@@ -107,7 +126,10 @@ pasteBtn.addEventListener("click", (event) => {
 document.addEventListener("paste", handlePasteShortcut);
 
 pdfInput.addEventListener("change", async () => {
-    if (pdfInput.files && pdfInput.files[0]) {
+    if (pdfInput.files && pdfInput.files.length) {
+        if (pdfInput.files.length > 1) {
+            showToast("PDF to JPG supports one PDF at a time. Using first file.", "warn");
+        }
         await handlePickedFile(pdfInput.files[0]);
     }
 });
@@ -119,6 +141,8 @@ downloadAllBtn.addEventListener("click", downloadAllAsJpg);
 shareZipBtn.addEventListener("click", shareZip);
 prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
 nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
+
+bootstrapDependencies();
 
 async function handlePasteButton() {
     if (!navigator.clipboard || !navigator.clipboard.read) {
@@ -147,6 +171,7 @@ async function handlePasteShortcut(event) {
     const items = event.clipboardData && event.clipboardData.items;
     if (!items) return;
 
+    const pdfFiles = [];
     for (const item of items) {
         if (item.kind !== "file") continue;
         const file = item.getAsFile();
@@ -154,11 +179,16 @@ async function handlePasteShortcut(event) {
 
         const isPdf = file.type === "application/pdf" || (file.name && file.name.toLowerCase().endsWith(".pdf"));
         if (isPdf) {
-            event.preventDefault();
-            await handlePickedFile(file);
-            return;
+            pdfFiles.push(file);
         }
     }
+    if (!pdfFiles.length) return;
+
+    event.preventDefault();
+    if (pdfFiles.length > 1) {
+        showToast("PDF to JPG supports one PDF at a time. Using first file.", "warn");
+    }
+    await handlePickedFile(pdfFiles[0]);
 }
 
 async function handlePickedFile(file) {
@@ -167,26 +197,51 @@ async function handlePickedFile(file) {
     if (file.type !== "application/pdf" && !(file.name || "").toLowerCase().endsWith(".pdf")) {
         setStatus("Only PDF files are supported.");
         showToast("Only PDF files are supported.", "error");
+        showInlineError("Only PDF files are supported.");
+        return;
+    }
+    if (file.size > MAX_UPLOAD_BYTES) {
+        setStatus("PDF must be 100 MB or smaller.");
+        showToast("Upload limit: PDF must be 100 MB or smaller.", "error");
+        showInlineError("Upload limit: PDF must be 100 MB or smaller.");
         return;
     }
 
     setStatus("Checking PDF security...");
     const validation = await validatePdfFile(file);
     if (!validation.ok) {
-        resetAll();
         if (validation.reason === "locked") {
-            setStatus("Unlock PDF then upload for converting.");
-            showToast("Unlock PDF then upload for converting.", "error");
+            const unlockedFile = await unlockPdfWithBackend(file);
+            if (!unlockedFile) {
+                resetAll();
+                setStatus("Locked PDF was not unlocked.");
+                return;
+            }
+            const unlockedValidation = await validatePdfFile(unlockedFile);
+            if (!unlockedValidation.ok) {
+                resetAll();
+                setStatus("Unlocked PDF is still invalid.");
+                showToast("Unlocked PDF is invalid.", "error");
+                showInlineError("Unlocked PDF is invalid.");
+                return;
+            }
+            file = unlockedFile;
+            validation.ok = true;
+            validation.numPages = unlockedValidation.numPages;
+            showToast("PDF unlocked successfully.", "success");
+            clearInlineError();
         } else {
+            resetAll();
             setStatus("Invalid or unreadable PDF file.");
             showToast("Invalid or unreadable PDF file.", "error");
+            showInlineError("Invalid or unreadable PDF file.");
+            return;
         }
-        return;
     }
+    clearInlineError();
 
     clearImageUrls();
     state.file = file;
-    state.pdfData = validation.pdfData || null;
     state.images = [];
     state.lastZipBlob = null;
     state.activeIndex = -1;
@@ -210,30 +265,105 @@ async function handlePickedFile(file) {
     resultInfo.textContent = "Ready to convert.";
     setStatus("PDF loaded. Set options and click Convert JPG.");
     showToast("PDF accepted. Ready to convert.", "success");
+    trackAnalytics("tool_file_ready", {
+        tool: "pdf_to_jpg",
+        file_size_bytes: file.size,
+        page_count: validation.numPages
+    });
 }
 
 async function validatePdfFile(file) {
     try {
         const pdfData = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
-        return { ok: true, numPages: pdf.numPages, pdfData };
+        const pdf = await loadPdfDocument(pdfData);
+        const numPages = pdf.numPages;
+        if (typeof pdf.destroy === "function") {
+            await pdf.destroy();
+        }
+        return { ok: true, numPages };
     } catch (error) {
-        const passCode = pdfjsLib.PasswordResponses || {};
-        const locked =
-            error && (
-                error.name === "PasswordException" ||
-                error.code === passCode.NEED_PASSWORD ||
-                error.code === passCode.INCORRECT_PASSWORD ||
-                /password|protected|encrypted/i.test(String(error.message || ""))
-            );
-        return { ok: false, reason: locked ? "locked" : "invalid" };
+        return { ok: false, reason: isPdfPasswordError(error) ? "locked" : "invalid" };
     }
+}
+
+function isPdfPasswordError(error) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (unlocker && typeof unlocker.isPdfPasswordError === "function") {
+        const passCode = hasPdfJs ? (pdfjsLib.PasswordResponses || {}) : {};
+        return unlocker.isPdfPasswordError(error, passCode);
+    }
+    return Boolean(error && /password|protected|encrypted/i.test(String(error.message || "")));
+}
+
+async function unlockPdfWithBackend(file) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (!unlocker || typeof unlocker.askPassword !== "function") {
+        throw new Error("Unlock module is unavailable. Refresh and try again.");
+    }
+    let attempt = 0;
+    while (attempt < 3) {
+        attempt += 1;
+        const password = await unlocker.askPassword({
+            title: `Unlock PDF (${attempt}/3)`,
+            message: `Enter password for ${file.name || "this PDF"} to continue conversion.`
+        });
+        if (password === null) {
+            showToast("Unlock cancelled.", "warn");
+            showInlineError("Unlock canceled by user.");
+            return null;
+        }
+
+        setStatus("Unlocking PDF on server...");
+        unlockCancelController = new AbortController();
+        setUnlockCancelUi(true);
+        try {
+            const unlocked = await requestPdfUnlock(file, password, { signal: unlockCancelController.signal });
+            clearInlineError();
+            return unlocked;
+        } catch (error) {
+            const message = String(error && error.message ? error.message : "Failed to unlock PDF.");
+            if (/incorrect pdf password/i.test(message)) {
+                showToast("Incorrect password. Try again.", "warn");
+                showInlineError("Incorrect PDF password.");
+                continue;
+            }
+            showToast(message, "error");
+            showInlineError(message);
+            return null;
+        } finally {
+            unlockCancelController = null;
+            setUnlockCancelUi(false);
+        }
+    }
+    showToast("Password attempts exceeded.", "error");
+    showInlineError("Password attempts exceeded.");
+    return null;
+}
+
+function setUnlockCancelUi(active) {
+    if (!cancelUnlockBtn) return;
+    cancelUnlockBtn.hidden = !active;
+    cancelUnlockBtn.disabled = !active;
+}
+
+if (cancelUnlockBtn) {
+    cancelUnlockBtn.addEventListener("click", () => {
+        if (!unlockCancelController) return;
+        unlockCancelController.abort();
+    });
+}
+
+async function requestPdfUnlock(file, password, options) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (!unlocker || typeof unlocker.requestPdfUnlock !== "function") {
+        throw new Error("Unlock module is unavailable. Refresh and try again.");
+    }
+    return unlocker.requestPdfUnlock(file, password, options || {});
 }
 
 function resetAll() {
     clearImageUrls();
     state.file = null;
-    state.pdfData = null;
     state.images = [];
     state.busy = false;
     state.lastZipBlob = null;
@@ -253,10 +383,25 @@ function resetAll() {
     shareZipBtn.disabled = true;
     resultInfo.textContent = "No pages converted yet.";
     setStatus("Waiting for PDF upload/paste.");
+    setUnlockCancelUi(false);
+    unlockCancelController = null;
+    clearInlineError();
 }
 
 function setStatus(message) {
     statusText.textContent = message;
+}
+
+function showInlineError(message) {
+    if (inlineAlert && typeof inlineAlert.showError === "function") {
+        inlineAlert.showError(message);
+    }
+}
+
+function clearInlineError() {
+    if (inlineAlert && typeof inlineAlert.clear === "function") {
+        inlineAlert.clear();
+    }
 }
 
 function updateUploadedInputPreview(file, numPages, sizeMB) {
@@ -327,32 +472,37 @@ async function convertPdfToJpg() {
     progressBar.style.width = "0%";
 
     const startTime = performance.now();
+    let pdf = null;
+    let timerId = null;
     try {
         setStatus("Reading PDF...");
-        const pdfData = state.pdfData || await state.file.arrayBuffer();
-        state.pdfData = pdfData;
-        const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+        const pdfData = await state.file.arrayBuffer();
+        pdf = await loadPdfDocument(pdfData);
         const targetPages = parsePageRange(rangeInput.value, pdf.numPages);
+        const mode = modeInput.value;
         const scale = Number(scaleInput.value);
         const quality = Number(qualityInput.value) / 100;
         const output = getImageOutputConfig(formatInput.value);
         validateConversionBudget(targetPages.length, scale, pdf);
+        timerId = startAnalyticsTimer("pdf_to_jpg_convert", {
+            tool: "pdf_to_jpg",
+            page_count: targetPages.length,
+            output_format: output.ext,
+            mode
+        });
+        trackAnalytics("tool_conversion_started", {
+            tool: "pdf_to_jpg",
+            page_count: targetPages.length,
+            output_format: output.ext,
+            mode
+        });
 
         setStatus(`Converting ${targetPages.length} page(s)...`);
 
-        let totalPixels = 0;
         for (let index = 0; index < targetPages.length; index += 1) {
             const pageNumber = targetPages[index];
             const page = await pdf.getPage(pageNumber);
             const viewport = page.getViewport({ scale });
-            const pixelCount = Math.ceil(viewport.width) * Math.ceil(viewport.height);
-            if (pixelCount > PERF_LIMITS.maxPixelsPerPage) {
-                throw new Error(`Page ${pageNumber} is too large at current scale. Reduce render scale.`);
-            }
-            totalPixels += pixelCount;
-            if (totalPixels > PERF_LIMITS.maxPixelsTotal) {
-                throw new Error("Selected range is too heavy for browser memory. Reduce pages or render scale.");
-            }
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d", { alpha: false });
             canvas.width = Math.ceil(viewport.width);
@@ -404,27 +554,82 @@ async function convertPdfToJpg() {
         const seconds = ((performance.now() - startTime) / 1000).toFixed(2);
         resultInfo.textContent = `${state.images.length} ${output.label} file(s) ready in ${seconds}s.`;
         setStatus("Conversion complete. You can download or share files.");
-        downloadZipBtn.disabled = state.images.length === 0;
+        downloadZipBtn.disabled = state.images.length === 0 || !hasZip;
         downloadAllBtn.disabled = state.images.length === 0;
-        shareZipBtn.disabled = state.images.length === 0;
+        shareZipBtn.disabled = state.images.length === 0 || !hasZip;
         showToast("Conversion completed successfully.", "success");
+        trackAnalytics("tool_conversion_success", {
+            tool: "pdf_to_jpg",
+            output_files: state.images.length,
+            output_format: output.ext
+        });
+        endAnalyticsTimer(timerId, { status: "success", output_files: state.images.length });
     } catch (error) {
         setStatus(error.message || "Conversion failed.");
         resultInfo.textContent = "No pages converted yet.";
         showToast(error.message || "Conversion failed.", "error");
+        trackAnalytics("tool_conversion_failed", {
+            tool: "pdf_to_jpg",
+            error_message: String(error && error.message ? error.message : "conversion_failed").slice(0, 120)
+        });
+        endAnalyticsTimer(timerId, { status: "failed" });
     } finally {
+        if (pdf && typeof pdf.destroy === "function") {
+            try {
+                await pdf.destroy();
+            } catch (error) {
+                console.warn("Failed to release PDF document resources.", error);
+            }
+        }
         state.busy = false;
         convertBtn.disabled = !state.file;
     }
 }
 
-function validateConversionBudget(pageCount, scale, pdf) {
-    const maxPages = window.matchMedia("(max-width: 900px)").matches
-        ? PERF_LIMITS.maxPagesMobile
-        : PERF_LIMITS.maxPagesDesktop;
+function initializeModePreset() {
+    if (!modeInput) return;
+    applyModePreset(modeInput.value || "balanced");
+}
 
-    if (pageCount > maxPages) {
-        throw new Error(`Please convert up to ${maxPages} pages at once for stable performance.`);
+function applyModePreset(mode) {
+    const presets = {
+        fast: {
+            scale: 1.75,
+            quality: 86,
+            format: "jpeg",
+            label: "Fast",
+            hint: "Fastest conversion with smaller JPG files. Best for quick sharing."
+        },
+        balanced: {
+            scale: 2.75,
+            quality: 97,
+            format: "jpeg",
+            label: "Balanced",
+            hint: "Recommended balance of conversion speed and visual quality."
+        },
+        max: {
+            scale: 3.5,
+            quality: 100,
+            format: "png",
+            label: "Max quality",
+            hint: "Highest detail output (PNG) with slower conversion and larger files."
+        }
+    };
+    const preset = presets[mode] || presets.balanced;
+    modeInput.value = mode in presets ? mode : "balanced";
+    if (modeValue) modeValue.textContent = preset.label;
+    if (modeHint) modeHint.textContent = preset.hint;
+    scaleInput.value = String(preset.scale);
+    qualityInput.value = String(preset.quality);
+    formatInput.value = preset.format;
+    scaleValue.textContent = `${Number(scaleInput.value).toFixed(1)}x`;
+    qualityValue.textContent = `${qualityInput.value}%`;
+    formatValue.textContent = formatInput.selectedOptions[0].text;
+}
+
+function validateConversionBudget(pageCount, scale, pdf) {
+    if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > MAX_CONVERT_PAGES) {
+        throw new Error(`You can convert up to ${MAX_CONVERT_PAGES} pages at a time.`);
     }
 
     if (!Number.isFinite(scale) || scale <= 0) {
@@ -515,6 +720,9 @@ function clearPreview() {
 }
 
 async function getZipBlob() {
+    if (!hasZip) {
+        throw new Error("ZIP library failed to load. Refresh and try again.");
+    }
     if (state.lastZipBlob) return state.lastZipBlob;
     const zip = new JSZip();
     for (const image of state.images) {
@@ -545,7 +753,7 @@ async function downloadAllAsZip() {
         setStatus("Failed to create ZIP.");
         showToast("Failed to create ZIP.", "error");
     } finally {
-        downloadZipBtn.disabled = false;
+        downloadZipBtn.disabled = !hasZip;
     }
 }
 
@@ -638,8 +846,61 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
+function bootstrapDependencies() {
+    if (!hasPdfJs) {
+        setStatus("PDF engine failed to load. Refresh the page and check your connection.");
+        resultInfo.textContent = "PDF conversion engine unavailable.";
+        convertBtn.disabled = true;
+        downloadAllBtn.disabled = true;
+        shareZipBtn.disabled = true;
+        showToast("PDF engine not loaded. Please refresh.", "error");
+    }
+
+    if (!hasZip) {
+        downloadZipBtn.disabled = true;
+        shareZipBtn.disabled = true;
+        showToast("ZIP export unavailable right now.", "warn");
+    }
+}
+
+async function loadPdfDocument(pdfData) {
+    if (!hasPdfJs) {
+        throw new Error("PDF conversion engine unavailable.");
+    }
+
+    try {
+        return await pdfjsLib.getDocument({ data: pdfData }).promise;
+    } catch (error) {
+        const retryableWorkerIssue =
+            /worker|setting up fake worker|networkerror|failed to fetch/i.test(String(error && error.message ? error.message : "")) ||
+            error.name === "UnknownErrorException";
+
+        if (!retryableWorkerIssue) {
+            throw error;
+        }
+    }
+
+    return pdfjsLib.getDocument({ data: pdfData, disableWorker: true }).promise;
+}
+
 function clearImageUrls() {
     for (const image of state.images) {
         URL.revokeObjectURL(image.url);
     }
+}
+
+function trackAnalytics(eventName, params) {
+    if (!analytics || typeof analytics.trackEvent !== "function") return;
+    analytics.trackEvent(eventName, params || {});
+}
+
+function startAnalyticsTimer(label, meta) {
+    if (!analytics || typeof analytics.startTimer !== "function") return null;
+    return analytics.startTimer(label, meta || {});
+}
+
+function endAnalyticsTimer(timerId, meta) {
+    if (!timerId) return;
+    if (!analytics || typeof analytics.endTimer !== "function") return;
+    analytics.endTimer(timerId, meta || {});
 }

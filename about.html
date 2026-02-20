@@ -3,24 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>About | SiRa Convert</title>
 <meta name="description" content="About SiRa Convert: mission, approach, and product principles for private document conversion." />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
 <meta name="author" content="Raghav Pratap" />
 <meta name="theme-color" content="#2563eb" />
+<meta name="application-name" content="SiRa Convert" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="SiRa Convert" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <link rel="canonical" href="https://sira-452b7.web.app/about.html" />
+<link rel="alternate" hreflang="en" href="https://sira-452b7.web.app/about.html">
+<link rel="alternate" hreflang="x-default" href="https://sira-452b7.web.app/about.html">
 <meta property="og:title" content="About | SiRa Convert" />
 <meta property="og:description" content="Discover the mission and values behind SiRa Convert." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sira-452b7.web.app/about.html" />
+<meta property="og:site_name" content="SiRa Convert" />
+<meta property="og:locale" content="en_US" />
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png" />
+<meta property="og:image:alt" content="SiRa Convert logo and branding" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="About | SiRa Convert" />
 <meta name="twitter:description" content="Learn how SiRa Convert is built for speed, privacy, and productivity." />
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png" />
+<meta name="twitter:image:alt" content="SiRa Convert logo and branding" />
+<meta name="twitter:site" content="@sira_convert" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="logo.png" type="image/png" />
+<link rel="apple-touch-icon" href="logo-192.png">
 <link rel="stylesheet" href="style.css" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
 <script src="gtag-init.js"></script>
@@ -29,13 +44,13 @@
 .page-shell {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 36px 20px 72px;
+  padding: 4px 20px 72px;
 }
 .top-nav {
   position: sticky;
-  top: 16px;
+  top: 2px;
   z-index: 25;
-  margin-bottom: 18px;
+  margin-bottom: 4px;
 }
 .top-nav-inner {
   display: flex;
@@ -85,11 +100,23 @@
   border-color: var(--accent);
 }
 .hero {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(145deg, rgba(37,99,235,0.2), rgba(16,185,129,0.12));
   border: 1px solid var(--border);
   border-radius: 26px;
   padding: 30px;
   box-shadow: var(--shadow);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -90px;
+  top: -120px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(56,189,248,0.24), transparent 68%);
 }
 .badge {
   display: inline-flex;
@@ -120,6 +147,12 @@
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 22px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 30px rgba(37,99,235,0.15);
 }
 .card h2 {
   margin-bottom: 10px;
@@ -140,6 +173,7 @@
   border-radius: 16px;
   padding: 20px;
   background: linear-gradient(135deg, rgba(15,23,42,0.82), rgba(37,99,235,0.2));
+  box-shadow: 0 14px 34px rgba(2, 10, 24, 0.28);
 }
 .owner h2 {
   margin-bottom: 8px;
@@ -233,6 +267,31 @@
   <section class="owner">
     <h2>Ownership</h2>
     <p>This app is owned and operated by <strong>RAGHAV PRATAP</strong>. Product strategy, updates, and policy oversight are managed by the owner.</p>
+  </section>
+
+  <section class="owner" aria-labelledby="about-seo-heading">
+    <h2 id="about-seo-heading">About Our PDF and Image Tools</h2>
+    <p>SiRa Convert focuses on practical browser-based document workflows. The product direction centers on reliable conversion quality, faster task completion, and simple controls for common PDF operations.</p>
+    <div class="grid" style="margin-top:14px;">
+      <article class="card">
+        <h2>Feature Pages</h2>
+        <p>Explore dedicated pages for <a href="jpg-to-pdf.html">JPG to PDF</a>, <a href="pdf-to-jpg.html">PDF to JPG</a>, and <a href="merge-pdf.html">Merge PDF</a> workflows.</p>
+      </article>
+      <article class="card">
+        <h2>Product Updates</h2>
+        <p>See release notes and improvements in the <a href="blog.html">SiRa Convert blog</a> to track roadmap and quality updates.</p>
+      </article>
+    </div>
+    <div style="margin-top:14px;">
+      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;">
+        <summary style="cursor:pointer;font-weight:700;">What is the main goal of SiRa Convert?</summary>
+        <p style="margin-top:8px;color:var(--text-dim);">The main goal is to provide fast and straightforward online document tools with a consistent interface across devices.</p>
+      </details>
+      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;">
+        <summary style="cursor:pointer;font-weight:700;">Who is SiRa Convert designed for?</summary>
+        <p style="margin-top:8px;color:var(--text-dim);">Students, professionals, and creators who need simple PDF and image conversion tools without complex setup.</p>
+      </details>
+    </div>
   </section>
 
   <div class="actions">

@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var timingStore = Object.create(null);
+
   function hasGtag() {
     return typeof window.gtag === "function";
   }
@@ -13,6 +15,45 @@
   function sendEvent(name, params) {
     if (!hasGtag()) return;
     window.gtag("event", name, params || {});
+  }
+
+  function pageContext() {
+    return {
+      page_path: location.pathname,
+      page_title: document.title
+    };
+  }
+
+  function trackEvent(name, params) {
+    sendEvent(name, Object.assign(pageContext(), params || {}));
+  }
+
+  function nowMs() {
+    if (window.performance && typeof window.performance.now === "function") {
+      return window.performance.now();
+    }
+    return Date.now();
+  }
+
+  function startTimer(label, meta) {
+    var id = label + "::" + Date.now() + "::" + Math.random().toString(16).slice(2);
+    timingStore[id] = {
+      label: trimValue(label, 60),
+      meta: meta || {},
+      start: nowMs()
+    };
+    return id;
+  }
+
+  function endTimer(timerId, finalMeta) {
+    var record = timingStore[timerId];
+    if (!record) return;
+    delete timingStore[timerId];
+    var durationMs = Math.max(0, Math.round(nowMs() - record.start));
+    trackEvent("tool_timing", Object.assign({}, record.meta, finalMeta || {}, {
+      timer_label: record.label,
+      duration_ms: durationMs
+    }));
   }
 
   function pickLabel(el) {
@@ -104,4 +145,10 @@
     },
     true
   );
+
+  window.SiRaAnalytics = {
+    trackEvent: trackEvent,
+    startTimer: startTimer,
+    endTimer: endTimer
+  };
 })();

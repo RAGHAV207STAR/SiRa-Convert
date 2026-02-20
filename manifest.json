@@ -1,6 +1,6 @@
 {
   "name": "SiRa Convert PRO | Ultra Document Suite",
-  "short_name": "SiRa PRO",
+  "short_name": "SiRa Convert",
   "description": "Enterprise-grade workstation to Merge PDF, Convert JPG to PDF, and Extract Images with high precision.",
   "id": "/index.html?source=pwa",
   "start_url": "/index.html?source=pwa",
@@ -38,19 +38,19 @@
   "shortcuts": [
     {
       "name": "Merge PDF",
-      "short_name": "Merge",
+      "short_name": "Merge PDF",
       "url": "/merge-pdf.html",
       "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     },
     {
       "name": "JPG to PDF",
-      "short_name": "JPG2PDF",
+      "short_name": "JPG to PDF",
       "url": "/jpg-to-pdf.html",
       "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     },
     {
       "name": "PDF to JPG",
-      "short_name": "PDF2JPG",
+      "short_name": "PDF to JPG",
       "url": "/pdf-to-jpg.html",
       "icons": [{ "src": "logo.png", "sizes": "512x512", "type": "image/png" }]
     }

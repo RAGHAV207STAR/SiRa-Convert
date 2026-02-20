@@ -1,4 +1,4 @@
-const SW_VERSION = "v12";
+const SW_VERSION = "v13";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;
@@ -16,6 +16,7 @@ const APP_SHELL = [
     "/offline.html",
     "/style.css",
     "/shared-ui.js",
+    "/shared-unlock.js",
     "/index.js",
     "/jpg-to-pdf.js",
     "/merge-pdf.js",
@@ -69,6 +70,7 @@ self.addEventListener("fetch", (event) => {
 
     const requestUrl = new URL(event.request.url);
     const isSameOrigin = requestUrl.origin === self.location.origin;
+    if (isSameOrigin && requestUrl.pathname.startsWith("/api/")) return;
     const isApi =
         requestUrl.hostname.includes("googleapis.com") ||
         requestUrl.hostname.includes("firebase");

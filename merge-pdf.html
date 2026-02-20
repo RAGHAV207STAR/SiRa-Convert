@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>Merge PDF | SiRa Convert</title>
 <meta name="description" content="Merge multiple PDF files into one output document with private browser-side processing and quick export.">
@@ -16,6 +18,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#0f6cff">
 <link rel="canonical" href="https://sira-452b7.web.app/merge-pdf.html">
+<link rel="alternate" hreflang="en" href="https://sira-452b7.web.app/merge-pdf.html">
+<link rel="alternate" hreflang="x-default" href="https://sira-452b7.web.app/merge-pdf.html">
 <meta property="og:title" content="Merge PDF | SiRa Convert">
 <meta property="og:description" content="Combine PDFs securely in your browser with queue controls and instant download.">
 <meta property="og:type" content="website">
@@ -32,6 +36,7 @@
 <meta name="twitter:site" content="@sira_convert">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -106,7 +111,7 @@ body::before, body::after{ content:""; position:fixed; border-radius:999px; filt
 body::before{ width:260px; height:260px; left:-70px; top:18%; background:rgba(56,189,248,.35); animation:floatPulse 7s ease-in-out infinite alternate; }
 body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(37,99,235,.28); animation:floatPulse 8s ease-in-out infinite alternate-reverse; }
 
-.main-header{ padding:14px 4%; position:sticky; top:0; z-index:1000; }
+.main-header{ padding:2px 4%; position:sticky; top:0; z-index:1000; }
 .header-glass{ max-width:1240px; margin:0 auto; padding:11px 16px; border-radius:20px; border:1px solid var(--tool-border); background:linear-gradient(145deg, rgba(17,30,50,.85), rgba(8,17,30,.86)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:0 14px 36px rgba(0,10,28,.4); }
 [data-theme="light"] .header-glass{ background:linear-gradient(145deg, rgba(255,255,255,.92), rgba(246,251,255,.9)); }
 .brand{ gap:10px; }
@@ -124,7 +129,7 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 .user-mode{ color:var(--tool-text-muted); font-size:.75rem; }
 .user-menu-home{ width:100%; padding:10px; background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.35); border-radius:10px; color:var(--accent); font-weight:700; cursor:pointer; display:block; text-decoration:none; text-align:center; }
 
-.tool-wrapper{ max-width:1240px; margin:auto; padding:30px 18px 76px; width:100%; position:relative; z-index:1; }
+.tool-wrapper{ max-width:1240px; margin:auto; padding:4px 18px 76px; width:100%; position:relative; z-index:1; }
 .pro-card{ background:linear-gradient(165deg, rgba(255,255,255,.03), transparent 35%), var(--tool-panel); border:1px solid var(--tool-border); border-radius:28px; padding:28px; box-shadow:var(--shadow); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); animation:liftIn .5s ease; }
 .tool-head{ margin-bottom:24px; }
 .tool-kicker{ display:inline-flex; align-items:center; gap:8px; margin-bottom:10px; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; font-weight:800; color:#d6ebff; border:1px solid var(--tool-pill-border); background:var(--tool-pill-bg); border-radius:999px; padding:6px 12px; }
@@ -156,6 +161,7 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 .settings[open] .settings-summary{ border-bottom:1px solid var(--tool-border); }
 .settings-body{ padding:14px 18px 18px; display:grid; gap:8px; }
 .field{ margin-bottom:12px; }
+.mode-hint{ margin:6px 0 0; font-size:.78rem; color:var(--tool-text-muted); line-height:1.35; }
 .field label{ font-size:.88rem; color:var(--tool-text-soft); display:flex; justify-content:space-between; gap:12px; margin-bottom:6px; }
 .field select, .field input[type="text"]{ width:100%; border:1px solid var(--tool-border); background:var(--tool-input-bg); color:var(--text-main); border-radius:10px; padding:9px 12px; }
 .field input[type="checkbox"]{ width:16px; height:16px; accent-color:#38bdf8; }
@@ -204,6 +210,9 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 .thumb.active{ border-color:#22d3ee; box-shadow:0 0 0 2px rgba(56,189,248,.28); }
 .thumb.drag-over{ border-color:#38bdf8; box-shadow:0 0 0 2px rgba(56,189,248,.28); }
 .thumb .caption{ margin:4px 2px 4px; font-size:.8rem; color:var(--text-main); font-weight:700; }
+.status-badge{ display:inline-flex; align-items:center; gap:4px; margin:0 2px 6px; font-size:.68rem; font-weight:800; letter-spacing:.02em; text-transform:uppercase; border-radius:999px; padding:4px 8px; border:1px solid transparent; }
+.status-ready{ color:#a6d7ff; background:rgba(56,189,248,.12); border-color:rgba(56,189,248,.34); }
+.status-unlocked{ color:#9ff5cd; background:rgba(16,185,129,.15); border-color:rgba(16,185,129,.4); }
 .thumb .meta{ margin:0 2px 8px; font-size:.72rem; color:var(--tool-text-muted); }
 .thumb .remove{ position:absolute; top:6px; right:6px; width:24px; height:24px; border-radius:999px; border:1px solid rgba(248,113,113,.55); background:rgba(127,29,29,.65); color:#fff; font-weight:900; cursor:pointer; }
 
@@ -233,20 +242,6 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 .contact-btn{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; font-size:.84rem; font-weight:700; text-decoration:none; }
 .contact-btn svg{ width:18px; height:18px; }
 .f-bottom{ max-width:1240px; margin:34px auto 0; font-size:.77rem; color:var(--tool-text-muted); text-align:center; }
-.install-footer-panel{ max-width:1240px; margin:20px auto 0; padding:14px 16px; border:1px solid var(--tool-border); border-radius:14px; background:var(--glass); display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.install-footer-text{ margin:0; color:var(--tool-text-soft); font-size:.88rem; }
-.install-footer-btn{ border:1px solid var(--tool-border-strong); border-radius:12px; background:linear-gradient(130deg, #0ea5e9, #2563eb); color:#fff; font-weight:800; font-size:.78rem; letter-spacing:.02em; padding:10px 14px; cursor:pointer; }
-.install-notice{ position:fixed; right:20px; bottom:20px; width:min(360px, calc(100vw - 32px)); border:1px solid var(--tool-border); border-radius:14px; background:var(--tool-surface-soft); box-shadow:0 18px 40px rgba(0,0,0,.35); padding:12px; z-index:10000; }
-.install-notice strong{ display:block; margin-bottom:4px; }
-.install-notice p{ margin:0; font-size:.84rem; color:var(--tool-text-muted); }
-.install-notice-actions{ margin-top:10px; display:flex; gap:8px; }
-.install-action-btn,.install-close-btn{ border:1px solid var(--tool-border); border-radius:10px; padding:8px 10px; font-size:.78rem; font-weight:700; cursor:pointer; }
-.install-action-btn{ color:#fff; border-color:transparent; background:linear-gradient(130deg, #0ea5e9, #2563eb); }
-.install-close-btn{ color:var(--text-main); background:var(--tool-surface); }
-
-.toast{ position:fixed; right:20px; bottom:20px; max-width:360px; padding:12px 14px; border-radius:12px; font-size:.9rem; font-weight:600; color:#fff; box-shadow:0 18px 40px rgba(0,0,0,.35); transform:translateY(20px); opacity:0; pointer-events:none; transition:.25s ease; z-index:9999; }
-.toast.show{ transform:translateY(0); opacity:1; }
-.toast.info{ background:#2563eb; } .toast.success{ background:#059669; } .toast.warn{ background:#d97706; } .toast.error{ background:#dc2626; }
 
 [data-theme="light"]{
     --tool-panel: rgba(255, 255, 255, 0.94);
@@ -282,6 +277,8 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 }
 [data-theme="light"] .preview-nav button{ background:#ffffff; }
 [data-theme="light"] .thumb{ box-shadow:0 10px 20px rgba(36, 90, 168, 0.14); }
+[data-theme="light"] .status-ready{ color:#0f4f88; background:rgba(186,230,253,.65); border-color:rgba(33,129,223,.4); }
+[data-theme="light"] .status-unlocked{ color:#0d6b4b; background:rgba(167,243,208,.6); border-color:rgba(16,185,129,.45); }
 [data-theme="light"] .thumb .remove{ background:rgba(220, 38, 38, 0.92); border-color:rgba(239, 68, 68, 0.65); }
 [data-theme="light"] .cross-tool-btn{ background:radial-gradient(220px 90px at 15% -20%, rgba(56,189,248,.3), transparent 70%), linear-gradient(150deg, #ffffff, #dbeeff); box-shadow:0 12px 24px rgba(37,99,235,.16); }
 [data-theme="light"] .cross-tools-note{ background:linear-gradient(150deg, #ffffff, #e9f3ff); }
@@ -303,19 +300,77 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 }
 
 @media (max-width:640px){
-    .main-header{ padding:12px 12px; }
+    .main-header{ padding:4px 12px; }
     .header-glass{ border-radius:16px; padding:9px 12px; }
     .brand-name{ font-size:.92rem; }
     .pro-card{ padding:20px 14px; border-radius:20px; }
     .drop-zone{ padding:28px 15px; }
     .action-grid, .cross-tools-grid, .feature-grid{ grid-template-columns:1fr; }
     .btn{ padding:11px 14px; }
-    .toast{ left:16px; right:16px; max-width:none; }
     .preview-toolbar{ flex-direction:column; align-items:flex-start; }
     .footer-grid{ grid-template-columns:1fr; gap:24px; }
-    .install-footer-panel{ flex-direction:column; text-align:center; }
-    .install-footer-btn{ width:100%; }
 }
+.seo-content{
+    max-width:1240px;
+    margin:28px auto 0;
+    padding:0 4%;
+}
+.seo-shell{
+    position:relative;
+    border:1px solid var(--tool-border);
+    background:
+        radial-gradient(680px 260px at -10% -25%, rgba(56,189,248,.18), transparent 72%),
+        linear-gradient(170deg, rgba(14,28,48,.9), rgba(8,17,31,.94));
+    border-radius:22px;
+    padding:26px;
+    box-shadow:0 18px 45px rgba(2,10,24,.45);
+}
+[data-theme="light"] .seo-shell{ background:linear-gradient(170deg, rgba(255,255,255,.95), rgba(242,249,255,.92)); }
+.seo-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:10px;
+    padding:6px 11px;
+    border-radius:999px;
+    border:1px solid var(--tool-pill-border);
+    background:var(--tool-pill-bg);
+    font-size:.7rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:800;
+    color:var(--tool-text-soft);
+}
+.seo-shell h2{ margin:0 0 10px; font-size:1.4rem; }
+.seo-shell p{ color:var(--tool-text-soft); margin:0 0 14px; }
+.seo-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin-top:12px;
+}
+.seo-card{
+    border:1px solid var(--tool-border);
+    border-radius:16px;
+    padding:14px;
+    background:linear-gradient(160deg, rgba(12,24,40,.62), rgba(8,18,30,.86));
+    box-shadow:0 12px 30px rgba(2,10,22,.28);
+}
+[data-theme="light"] .seo-card{ background:rgba(255,255,255,.82); }
+.seo-card h3{ margin:0 0 6px; font-size:.95rem; }
+.seo-card p{ margin:0; font-size:.86rem; color:var(--tool-text-muted); }
+.seo-faq{ margin-top:16px; }
+.seo-faq details{
+    border:1px solid var(--tool-border);
+    border-radius:14px;
+    padding:11px 12px;
+    background:linear-gradient(160deg, rgba(11,22,38,.58), rgba(8,17,30,.78));
+    margin-bottom:11px;
+}
+[data-theme="light"] .seo-faq details{ background:rgba(255,255,255,.86); }
+.seo-faq summary{ cursor:pointer; font-weight:800; }
+.seo-faq p{ margin:8px 0 0; font-size:.9rem; color:var(--tool-text-muted); }
+@media (max-width:980px){ .seo-grid{ grid-template-columns:1fr; } }
 </style>
 <script src="analytics.js" defer></script>
 </head>
@@ -394,6 +449,7 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
                         <button id="mergeBtn" class="btn btn-primary" disabled>Merge PDFs</button>
                         <button id="downloadPdfBtn" class="btn btn-ghost" disabled>Download Merged PDF</button>
                         <button id="sharePdfBtn" class="btn btn-ghost" disabled>Share Merged PDF</button>
+                        <button id="cancelUnlockBtn" class="btn btn-ghost" hidden>Cancel Unlock</button>
                         <button id="clearBtn" class="btn btn-ghost">Clear</button>
                     </div>
                 </div>
@@ -404,6 +460,18 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
                         <span id="controlsState" class="settings-state">Closed</span>
                     </summary>
                     <div class="settings-body">
+                        <div class="field">
+                            <label for="modeInput">
+                                <span>Performance mode</span>
+                                <strong id="modeValue">Balanced</strong>
+                            </label>
+                            <select id="modeInput">
+                                <option value="balanced">Balanced</option>
+                                <option value="fast">Fast</option>
+                                <option value="max">Max quality</option>
+                            </select>
+                            <p id="modeHint" class="mode-hint">Balanced mode is recommended for most files.</p>
+                        </div>
                         <div class="field">
                             <label for="sortInput">
                                 <span>Sort files</span>
@@ -525,6 +593,42 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
     </div>
 </section>
 
+<section class="seo-content" aria-labelledby="merge-pdf-seo-heading">
+    <div class="seo-shell">
+        <span class="seo-kicker">SEO + FAQ</span>
+        <h2 id="merge-pdf-seo-heading">Merge PDF Files Online</h2>
+        <p>SiRa Convert provides a quick PDF merge tool for combining multiple PDF files in your browser. Upload files, reorder the queue, and export one merged PDF with a custom filename.</p>
+        <div class="seo-grid">
+            <article class="seo-card">
+                <h3>How to merge PDF files</h3>
+                <p>Upload two or more PDFs, arrange them in the right order, and click Merge PDFs to create a single output file.</p>
+            </article>
+            <article class="seo-card">
+                <h3>Queue management</h3>
+                <p>Review selected files, remove items, sort by name, and manage merge order before output generation.</p>
+            </article>
+            <article class="seo-card">
+                <h3>Fast final export</h3>
+                <p>Download the merged file instantly or share it right after processing without extra steps.</p>
+            </article>
+        </div>
+        <div class="seo-faq" aria-label="Merge PDF frequently asked questions">
+            <details>
+                <summary>Does merge order follow my selected queue?</summary>
+                <p>Yes. The final merged document follows the exact queue order shown before processing.</p>
+            </details>
+            <details>
+                <summary>Can I skip locked or invalid PDF files?</summary>
+                <p>Yes. Enable the skip option to continue merging valid files while ignoring protected or unreadable inputs.</p>
+            </details>
+            <details>
+                <summary>Can I rename the merged PDF output?</summary>
+                <p>Yes. Set a custom output filename in the controls before downloading.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
 <footer class="ultra-footer">
     <div class="footer-grid">
         <div class="f-brand">
@@ -589,6 +693,7 @@ body::after{ width:320px; height:320px; right:-100px; top:52%; background:rgba(3
 <div id="toast" class="toast info" role="status" aria-live="polite"></div>
 
 <script src="shared-ui.js"></script>
+<script src="shared-unlock.js"></script>
 <script src="merge-pdf.js"></script>
 </body>
 </html>

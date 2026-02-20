@@ -8,12 +8,9 @@ const state = {
     mergedUrl: null,
     dragIndex: -1
 };
-
-const PERF_LIMITS = {
-    maxFilesDesktop: 80,
-    maxFilesMobile: 40,
-    maxTotalBytes: 500 * 1024 * 1024
-};
+const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 100;
+const analytics = window.SiRaAnalytics || null;
 
 const pdfInput = document.getElementById("pdfInput");
 const dropZone = document.getElementById("dropZone");
@@ -22,6 +19,7 @@ const pasteBtn = document.getElementById("pasteBtn");
 const fileMeta = document.getElementById("fileMeta");
 const mergeBtn = document.getElementById("mergeBtn");
 const clearBtn = document.getElementById("clearBtn");
+const cancelUnlockBtn = document.getElementById("cancelUnlockBtn");
 const downloadPdfBtn = document.getElementById("downloadPdfBtn");
 const sharePdfBtn = document.getElementById("sharePdfBtn");
 const gallery = document.getElementById("gallery");
@@ -37,11 +35,16 @@ const resultInfo = document.getElementById("resultInfo");
 const outputResultInfo = document.getElementById("outputResultInfo");
 const outputPreviewCanvas = document.getElementById("outputPreviewCanvas");
 const progressBar = document.getElementById("progressBar");
+const modeInput = document.getElementById("modeInput");
 const sortInput = document.getElementById("sortInput");
 const outputNameInput = document.getElementById("outputNameInput");
 const skipLockedInput = document.getElementById("skipLockedInput");
 const sortValue = document.getElementById("sortValue");
+const modeValue = document.getElementById("modeValue");
+const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
+let inlineAlert = null;
+let unlockCancelController = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -64,11 +67,18 @@ if (window.SiRaShared) {
     window.SiRaShared.initInstallPrompt({
         notify: (message, type) => showToast(message, type)
     });
+    if (typeof window.SiRaShared.initInlineAlert === "function") {
+        inlineAlert = window.SiRaShared.initInlineAlert({ hostId: "statusText" });
+    }
 }
 
 sortInput.addEventListener("change", () => {
     sortValue.textContent = sortInput.selectedOptions[0].text;
 });
+modeInput.addEventListener("change", () => {
+    applyModePreset(modeInput.value);
+});
+initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -153,10 +163,12 @@ async function handlePasteShortcut(event) {
 async function tryAddFiles(files) {
     try {
         await addFiles(files);
+        clearInlineError();
     } catch (error) {
         const message = error && error.message ? error.message : "Failed to add selected PDFs.";
         setStatus(message);
         showToast(message, "error");
+        showInlineError(message);
     }
 }
 
@@ -166,11 +178,15 @@ async function addFiles(files) {
     const pdfFiles = files.filter((file) => file.type === "application/pdf" || (file.name || "").toLowerCase().endsWith(".pdf"));
     if (!pdfFiles.length) {
         showToast("Only PDF files are supported.", "error");
+        showInlineError("Only PDF files are supported.");
         return;
     }
-    validateIncomingPdfCount(pdfFiles.length);
-
+    const oversized = pdfFiles.find((file) => file.size > MAX_UPLOAD_BYTES);
+    if (oversized) {
+        throw new Error(`${oversized.name || "PDF"} exceeds 100 MB upload limit.`);
+    }
     setStatus("Reading PDF files...");
+    clearInlineError();
     for (const file of pdfFiles) {
         const loaded = await inspectPdf(file);
         if (loaded) state.files.push(loaded);
@@ -188,6 +204,11 @@ async function addFiles(files) {
     resultInfo.textContent = state.files.length ? `${state.files.length} PDF file(s) queued.` : "No PDF files selected yet.";
     setStatus(state.files.length ? "PDF files ready. Click Merge PDFs." : "Waiting for PDF upload/paste.");
     showToast(`${pdfFiles.length} PDF file(s) added.`, "success");
+    trackAnalytics("tool_file_ready", {
+        tool: "merge_pdf",
+        input_files: pdfFiles.length,
+        queue_total: state.files.length
+    });
 }
 
 async function inspectPdf(file) {
@@ -198,11 +219,36 @@ async function inspectPdf(file) {
             file,
             name: file.name || "document.pdf",
             size: file.size,
-            pages: pdf.getPageCount()
+            pages: pdf.getPageCount(),
+            unlockedByServer: false
         };
     } catch (error) {
-        showToast(`${file.name || "A file"} could not be read.`, "warn");
-        return null;
+        if (!isPdfPasswordError(error)) {
+            showToast(`${file.name || "A file"} could not be read.`, "warn");
+            showInlineError(`${file.name || "A file"} could not be read.`);
+            return null;
+        }
+
+        const unlockedFile = await unlockPdfWithBackend(file);
+        if (!unlockedFile) return null;
+
+        try {
+            const pdf = await PDFDocument.load(await unlockedFile.arrayBuffer());
+            showToast(`${file.name || "PDF"} unlocked successfully.`, "success");
+            clearInlineError();
+            return {
+                id: cryptoRandom(),
+                file: unlockedFile,
+                name: unlockedFile.name || file.name || "document.pdf",
+                size: unlockedFile.size,
+                pages: pdf.getPageCount(),
+                unlockedByServer: true
+            };
+        } catch (unlockError) {
+            showToast(`${file.name || "PDF"} is still invalid after unlock.`, "error");
+            showInlineError(`${file.name || "PDF"} is still invalid after unlock.`);
+            return null;
+        }
     }
 }
 
@@ -229,6 +275,7 @@ function renderQueue() {
         card.innerHTML = `
             <button class="remove" type="button" aria-label="Remove PDF">×</button>
             <p class="caption">${escapeHtml(shortName(fileItem.name))}</p>
+            <p class="status-badge ${fileItem.unlockedByServer ? "status-unlocked" : "status-ready"}">${fileItem.unlockedByServer ? "Unlocked" : "Ready"}</p>
             <p class="meta">${fileItem.pages} pages • ${formatBytes(fileItem.size)}</p>
         `;
 
@@ -282,6 +329,7 @@ function setPreviewByIndex(index) {
         <div class="pdf-file-card">
             <div class="pdf-icon">📄</div>
             <p class="caption">${escapeHtml(item.name)}</p>
+            <p class="status-badge ${item.unlockedByServer ? "status-unlocked" : "status-ready"}">${item.unlockedByServer ? "Unlocked by backend" : "Ready to merge"}</p>
             <p class="meta">${item.pages} pages • ${formatBytes(item.size)}</p>
         </div>
     `;
@@ -331,16 +379,31 @@ async function mergePdfFiles() {
     downloadPdfBtn.disabled = true;
     sharePdfBtn.disabled = true;
     progressBar.style.width = "0%";
+    let timerId = null;
 
     try {
         const orderedFiles = getSortedFiles();
+        const totalPages = orderedFiles.reduce((sum, item) => sum + item.pages, 0);
+        if (totalPages > MAX_CONVERT_PAGES) {
+            throw new Error(`You can merge up to ${MAX_CONVERT_PAGES} pages at a time.`);
+        }
+        timerId = startAnalyticsTimer("merge_pdf_convert", {
+            tool: "merge_pdf",
+            input_files: orderedFiles.length,
+            page_count: totalPages,
+            mode: modeInput.value
+        });
+        trackAnalytics("tool_conversion_started", {
+            tool: "merge_pdf",
+            input_files: orderedFiles.length,
+            page_count: totalPages,
+            mode: modeInput.value
+        });
         const mergedPdf = await PDFDocument.create();
         mergedPdf.setCreator("SiRa Convert");
         mergedPdf.setProducer("SiRa Convert Merge Engine");
         mergedPdf.setTitle("Merged PDF - SiRa Convert");
         const skipLocked = skipLockedInput.checked;
-        validateMergeBudget(orderedFiles);
-
         let mergedCount = 0;
         for (let i = 0; i < orderedFiles.length; i += 1) {
             const fileItem = orderedFiles[i];
@@ -367,10 +430,11 @@ async function mergePdfFiles() {
             throw new Error("No valid PDFs could be merged.");
         }
 
+        const saveConfig = getMergeSaveConfig(modeInput.value);
         const bytes = await mergedPdf.save({
-            useObjectStreams: false,
+            useObjectStreams: saveConfig.useObjectStreams,
             addDefaultPage: false,
-            updateFieldAppearances: false
+            updateFieldAppearances: saveConfig.updateFieldAppearances
         });
         state.mergedBlob = new Blob([bytes], { type: "application/pdf" });
         revokeMergedUrl();
@@ -379,16 +443,69 @@ async function mergePdfFiles() {
         resultInfo.textContent = `Merged ${mergedCount} PDF file(s) successfully.`;
         updateOutputPreview(mergedCount);
         setStatus("Merge complete. Original page quality preserved. You can download or share merged PDF.");
+        clearInlineError();
         downloadPdfBtn.disabled = false;
         sharePdfBtn.disabled = false;
         showToast("PDF merge completed successfully.", "success");
+        trackAnalytics("tool_conversion_success", {
+            tool: "merge_pdf",
+            merged_files: mergedCount,
+            output_size_bytes: state.mergedBlob ? state.mergedBlob.size : 0
+        });
+        endAnalyticsTimer(timerId, {
+            status: "success",
+            merged_files: mergedCount,
+            output_size_bytes: state.mergedBlob ? state.mergedBlob.size : 0
+        });
     } catch (error) {
         setStatus(error.message || "Merge failed.");
         showToast(error.message || "Merge failed.", "error");
+        showInlineError(error.message || "Merge failed.");
+        trackAnalytics("tool_conversion_failed", {
+            tool: "merge_pdf",
+            error_message: String(error && error.message ? error.message : "conversion_failed").slice(0, 120)
+        });
+        endAnalyticsTimer(timerId, { status: "failed" });
     } finally {
         state.busy = false;
         mergeBtn.disabled = state.files.length < 2;
     }
+}
+
+function initializeModePreset() {
+    if (!modeInput) return;
+    applyModePreset(modeInput.value || "balanced");
+}
+
+function applyModePreset(mode) {
+    const presets = {
+        fast: {
+            label: "Fast",
+            hint: "Faster merge and smaller output in most cases."
+        },
+        balanced: {
+            label: "Balanced",
+            hint: "Recommended mode for speed and broad PDF compatibility."
+        },
+        max: {
+            label: "Max quality",
+            hint: "Compatibility-focused output. May be larger and slightly slower."
+        }
+    };
+    const preset = presets[mode] || presets.balanced;
+    modeInput.value = mode in presets ? mode : "balanced";
+    if (modeValue) modeValue.textContent = preset.label;
+    if (modeHint) modeHint.textContent = preset.hint;
+}
+
+function getMergeSaveConfig(mode) {
+    if (mode === "fast") {
+        return { useObjectStreams: true, updateFieldAppearances: false };
+    }
+    if (mode === "max") {
+        return { useObjectStreams: false, updateFieldAppearances: false };
+    }
+    return { useObjectStreams: true, updateFieldAppearances: false };
 }
 
 function downloadMergedPdf() {
@@ -466,6 +583,9 @@ function resetAll() {
     sharePdfBtn.disabled = true;
     resultInfo.textContent = "No PDF files selected yet.";
     setStatus("Waiting for PDF upload/paste.");
+    setUnlockCancelUi(false);
+    unlockCancelController = null;
+    clearInlineError();
 }
 
 function clearPreview() {
@@ -506,23 +626,6 @@ function revokeMergedUrl() {
 
 function setStatus(message) {
     statusText.textContent = message;
-}
-
-function validateIncomingPdfCount(newCount) {
-    const maxFiles = window.matchMedia("(max-width: 900px)").matches
-        ? PERF_LIMITS.maxFilesMobile
-        : PERF_LIMITS.maxFilesDesktop;
-
-    if (state.files.length + newCount > maxFiles) {
-        throw new Error(`Please merge up to ${maxFiles} files at once for stable performance.`);
-    }
-}
-
-function validateMergeBudget(files) {
-    const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
-    if (totalBytes > PERF_LIMITS.maxTotalBytes) {
-        throw new Error("Selected files are too large for one merge. Split into smaller batches.");
-    }
 }
 
 function yieldToUi() {
@@ -568,4 +671,106 @@ function escapeHtml(value) {
 function cryptoRandom() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function isPdfPasswordError(error) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (unlocker && typeof unlocker.isPdfPasswordError === "function") {
+        return unlocker.isPdfPasswordError(error);
+    }
+    return Boolean(error && /password|encrypted|protected/i.test(String(error.message || "")));
+}
+
+async function unlockPdfWithBackend(file) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (!unlocker || typeof unlocker.askPassword !== "function") {
+        throw new Error("Unlock module is unavailable. Refresh and try again.");
+    }
+    let attempt = 0;
+    while (attempt < 3) {
+        attempt += 1;
+        const password = await unlocker.askPassword({
+            title: `Unlock PDF (${attempt}/3)`,
+            message: `Enter password for ${file.name || "this PDF"} to add it to merge queue.`
+        });
+        if (password === null) {
+            showToast("Unlock cancelled for locked PDF.", "warn");
+            showInlineError("Unlock canceled by user.");
+            return null;
+        }
+
+        setStatus(`Unlocking "${file.name || "PDF"}" on server...`);
+        unlockCancelController = new AbortController();
+        setUnlockCancelUi(true);
+        try {
+            const unlocked = await requestPdfUnlock(file, password, { signal: unlockCancelController.signal });
+            clearInlineError();
+            return unlocked;
+        } catch (error) {
+            const message = String(error && error.message ? error.message : "Failed to unlock PDF.");
+            if (/incorrect pdf password/i.test(message)) {
+                showToast("Incorrect password. Try again.", "warn");
+                showInlineError("Incorrect PDF password.");
+                continue;
+            }
+            showToast(message, "error");
+            showInlineError(message);
+            return null;
+        } finally {
+            unlockCancelController = null;
+            setUnlockCancelUi(false);
+        }
+    }
+    showToast(`Password attempts exceeded for "${file.name || "PDF"}".`, "error");
+    showInlineError(`Password attempts exceeded for "${file.name || "PDF"}".`);
+    return null;
+}
+
+function setUnlockCancelUi(active) {
+    if (!cancelUnlockBtn) return;
+    cancelUnlockBtn.hidden = !active;
+    cancelUnlockBtn.disabled = !active;
+}
+
+if (cancelUnlockBtn) {
+    cancelUnlockBtn.addEventListener("click", () => {
+        if (!unlockCancelController) return;
+        unlockCancelController.abort();
+    });
+}
+
+async function requestPdfUnlock(file, password, options) {
+    const unlocker = window.SiRaUnlocker || null;
+    if (!unlocker || typeof unlocker.requestPdfUnlock !== "function") {
+        throw new Error("Unlock module is unavailable. Refresh and try again.");
+    }
+    return unlocker.requestPdfUnlock(file, password, options || {});
+}
+
+function showInlineError(message) {
+    if (inlineAlert && typeof inlineAlert.showError === "function") {
+        inlineAlert.showError(message);
+    }
+}
+
+function clearInlineError() {
+    if (inlineAlert && typeof inlineAlert.clear === "function") {
+        inlineAlert.clear();
+    }
+}
+
+function trackAnalytics(eventName, params) {
+    if (!analytics || typeof analytics.trackEvent !== "function") return;
+    analytics.trackEvent(eventName, params || {});
+}
+
+function startAnalyticsTimer(label, meta) {
+    if (!analytics || typeof analytics.startTimer !== "function") return null;
+    return analytics.startTimer(label, meta || {});
+}
+
+function endAnalyticsTimer(timerId, meta) {
+    if (!timerId) return;
+    if (!analytics || typeof analytics.endTimer !== "function") return;
+    analytics.endTimer(timerId, meta || {});
 }

@@ -3,24 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>Blog | SiRa Convert</title>
 <meta name="description" content="Product updates, release notes, and workflow tips from SiRa Convert." />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
 <meta name="author" content="Raghav Pratap" />
 <meta name="theme-color" content="#2563eb" />
+<meta name="application-name" content="SiRa Convert" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="SiRa Convert" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <link rel="canonical" href="https://sira-452b7.web.app/blog.html" />
+<link rel="alternate" hreflang="en" href="https://sira-452b7.web.app/blog.html">
+<link rel="alternate" hreflang="x-default" href="https://sira-452b7.web.app/blog.html">
 <meta property="og:title" content="Blog | SiRa Convert" />
 <meta property="og:description" content="Read updates and practical tips from SiRa Convert." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sira-452b7.web.app/blog.html" />
+<meta property="og:site_name" content="SiRa Convert" />
+<meta property="og:locale" content="en_US" />
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png" />
+<meta property="og:image:alt" content="SiRa Convert logo and branding" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Blog | SiRa Convert" />
 <meta name="twitter:description" content="Latest product notes and roadmap highlights from SiRa Convert." />
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png" />
+<meta name="twitter:image:alt" content="SiRa Convert logo and branding" />
+<meta name="twitter:site" content="@sira_convert" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="logo.png" type="image/png" />
+<link rel="apple-touch-icon" href="logo-192.png">
 <link rel="stylesheet" href="style.css" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
 <script src="gtag-init.js"></script>
@@ -29,13 +44,13 @@
 .page-shell {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 36px 20px 72px;
+  padding: 4px 20px 72px;
 }
 .top-nav {
   position: sticky;
-  top: 16px;
+  top: 2px;
   z-index: 25;
-  margin-bottom: 18px;
+  margin-bottom: 4px;
 }
 .top-nav-inner {
   display: flex;
@@ -85,11 +100,23 @@
   border-color: var(--accent);
 }
 .hero {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(245,158,11,0.18));
   border: 1px solid var(--border);
   border-radius: 26px;
   padding: 30px;
   box-shadow: var(--shadow);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -90px;
+  top: -120px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(245,158,11,0.26), transparent 68%);
 }
 .badge {
   display: inline-flex;
@@ -120,11 +147,12 @@
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .post:hover {
   transform: translateY(-4px);
   border-color: var(--accent);
+  box-shadow: 0 14px 30px rgba(37,99,235,0.18);
 }
 .post time {
   display: inline-block;
@@ -151,6 +179,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
+  background: linear-gradient(140deg, rgba(59,130,246,0.12), rgba(2,132,199,0.08));
   color: var(--text-dim);
 }
 .actions {
@@ -233,6 +262,38 @@
 
   <section class="owner">
     <p>Editorial owner: <strong>RAGHAV PRATAP</strong>. This blog publishes official updates about SiRa Convert product direction and improvements.</p>
+  </section>
+
+  <section class="owner" aria-labelledby="blog-seo-heading">
+    <h2 id="blog-seo-heading">Document Workflow Guides and Product Notes</h2>
+    <p>The SiRa Convert blog publishes updates for online PDF tools, including conversion quality improvements, UI changes, and workflow guidance for JPG to PDF, PDF to JPG, and PDF merge tasks.</p>
+    <div class="blog-grid" style="margin-top:14px;">
+      <article class="post">
+        <h2>JPG to PDF Best Practices</h2>
+        <p>Use high-resolution source images, check orientation, and tune margin/quality settings before export.</p>
+        <a href="jpg-to-pdf.html">Go to JPG to PDF tool</a>
+      </article>
+      <article class="post">
+        <h2>PDF to JPG Export Tips</h2>
+        <p>Select page ranges for targeted export and use ZIP downloads for faster sharing across teams.</p>
+        <a href="pdf-to-jpg.html">Go to PDF to JPG tool</a>
+      </article>
+      <article class="post">
+        <h2>PDF Merge Workflow Tips</h2>
+        <p>Order files before merge and set a descriptive output filename for easier downstream usage.</p>
+        <a href="merge-pdf.html">Go to Merge PDF tool</a>
+      </article>
+    </div>
+    <div style="margin-top:14px;">
+      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;">
+        <summary style="cursor:pointer;font-weight:700;">How often is the blog updated?</summary>
+        <p style="margin-top:8px;color:var(--text-dim);">Updates are posted when major product improvements, fixes, and roadmap milestones are released.</p>
+      </details>
+      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;">
+        <summary style="cursor:pointer;font-weight:700;">Does the blog include practical usage tips?</summary>
+        <p style="margin-top:8px;color:var(--text-dim);">Yes. Posts include workflow recommendations that help users complete conversions and merges more efficiently.</p>
+      </details>
+    </div>
   </section>
 
   <div class="actions">

@@ -169,6 +169,20 @@ check_js_html_id_bindings pdf-to-jpg.js pdf-to-jpg.html
 check_js_html_id_bindings merge-pdf.js merge-pdf.html
 
 echo
+echo "== Workflow smoke checks =="
+check_required_contains analytics.js "window\\.SiRaAnalytics" "analytics.js exposes SiRaAnalytics API"
+check_required_contains analytics.js "tool_timing" "analytics.js emits tool timing events"
+check_required_contains pdf-to-jpg.js "convertBtn\\.addEventListener\\(\"click\", convertPdfToJpg\\)" "pdf-to-jpg convert button is wired"
+check_required_contains jpg-to-pdf.js "convertBtn\\.addEventListener\\(\"click\", createPdf\\)" "jpg-to-pdf convert button is wired"
+check_required_contains merge-pdf.js "mergeBtn\\.addEventListener\\(\"click\", mergePdfFiles\\)" "merge-pdf merge button is wired"
+check_required_contains pdf-to-jpg.js "tool_conversion_started" "pdf-to-jpg reports conversion start telemetry"
+check_required_contains jpg-to-pdf.js "tool_conversion_started" "jpg-to-pdf reports conversion start telemetry"
+check_required_contains merge-pdf.js "tool_conversion_started" "merge-pdf reports conversion start telemetry"
+check_required_contains pdf-to-jpg.js "startAnalyticsTimer" "pdf-to-jpg tracks conversion duration"
+check_required_contains jpg-to-pdf.js "startAnalyticsTimer" "jpg-to-pdf tracks conversion duration"
+check_required_contains merge-pdf.js "startAnalyticsTimer" "merge-pdf tracks conversion duration"
+
+echo
 echo "== Required tool controls =="
 check_required_ids jpg-to-pdf.html \
   imageInput dropZone uploadBtn pasteBtn convertBtn clearBtn downloadPdfBtn sharePdfBtn

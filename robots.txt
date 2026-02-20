@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /offline.html
 Host: sira-452b7.web.app
 
 # Sitemap Location

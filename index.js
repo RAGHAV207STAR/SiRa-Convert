@@ -16,6 +16,27 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         auth.useDeviceLanguage();
         const provider = new GoogleAuthProvider();
         const AUTH_STORAGE_KEY = "sira-auth-user";
+        const toastEl = document.getElementById("toast");
+        const analytics = window.SiRaAnalytics || null;
+
+        function showToast(message, type = "info") {
+            if (!toastEl) {
+                console.warn(message);
+                return;
+            }
+            toastEl.textContent = message;
+            toastEl.className = `toast ${type}`;
+            toastEl.classList.add("show");
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => {
+                toastEl.classList.remove("show");
+            }, 2800);
+        }
+
+        function trackAnalytics(eventName, params) {
+            if (!analytics || typeof analytics.trackEvent !== "function") return;
+            analytics.trackEvent(eventName, params || {});
+        }
 
         if (window.SiRaShared) {
             window.SiRaShared.initTheme();
@@ -32,30 +53,40 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
        window.loginWithGoogle = async () => {
     try {
         await signInWithPopup(auth, provider);
+        trackAnalytics("auth_login_success", { auth_provider: "google" });
     } catch (error) {
         console.error('Google login failed:', error);
+        trackAnalytics("auth_login_failed", {
+            auth_provider: "google",
+            error_code: String((error && error.code) || "unknown").slice(0, 60)
+        });
         const code = (error && error.code) || "";
         if (code === "auth/unauthorized-domain") {
-            alert("This domain is not authorized in Firebase Auth. Add your site domain in Firebase Console > Authentication > Settings > Authorized domains.");
+            showToast("Domain not authorized in Firebase Auth. Add it in Firebase Console.", "error");
             return;
         }
         if (code === "auth/popup-blocked") {
-            alert("Popup was blocked by the browser. Allow popups and try again.");
+            showToast("Popup blocked. Allow popups and try again.", "warn");
             return;
         }
         if (code === "auth/popup-closed-by-user") {
-            alert("Popup was closed before sign-in completed. Please try again.");
+            showToast("Popup closed before sign-in completed. Please try again.", "warn");
             return;
         }
-        alert('Login failed. Please check popup permission and Firebase Auth settings.');
+        showToast("Login failed. Check popup permission and Firebase settings.", "error");
     }
 };
         window.handleLogout = async () => {
     try {
         await signOut(auth);
+        trackAnalytics("auth_logout_success");
+        showToast("Logged out successfully.", "success");
     } catch (error) {
         console.error("Logout failed:", error);
-        alert("Unable to log out right now. Please try again.");
+        trackAnalytics("auth_logout_failed", {
+            error_code: String((error && error.code) || "unknown").slice(0, 60)
+        });
+        showToast("Unable to log out right now. Please try again.", "error");
     }
 };
 

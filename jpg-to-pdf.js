@@ -6,13 +6,9 @@ const state = {
     pdfUrl: null,
     dragIndex: -1
 };
-
-const PERF_LIMITS = {
-    maxImagesDesktop: 100,
-    maxImagesMobile: 50,
-    maxPixelsPerImage: 36_000_000,
-    maxPixelsTotal: 240_000_000
-};
+const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 100;
+const analytics = window.SiRaAnalytics || null;
 
 const imageInput = document.getElementById("imageInput");
 const dropZone = document.getElementById("dropZone");
@@ -36,6 +32,7 @@ const resultInfo = document.getElementById("resultInfo");
 const outputResultInfo = document.getElementById("outputResultInfo");
 const outputPreviewCanvas = document.getElementById("outputPreviewCanvas");
 const progressBar = document.getElementById("progressBar");
+const modeInput = document.getElementById("modeInput");
 const pageSizeInput = document.getElementById("pageSizeInput");
 const orientationInput = document.getElementById("orientationInput");
 const fitInput = document.getElementById("fitInput");
@@ -49,7 +46,10 @@ const fitValue = document.getElementById("fitValue");
 const marginValue = document.getElementById("marginValue");
 const qualityValue = document.getElementById("qualityValue");
 const compressionValue = document.getElementById("compressionValue");
+const modeValue = document.getElementById("modeValue");
+const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
+let inlineAlert = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -72,6 +72,9 @@ if (window.SiRaShared) {
     window.SiRaShared.initInstallPrompt({
         notify: (message, type) => showToast(message, type)
     });
+    if (typeof window.SiRaShared.initInlineAlert === "function") {
+        inlineAlert = window.SiRaShared.initInlineAlert({ hostId: "statusText" });
+    }
 }
 
 marginInput.addEventListener("input", () => {
@@ -92,6 +95,10 @@ orientationInput.addEventListener("change", () => {
 fitInput.addEventListener("change", () => {
     fitValue.textContent = fitInput.selectedOptions[0].text;
 });
+modeInput.addEventListener("change", () => {
+    applyModePreset(modeInput.value);
+});
+initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -175,10 +182,12 @@ async function handlePasteShortcut(event) {
 async function tryAddFiles(files) {
     try {
         await addFiles(files);
+        clearInlineError();
     } catch (error) {
         const message = error && error.message ? error.message : "Failed to add selected images.";
         setStatus(message);
         showToast(message, "error");
+        showInlineError(message);
     }
 }
 
@@ -188,11 +197,18 @@ async function addFiles(files) {
     const valid = files.filter((file) => file.type.startsWith("image/"));
     if (!valid.length) {
         showToast("Only image files are supported.", "error");
+        showInlineError("Only image files are supported.");
         return;
     }
-    validateIncomingImages(valid.length);
-
+    const oversized = valid.find((file) => file.size > MAX_UPLOAD_BYTES);
+    if (oversized) {
+        throw new Error(`${oversized.name || "Image"} exceeds 100 MB upload limit.`);
+    }
+    if (state.images.length + valid.length > MAX_CONVERT_PAGES) {
+        throw new Error(`You can convert up to ${MAX_CONVERT_PAGES} pages at a time.`);
+    }
     setStatus("Reading images...");
+    clearInlineError();
     for (const file of valid) {
         const imageData = await buildImageData(file);
         state.images.push(imageData);
@@ -210,6 +226,11 @@ async function addFiles(files) {
     resultInfo.textContent = `${state.images.length} image(s) queued.`;
     setStatus("Images ready. Click Create PDF.");
     showToast(`${valid.length} image(s) added.`, "success");
+    trackAnalytics("tool_file_ready", {
+        tool: "jpg_to_pdf",
+        input_files: valid.length,
+        queue_total: state.images.length
+    });
 }
 
 async function buildImageData(file) {
@@ -228,8 +249,18 @@ async function buildImageData(file) {
         };
     } catch (error) {
         URL.revokeObjectURL(url);
-        throw error;
+        throw buildImageReadError(file, error);
     }
+}
+
+function buildImageReadError(file, error) {
+    const name = file && file.name ? file.name : "image";
+    const base = `${name} could not be decoded as a valid image.`;
+    const maybeJpg = /\.jpe?g$/i.test(name) || String(file.type || "").toLowerCase() === "image/jpeg";
+    if (!maybeJpg) {
+        return new Error(base);
+    }
+    return new Error(`${base} JPG files do not support standard password locking. If this came from a locked PDF/ZIP, unlock that file first and then upload JPG.`);
 }
 
 function getImageDimensions(url) {
@@ -352,6 +383,7 @@ async function createPdf() {
     downloadPdfBtn.disabled = true;
     sharePdfBtn.disabled = true;
     progressBar.style.width = "0%";
+    let timerId = null;
 
     try {
         setStatus("Generating PDF...");
@@ -361,7 +393,18 @@ async function createPdf() {
         const sizeMode = pageSizeInput.value;
         const orientationMode = orientationInput.value;
         const fitMode = fitInput.value;
+        const mode = modeInput.value;
         validatePdfBuildBudget(state.images, margin, imageQuality, compression);
+        timerId = startAnalyticsTimer("jpg_to_pdf_convert", {
+            tool: "jpg_to_pdf",
+            page_count: state.images.length,
+            mode
+        });
+        trackAnalytics("tool_conversion_started", {
+            tool: "jpg_to_pdf",
+            page_count: state.images.length,
+            mode
+        });
 
         let doc = null;
 
@@ -404,16 +447,88 @@ async function createPdf() {
         resultInfo.textContent = `PDF created from ${state.images.length} image(s) at ${imageQuality}% quality.`;
         updateOutputPreview();
         setStatus("PDF is ready. You can download or share.");
+        clearInlineError();
         downloadPdfBtn.disabled = false;
         sharePdfBtn.disabled = false;
         showToast("PDF created successfully.", "success");
+        trackAnalytics("tool_conversion_success", {
+            tool: "jpg_to_pdf",
+            page_count: state.images.length,
+            output_size_bytes: state.pdfBlob ? state.pdfBlob.size : 0
+        });
+        endAnalyticsTimer(timerId, {
+            status: "success",
+            output_size_bytes: state.pdfBlob ? state.pdfBlob.size : 0
+        });
     } catch (error) {
         setStatus("Failed to create PDF.");
         showToast(error.message || "Failed to create PDF.", "error");
+        showInlineError(error.message || "Failed to create PDF.");
+        trackAnalytics("tool_conversion_failed", {
+            tool: "jpg_to_pdf",
+            error_message: String(error && error.message ? error.message : "conversion_failed").slice(0, 120)
+        });
+        endAnalyticsTimer(timerId, { status: "failed" });
     } finally {
         state.busy = false;
         convertBtn.disabled = state.images.length === 0;
     }
+}
+
+function initializeModePreset() {
+    if (!modeInput) return;
+    applyModePreset(modeInput.value || "balanced");
+}
+
+function applyModePreset(mode) {
+    const presets = {
+        fast: {
+            label: "Fast",
+            margin: 6,
+            quality: 86,
+            compression: "FAST",
+            pageSize: "a4",
+            orientation: "auto",
+            fit: "contain",
+            hint: "Fastest PDF generation with lighter output and lower image detail."
+        },
+        balanced: {
+            label: "Balanced",
+            margin: 10,
+            quality: 98,
+            compression: "MEDIUM",
+            pageSize: "a4",
+            orientation: "auto",
+            fit: "contain",
+            hint: "Recommended mode for clear output and stable performance."
+        },
+        max: {
+            label: "Max quality",
+            margin: 12,
+            quality: 100,
+            compression: "SLOW",
+            pageSize: "auto",
+            orientation: "auto",
+            fit: "contain",
+            hint: "Highest image quality in PDF. Slower conversion and larger file size."
+        }
+    };
+    const preset = presets[mode] || presets.balanced;
+    modeInput.value = mode in presets ? mode : "balanced";
+    if (modeValue) modeValue.textContent = preset.label;
+    if (modeHint) modeHint.textContent = preset.hint;
+    marginInput.value = String(preset.margin);
+    qualityInput.value = String(preset.quality);
+    compressionInput.value = preset.compression;
+    pageSizeInput.value = preset.pageSize;
+    orientationInput.value = preset.orientation;
+    fitInput.value = preset.fit;
+    marginValue.textContent = `${marginInput.value} mm`;
+    qualityValue.textContent = `${qualityInput.value}%`;
+    compressionValue.textContent = compressionInput.selectedOptions[0].text;
+    pageSizeValue.textContent = pageSizeInput.selectedOptions[0].text;
+    orientationValue.textContent = orientationInput.selectedOptions[0].text;
+    fitValue.textContent = fitInput.selectedOptions[0].text;
 }
 
 function getPageConfig(sizeMode, orientationMode, imgW, imgH, margin) {
@@ -552,6 +667,7 @@ function resetAll() {
     sharePdfBtn.disabled = true;
     resultInfo.textContent = "No images selected yet.";
     setStatus("Waiting for image upload/paste.");
+    clearInlineError();
 }
 
 function clearPreview() {
@@ -591,6 +707,18 @@ function revokePdfUrl() {
     }
 }
 
+function showInlineError(message) {
+    if (inlineAlert && typeof inlineAlert.showError === "function") {
+        inlineAlert.showError(message);
+    }
+}
+
+function clearInlineError() {
+    if (inlineAlert && typeof inlineAlert.clear === "function") {
+        inlineAlert.clear();
+    }
+}
+
 function buildOutputName() {
     const base = (outputNameInput.value || "sira-jpg-to-pdf").trim() || "sira-jpg-to-pdf";
     return base.toLowerCase().endsWith(".pdf") ? base : `${base}.pdf`;
@@ -600,27 +728,17 @@ function setStatus(message) {
     statusText.textContent = message;
 }
 
-function validateIncomingImages(newCount) {
-    const maxImages = window.matchMedia("(max-width: 900px)").matches
-        ? PERF_LIMITS.maxImagesMobile
-        : PERF_LIMITS.maxImagesDesktop;
-
-    if (state.images.length + newCount > maxImages) {
-        throw new Error(`Please keep up to ${maxImages} images per run for stable performance.`);
-    }
-}
-
 function validateImageDimensions(dims, name) {
     const pixels = dims.width * dims.height;
     if (!Number.isFinite(pixels) || pixels <= 0) {
         throw new Error(`${name} could not be read.`);
     }
-    if (pixels > PERF_LIMITS.maxPixelsPerImage) {
-        throw new Error(`${name} is too large. Resize the image before converting.`);
-    }
 }
 
 function validatePdfBuildBudget(images, margin, imageQuality, compression) {
+    if (!Array.isArray(images) || images.length < 1 || images.length > MAX_CONVERT_PAGES) {
+        throw new Error(`You can convert up to ${MAX_CONVERT_PAGES} pages at a time.`);
+    }
     if (!Number.isFinite(margin) || margin < 0 || margin > 50) {
         throw new Error("Margin value is out of range.");
     }
@@ -631,20 +749,11 @@ function validatePdfBuildBudget(images, margin, imageQuality, compression) {
         throw new Error("Invalid PDF compression mode.");
     }
 
-    let totalPixels = 0;
     for (const image of images) {
         const pixels = image.width * image.height;
         if (!Number.isFinite(pixels) || pixels <= 0) {
             throw new Error(`Invalid image dimensions: ${image.name}`);
         }
-        if (pixels > PERF_LIMITS.maxPixelsPerImage) {
-            throw new Error(`${image.name} is too large for stable conversion.`);
-        }
-        totalPixels += pixels;
-    }
-
-    if (totalPixels > PERF_LIMITS.maxPixelsTotal) {
-        throw new Error("Total image size is too heavy for browser memory. Split into smaller batches.");
     }
 }
 
@@ -691,4 +800,20 @@ function escapeHtml(value) {
 function cryptoRandom() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function trackAnalytics(eventName, params) {
+    if (!analytics || typeof analytics.trackEvent !== "function") return;
+    analytics.trackEvent(eventName, params || {});
+}
+
+function startAnalyticsTimer(label, meta) {
+    if (!analytics || typeof analytics.startTimer !== "function") return null;
+    return analytics.startTimer(label, meta || {});
+}
+
+function endAnalyticsTimer(timerId, meta) {
+    if (!timerId) return;
+    if (!analytics || typeof analytics.endTimer !== "function") return;
+    analytics.endTimer(timerId, meta || {});
 }
