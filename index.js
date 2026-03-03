@@ -15,9 +15,17 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         const auth = getAuth(app);
         auth.useDeviceLanguage();
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: "select_account" });
         const AUTH_STORAGE_KEY = "sira-auth-user";
         const toastEl = document.getElementById("toast");
         const analytics = window.SiRaAnalytics || null;
+        const loginPanel = document.getElementById("loginPanel");
+        const googleLoginBtn = document.getElementById("googleLoginBtn");
+        const googleLoginBtnText = document.getElementById("googleLoginBtnText");
+        const loginStateText = document.getElementById("loginStateText");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const profileBox = document.getElementById("profileBox");
+        let authBusy = false;
 
         function showToast(message, type = "info") {
             if (!toastEl) {
@@ -45,16 +53,49 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // --- UI MENUS ---
 
+        function setLoginPanelVisible(visible) {
+            if (!loginPanel) return;
+            loginPanel.classList.toggle("active", visible);
+            loginPanel.setAttribute("aria-hidden", visible ? "false" : "true");
+            document.body.classList.toggle("auth-modal-open", visible);
+            if (!visible && loginStateText) loginStateText.textContent = "";
+        }
+
         window.toggleLoginPanel = () => {
-    document.getElementById('loginPanel').classList.toggle('active');
-};
+            const isOpen = Boolean(loginPanel && loginPanel.classList.contains("active"));
+            setLoginPanelVisible(!isOpen);
+        };
+
+        function setGoogleLoginBusy(isBusy, hint) {
+            if (!googleLoginBtn) return;
+            googleLoginBtn.disabled = isBusy;
+            googleLoginBtn.classList.toggle("is-loading", isBusy);
+            if (googleLoginBtnText) {
+                googleLoginBtnText.textContent = isBusy ? "Opening Google..." : "Continue with Google";
+            }
+            if (loginStateText) {
+                loginStateText.textContent = hint || "";
+            }
+        }
+
+        function setLogoutBusy(isBusy) {
+            if (!logoutBtn) return;
+            logoutBtn.disabled = isBusy;
+            logoutBtn.classList.toggle("is-loading", isBusy);
+            logoutBtn.textContent = isBusy ? "Signing out..." : "Logout";
+        }
 
        // --- AUTH LOGIC ---
        window.loginWithGoogle = async () => {
+    if (authBusy) return;
+    authBusy = true;
+    setGoogleLoginBusy(true, "Select your Google account to continue.");
     try {
         await signInWithPopup(auth, provider);
+        setGoogleLoginBusy(false, "Signed in successfully.");
         trackAnalytics("auth_login_success", { auth_provider: "google" });
     } catch (error) {
+        setGoogleLoginBusy(false, "");
         console.error('Google login failed:', error);
         trackAnalytics("auth_login_failed", {
             auth_provider: "google",
@@ -62,23 +103,34 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         });
         const code = (error && error.code) || "";
         if (code === "auth/unauthorized-domain") {
+            if (loginStateText) loginStateText.textContent = "This domain is not enabled in Firebase Authentication.";
             showToast("Domain not authorized in Firebase Auth. Add it in Firebase Console.", "error");
             return;
         }
         if (code === "auth/popup-blocked") {
+            if (loginStateText) loginStateText.textContent = "Popup blocked by browser settings.";
             showToast("Popup blocked. Allow popups and try again.", "warn");
             return;
         }
         if (code === "auth/popup-closed-by-user") {
+            if (loginStateText) loginStateText.textContent = "Google sign-in was closed before completion.";
             showToast("Popup closed before sign-in completed. Please try again.", "warn");
             return;
         }
+        if (loginStateText) loginStateText.textContent = "Sign-in failed. Retry with Google.";
         showToast("Login failed. Check popup permission and Firebase settings.", "error");
+    } finally {
+        authBusy = false;
     }
 };
         window.handleLogout = async () => {
+    if (authBusy) return;
+    authBusy = true;
+    setLogoutBusy(true);
     try {
         await signOut(auth);
+        const menu = document.getElementById("userMenu");
+        if (menu) menu.classList.remove("active");
         trackAnalytics("auth_logout_success");
         showToast("Logged out successfully.", "success");
     } catch (error) {
@@ -87,15 +139,26 @@ from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
             error_code: String((error && error.code) || "unknown").slice(0, 60)
         });
         showToast("Unable to log out right now. Please try again.", "error");
+    } finally {
+        setLogoutBusy(false);
+        authBusy = false;
     }
 };
 
         const closeLoginBtn = document.getElementById("closeLoginBtn");
-        const googleLoginBtn = document.getElementById("googleLoginBtn");
-        const logoutBtn = document.getElementById("logoutBtn");
         if (closeLoginBtn) closeLoginBtn.addEventListener("click", window.toggleLoginPanel);
         if (googleLoginBtn) googleLoginBtn.addEventListener("click", window.loginWithGoogle);
         if (logoutBtn) logoutBtn.addEventListener("click", window.handleLogout);
+        if (loginPanel) {
+            loginPanel.addEventListener("click", (event) => {
+                if (event.target === loginPanel) setLoginPanelVisible(false);
+            });
+        }
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && loginPanel && loginPanel.classList.contains("active")) {
+                setLoginPanelVisible(false);
+            }
+        });
 
 function setGuestProfile() {
     const profileDisplay = document.getElementById("profileDisplay");
@@ -105,7 +168,10 @@ function setGuestProfile() {
     const userNameDisplay = document.getElementById("userNameDisplay");
     const userEmailDisplay = document.getElementById("userEmailDisplay");
     if (userNameDisplay) userNameDisplay.innerText = "Guest User";
-    if (userEmailDisplay) userEmailDisplay.innerText = "";
+    if (userEmailDisplay) userEmailDisplay.innerText = "Login to sync across tools";
+    if (logoutBtn) logoutBtn.hidden = true;
+    document.body.classList.remove("auth-signed-in");
+    if (profileBox) profileBox.setAttribute("aria-label", "Sign in with Google");
 }
 
 function cacheUser(user) {
@@ -182,10 +248,12 @@ let handledAuthRouteQuery = false;
         const userEmailDisplay = document.getElementById("userEmailDisplay");
         if (userNameDisplay) userNameDisplay.innerText = user.displayName || "Signed-in User";
         if (userEmailDisplay) userEmailDisplay.innerText = user.email || "";
+        if (logoutBtn) logoutBtn.hidden = false;
+        document.body.classList.add("auth-signed-in");
+        if (profileBox) profileBox.setAttribute("aria-label", "Open account menu");
 
         cacheUser(user);
-        const loginPanel = document.getElementById("loginPanel");
-        if (loginPanel) loginPanel.classList.remove("active");
+        setLoginPanelVisible(false);
     } else {
         cacheUser(null);
         setGuestProfile();
@@ -203,8 +271,7 @@ let handledAuthRouteQuery = false;
     }
 
     if (!user && shouldOpenLoginFromQuery()) {
-        const loginPanel = document.getElementById("loginPanel");
-        if (loginPanel) loginPanel.classList.add("active");
+        setLoginPanelVisible(true);
         clearAuthQueryFlags();
     }
 });
@@ -214,7 +281,7 @@ let handledAuthRouteQuery = false;
             window.SiRaShared.initUserMenu({
                 onProfileRequest: () => {
                     if (!auth.currentUser) {
-                        toggleLoginPanel();
+                        window.toggleLoginPanel();
                         return false;
                     }
                     return true;
@@ -225,6 +292,7 @@ let handledAuthRouteQuery = false;
         // Splash
         window.addEventListener('load', () => setTimeout(() => {
             const splash = document.getElementById('splashScreen');
+            if (!splash) return;
             splash.style.opacity = '0';
             setTimeout(() => splash.style.display = 'none', 500);
         }, 1200));

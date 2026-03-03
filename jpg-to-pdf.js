@@ -6,8 +6,10 @@ const state = {
     pdfUrl: null,
     dragIndex: -1
 };
-const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
-const MAX_CONVERT_PAGES = 100;
+const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
+const MAX_TOTAL_UPLOAD_BYTES = 600 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 300;
+const MAX_TOTAL_IMAGE_PIXELS = 450_000_000;
 const analytics = window.SiRaAnalytics || null;
 
 const imageInput = document.getElementById("imageInput");
@@ -202,10 +204,15 @@ async function addFiles(files) {
     }
     const oversized = valid.find((file) => file.size > MAX_UPLOAD_BYTES);
     if (oversized) {
-        throw new Error(`${oversized.name || "Image"} exceeds 100 MB upload limit.`);
+        throw new Error(`${oversized.name || "Image"} exceeds ${toMegabytes(MAX_UPLOAD_BYTES)} MB upload limit.`);
     }
     if (state.images.length + valid.length > MAX_CONVERT_PAGES) {
         throw new Error(`You can convert up to ${MAX_CONVERT_PAGES} pages at a time.`);
+    }
+    const incomingBytes = valid.reduce((sum, file) => sum + file.size, 0);
+    const currentBytes = state.images.reduce((sum, image) => sum + image.size, 0);
+    if (currentBytes + incomingBytes > MAX_TOTAL_UPLOAD_BYTES) {
+        throw new Error(`Total upload size can be up to ${toMegabytes(MAX_TOTAL_UPLOAD_BYTES)} MB per conversion.`);
     }
     setStatus("Reading images...");
     clearInlineError();
@@ -578,6 +585,10 @@ function fileToPdfImagePayload(file, qualityPercent) {
                 canvas.width = img.naturalWidth;
                 canvas.height = img.naturalHeight;
                 const ctx = canvas.getContext("2d", { alpha: false });
+                if (!ctx) {
+                    reject(new Error("Canvas renderer unavailable in this browser. Try a modern browser version."));
+                    return;
+                }
                 if (!usePng) {
                     ctx.fillStyle = "#ffffff";
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -749,11 +760,17 @@ function validatePdfBuildBudget(images, margin, imageQuality, compression) {
         throw new Error("Invalid PDF compression mode.");
     }
 
+    let totalPixels = 0;
     for (const image of images) {
         const pixels = image.width * image.height;
         if (!Number.isFinite(pixels) || pixels <= 0) {
             throw new Error(`Invalid image dimensions: ${image.name}`);
         }
+        totalPixels += pixels;
+    }
+
+    if (totalPixels > MAX_TOTAL_IMAGE_PIXELS) {
+        throw new Error("Selected images are too large for stable browser conversion. Reduce image count or resolution.");
     }
 }
 
@@ -781,6 +798,10 @@ function formatBytes(bytes) {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function toMegabytes(bytes) {
+    return Math.round(bytes / (1024 * 1024));
 }
 
 function shortName(name) {

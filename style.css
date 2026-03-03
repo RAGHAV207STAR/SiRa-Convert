@@ -46,6 +46,10 @@ flex-direction: column;
 position: relative;
 overflow-x: hidden;
 }
+
+body.auth-modal-open {
+overflow: hidden;
+}
 body::before,
 body::after {
 content: "";
@@ -68,6 +72,13 @@ height: 360px;
 right: -130px;
 top: 45%;
 background: rgba(37, 99, 235, 0.14);
+}
+
+img,
+video,
+canvas {
+max-width: 100%;
+height: auto;
 }
 
 
@@ -236,6 +247,12 @@ margin-bottom: 20px; display: inline-block;
     padding: 10px 12px;
     margin-bottom: 8px;
     background: var(--surface);
+}
+
+.home-insights-faq h3 {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
 }
 
 .home-insights-faq summary {
@@ -438,13 +455,23 @@ border: 1px solid var(--border);
 border-radius: 26px;
 width: 90%;
 max-width: 380px;
-
-padding: 45px 30px;
+overflow: hidden;
+padding: 34px 28px 28px;
 text-align: center;
 position: relative;
 
 box-shadow: var(--shadow);
 animation: popIn 0.25s ease;
+}
+
+.login-art {
+position: absolute;
+inset: -80px -40px auto;
+height: 170px;
+background:
+radial-gradient(160px 80px at 20% 30%, rgba(14, 165, 233, 0.25), transparent 70%),
+radial-gradient(220px 110px at 80% 10%, rgba(37, 99, 235, 0.2), transparent 74%);
+pointer-events: none;
 }
 
 /* smooth popup */
@@ -455,23 +482,30 @@ to { transform: scale(1); opacity: 1; }
 
 .login-logo {
 margin-bottom: 18px;
+position: relative;
+z-index: 1;
 }
 
 .close-login {
 position: absolute;
-top: 12px;
-right: 18px;
+top: 10px;
+right: 12px;
+width: 34px;
+height: 34px;
 font-size: 24px;
-border: none;
-background: none;
+border-radius: 50%;
+border: 1px solid var(--border);
+background: rgba(148, 163, 184, 0.08);
 cursor: pointer;
 color: var(--text-dim);
+display: grid;
+place-items: center;
 }
 
 /* ---------- PREMIUM GOOGLE BUTTON ---------- */
 .google-btn-pro {
 width: 100%;
-height: 50px;
+height: 52px;
 
 display: flex;
 align-items: center;
@@ -504,6 +538,80 @@ box-shadow: 0 12px 28px rgba(0,0,0,0.15);
 
 .google-btn-pro:active {
 transform: scale(0.98);
+}
+
+.google-btn-pro:disabled {
+cursor: wait;
+opacity: 0.85;
+transform: none;
+}
+
+.google-btn-pro.is-loading img {
+opacity: 0.25;
+}
+
+.google-btn-pro.is-loading::after {
+content: "";
+width: 16px;
+height: 16px;
+border-radius: 50%;
+border: 2px solid rgba(37, 99, 235, 0.25);
+border-top-color: #2563eb;
+animation: authSpin 0.7s linear infinite;
+}
+
+.login-title {
+font-size: 1.35rem;
+font-weight: 800;
+}
+
+.login-sub {
+color: var(--text-dim);
+font-size: 0.92rem;
+margin: 8px 0 12px;
+}
+
+.login-points {
+list-style: none;
+display: grid;
+gap: 6px;
+text-align: left;
+margin: 0 0 15px;
+padding: 10px 12px;
+border: 1px solid var(--border);
+border-radius: 12px;
+background: rgba(148, 163, 184, 0.06);
+}
+
+.login-points li {
+font-size: 0.82rem;
+font-weight: 700;
+color: var(--text-dim);
+padding-left: 18px;
+position: relative;
+}
+
+.login-points li::before {
+content: "";
+position: absolute;
+left: 0;
+top: 7px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.login-state-text {
+min-height: 20px;
+margin-top: 10px;
+font-size: 0.8rem;
+font-weight: 700;
+color: var(--text-dim);
+}
+
+@keyframes authSpin {
+to { transform: rotate(360deg); }
 }
 
 /* ===== Sticky Footer Layout Fix ===== */
@@ -916,7 +1024,43 @@ box-shadow: var(--shadow); z-index: 1001;
 
 .settings-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
+.user-menu-head {
+padding: 4px 5px 13px;
+border-bottom: 1px solid var(--border);
+margin-bottom: 10px;
+}
 
+.user-menu-name {
+display: block;
+font-weight: 800;
+font-size: 0.9rem;
+}
+
+.user-menu-email {
+color: var(--text-dim);
+font-size: 0.75rem;
+}
+
+.user-menu-logout {
+width: 100%;
+padding: 10px 12px;
+background: rgba(255, 71, 87, 0.1);
+border: 1px solid rgba(255, 71, 87, 0.25);
+border-radius: 10px;
+color: #ff4757;
+font-weight: 800;
+cursor: pointer;
+text-align: center;
+}
+
+.user-menu-logout:hover {
+background: rgba(255, 71, 87, 0.16);
+}
+
+.user-menu-logout.is-loading {
+cursor: wait;
+opacity: 0.85;
+}
 
 /* Mobile Optimizations */
 
@@ -932,6 +1076,56 @@ box-shadow: var(--shadow); z-index: 1001;
 
 .footer-container { text-align: center; }
 
+}
+
+@media (max-width: 430px) {
+.header-glass {
+    padding: 8px 10px;
+    border-radius: 14px;
+}
+
+.brand-name {
+    font-size: 0.82rem;
+}
+
+.nav-right {
+    gap: 6px;
+}
+
+.theme-toggle {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+}
+
+#profileBox,
+.profile-box {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.settings-menu {
+    width: min(220px, calc(100vw - 24px));
+    right: 0;
+}
+
+.content {
+    padding: 4px 12px 28px;
+}
+
+.home-insights-shell {
+    padding: 16px;
+}
+
+.tool-card {
+    padding: 18px;
+}
+
+.ultra-footer {
+    padding: 48px 6% 20px;
+}
 }
 /* Theme Icon Toggle */
 .theme-toggle {
@@ -956,10 +1150,61 @@ box-shadow: var(--shadow); z-index: 1001;
 /* Profile toggle visibility hardening */
 #profileBox,
 .profile-box {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    border-radius: 50% !important;
+    padding: 0;
     border: 1px solid var(--border) !important;
     background: linear-gradient(145deg, var(--surface), rgba(15, 23, 42, 0.55)) !important;
     color: var(--text-main) !important;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: visible !important;
+    isolation: isolate;
+    transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+#profileBox::before,
+.profile-box::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: conic-gradient(
+        from 0deg,
+        rgba(56, 189, 248, 0.28),
+        rgba(37, 99, 235, 0.3),
+        rgba(14, 165, 233, 0.28),
+        rgba(96, 165, 250, 0.28),
+        rgba(56, 189, 248, 0.28)
+    );
+    opacity: 0.45;
+    z-index: -2;
+    animation: profileHaloSpin 6s linear infinite;
+}
+
+#profileBox::after,
+.profile-box::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.24), transparent 68%);
+    filter: blur(2px);
+    opacity: 0.5;
+    z-index: -3;
+}
+
+#profileDisplay {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 [data-theme="dark"] #profileBox,
@@ -979,7 +1224,17 @@ box-shadow: var(--shadow); z-index: 1001;
 #profileBox:hover,
 .profile-box:hover {
     border-color: var(--accent) !important;
-    transform: translateY(-1px) scale(1.03);
+    transform: translateY(-1px) scale(1.05);
+}
+
+#profileBox:hover::before,
+.profile-box:hover::before {
+    opacity: 0.8;
+}
+
+#profileBox:hover::after,
+.profile-box:hover::after {
+    opacity: 0.8;
 }
 
 #profileBox:focus-visible,
@@ -989,12 +1244,34 @@ box-shadow: var(--shadow); z-index: 1001;
 }
 
 #profileDisplay svg {
+    width: 16px;
+    height: 16px;
     color: var(--text-main);
     stroke: currentColor;
 }
 
 #profileDisplay img {
     border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+body.auth-signed-in #profileBox,
+body.auth-signed-in .profile-box {
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.38), 0 10px 22px rgba(0, 0, 0, 0.32);
+}
+
+body.auth-signed-in #profileBox::before,
+body.auth-signed-in .profile-box::before {
+    opacity: 1;
+    animation-duration: 3.6s;
+}
+
+body.auth-signed-in #profileBox::after,
+body.auth-signed-in .profile-box::after {
+    opacity: 0.95;
+}
+
+@keyframes profileHaloSpin {
+    to { transform: rotate(360deg); }
 }
 
 @media (forced-colors: active) {

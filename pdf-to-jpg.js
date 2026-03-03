@@ -12,8 +12,9 @@ const state = {
     lastZipBlob: null,
     activeIndex: -1
 };
-const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
-const MAX_CONVERT_PAGES = 100;
+const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 300;
+const MAX_ESTIMATED_RENDER_PIXELS = 420_000_000;
 const analytics = window.SiRaAnalytics || null;
 
 const pdfInput = document.getElementById("pdfInput");
@@ -201,9 +202,10 @@ async function handlePickedFile(file) {
         return;
     }
     if (file.size > MAX_UPLOAD_BYTES) {
-        setStatus("PDF must be 100 MB or smaller.");
-        showToast("Upload limit: PDF must be 100 MB or smaller.", "error");
-        showInlineError("Upload limit: PDF must be 100 MB or smaller.");
+        const message = `Upload limit: PDF must be ${toMegabytes(MAX_UPLOAD_BYTES)} MB or smaller.`;
+        setStatus(message);
+        showToast(message, "error");
+        showInlineError(message);
         return;
     }
 
@@ -483,7 +485,7 @@ async function convertPdfToJpg() {
         const scale = Number(scaleInput.value);
         const quality = Number(qualityInput.value) / 100;
         const output = getImageOutputConfig(formatInput.value);
-        validateConversionBudget(targetPages.length, scale, pdf);
+        await validateConversionBudget(targetPages.length, scale, pdf, targetPages);
         timerId = startAnalyticsTimer("pdf_to_jpg_convert", {
             tool: "pdf_to_jpg",
             page_count: targetPages.length,
@@ -505,6 +507,9 @@ async function convertPdfToJpg() {
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d", { alpha: false });
+            if (!ctx) {
+                throw new Error("Canvas renderer unavailable in this browser. Try a modern browser version.");
+            }
             canvas.width = Math.ceil(viewport.width);
             canvas.height = Math.ceil(viewport.height);
 
@@ -627,7 +632,7 @@ function applyModePreset(mode) {
     formatValue.textContent = formatInput.selectedOptions[0].text;
 }
 
-function validateConversionBudget(pageCount, scale, pdf) {
+async function validateConversionBudget(pageCount, scale, pdf, targetPages) {
     if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > MAX_CONVERT_PAGES) {
         throw new Error(`You can convert up to ${MAX_CONVERT_PAGES} pages at a time.`);
     }
@@ -642,6 +647,23 @@ function validateConversionBudget(pageCount, scale, pdf) {
 
     if (!pdf || typeof pdf.numPages !== "number") {
         throw new Error("Could not validate PDF conversion limits.");
+    }
+
+    if (!Array.isArray(targetPages) || !targetPages.length) {
+        throw new Error("No valid pages selected.");
+    }
+
+    const sample = targetPages.slice(0, Math.min(5, targetPages.length));
+    let sampledBasePixels = 0;
+    for (const pageNumber of sample) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+        sampledBasePixels += Math.max(1, Math.ceil(viewport.width) * Math.ceil(viewport.height));
+    }
+    const avgBasePixels = sampledBasePixels / sample.length;
+    const estimatedPixels = avgBasePixels * pageCount * scale * scale;
+    if (estimatedPixels > MAX_ESTIMATED_RENDER_PIXELS) {
+        throw new Error("Selected pages and scale are too heavy for stable conversion. Reduce scale or convert smaller ranges.");
     }
 }
 
@@ -835,6 +857,10 @@ function formatBytes(bytes) {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function toMegabytes(bytes) {
+    return Math.round(bytes / (1024 * 1024));
 }
 
 function escapeHtml(value) {

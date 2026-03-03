@@ -67,6 +67,12 @@
     var menu = document.getElementById(opts.menuId || "userMenu");
     var navSelector = opts.navSelector || ".nav-right";
     var onProfileRequest = typeof opts.onProfileRequest === "function" ? opts.onProfileRequest : null;
+    var profileButton = document.getElementById(opts.profileButtonId || "profileBox");
+
+    function syncProfileExpandedState() {
+      if (!profileButton || !menu) return;
+      profileButton.setAttribute("aria-expanded", menu.classList.contains("active") ? "true" : "false");
+    }
 
     window.handleProfileClick = function () {
       if (onProfileRequest) {
@@ -75,13 +81,16 @@
       }
       if (menu) {
         menu.classList.toggle("active");
+        syncProfileExpandedState();
       }
     };
 
-    var profileButton = document.getElementById(opts.profileButtonId || "profileBox");
     if (profileButton && !profileButton.dataset.boundProfileToggle) {
       profileButton.addEventListener("click", window.handleProfileClick);
       profileButton.dataset.boundProfileToggle = "true";
+      if (!profileButton.getAttribute("aria-expanded")) {
+        profileButton.setAttribute("aria-expanded", "false");
+      }
     }
 
     document.addEventListener("click", function (event) {
@@ -89,6 +98,7 @@
       document.querySelectorAll(".settings-menu").forEach(function (panel) {
         panel.classList.remove("active");
       });
+      syncProfileExpandedState();
     });
   }
 
@@ -276,10 +286,7 @@
       return;
     }
 
-    var dismissedKey = opts.dismissedKey || "sira-install-dismissed";
-    var dismissedUntilKey = opts.dismissedUntilKey || "sira-install-dismissed-until";
     var installedKey = opts.installedKey || "sira-installed";
-    var dismissForMs = Number(opts.dismissForMs || 6 * 60 * 60 * 1000);
     var bannerAutoHideMs = Number(opts.bannerAutoHideMs || 12000);
     var deferredInstallPrompt = null;
     var fallbackNoticeTimer = null;
@@ -296,12 +303,6 @@
 
     function isInstalled() {
       return isStandaloneMode() || safeGet(localStorage, installedKey) === "true";
-    }
-
-    function isDismissed() {
-      var dismissedUntil = Number(safeGet(localStorage, dismissedUntilKey) || "0");
-      if (dismissedUntil > Date.now()) return true;
-      return safeGet(sessionStorage, dismissedKey) === "true";
     }
 
     function clearHeaderAutoHideTimer() {
@@ -330,8 +331,6 @@
     }
 
     function dismissTransientPrompts() {
-      safeSet(sessionStorage, dismissedKey, "true");
-      safeSet(localStorage, dismissedUntilKey, String(Date.now() + dismissForMs));
       hideTransientPrompts();
     }
 
@@ -359,11 +358,6 @@
         installPanel.hidden = false;
       }
 
-      if (isDismissed()) {
-        hideTransientPrompts();
-        return;
-      }
-
       setNoticeMessage(message);
 
       if (hasHeaderNotice && installHeader) {
@@ -389,7 +383,6 @@
 
     function markAsInstalled() {
       safeSet(localStorage, installedKey, "true");
-      safeRemove(localStorage, dismissedUntilKey);
       deferredInstallPrompt = null;
       hideInstallExperience();
     }
@@ -425,7 +418,6 @@
           .then(function (choice) {
             if (choice && choice.outcome === "accepted") {
               markAsInstalled();
-              if (notify) notify("SiRa app installed successfully.", "success");
             }
           })
           .catch(function () {})
@@ -474,7 +466,6 @@
 
     window.addEventListener("appinstalled", function () {
       markAsInstalled();
-      if (notify) notify("SiRa app installed successfully.", "success");
     });
 
     var displayModeQuery = window.matchMedia("(display-mode: standalone)");

@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
-<title>PDF to JPG | SiRa Convert</title>
-<meta name="description" content="Convert PDF pages to high-quality JPG files in your browser with page-range, render scale, and quality controls.">
+<meta name="sira-unlock-api" content="http://localhost:8080">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
+<title>PDF to JPG Converter Online Free | SiRa Convert</title>
+<meta name="description" content="Convert PDF to JPG or PNG online for free. Select page ranges, control quality, and download as image files or ZIP in seconds.">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
 <meta name="keywords" content="PDF to JPG, PDF to image, extract PDF pages, convert PDF online, private PDF conversion">
 <meta name="author" content="SiRa Convert">
@@ -20,8 +21,8 @@
 <link rel="canonical" href="https://sira-452b7.web.app/pdf-to-jpg.html">
 <link rel="alternate" hreflang="en" href="https://sira-452b7.web.app/pdf-to-jpg.html">
 <link rel="alternate" hreflang="x-default" href="https://sira-452b7.web.app/pdf-to-jpg.html">
-<meta property="og:title" content="PDF to JPG | SiRa Convert">
-<meta property="og:description" content="Extract JPG images from PDF pages instantly with private browser-side conversion.">
+<meta property="og:title" content="PDF to JPG Converter Online Free | SiRa Convert">
+<meta property="og:description" content="Extract selected PDF pages as JPG or PNG with quality controls and ZIP export.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sira-452b7.web.app/pdf-to-jpg.html">
 <meta property="og:site_name" content="SiRa Convert">
@@ -29,8 +30,8 @@
 <meta property="og:image" content="https://sira-452b7.web.app/logo.png">
 <meta property="og:image:alt" content="SiRa Convert logo and branding">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PDF to JPG | SiRa Convert">
-<meta name="twitter:description" content="Fast PDF page to JPG conversion with ZIP export.">
+<meta name="twitter:title" content="PDF to JPG Converter Online Free | SiRa Convert">
+<meta name="twitter:description" content="Convert selected PDF pages to JPG/PNG and download all files as ZIP.">
 <meta name="twitter:image" content="https://sira-452b7.web.app/logo.png">
 <meta name="twitter:image:alt" content="SiRa Convert logo and branding">
 <meta name="twitter:site" content="@sira_convert">
@@ -1320,6 +1321,17 @@ input[type="range"]{
         grid-template-columns:1fr;
     }
 }
+
+@media (max-width:430px){
+    .tool-wrapper{ padding:4px 10px 46px; }
+    .cross-tools{ padding:0 10px 8px; }
+    .seo-content{ padding:0 10px; }
+    .seo-shell{ padding:18px 14px; border-radius:16px; }
+    .nav-right{ gap:6px; }
+    .theme-toggle, .profile-box{ width:34px; height:34px; border-radius:10px; }
+    .settings-menu{ width:min(220px, calc(100vw - 24px)); right:0; }
+    .preview-stage{ min-height:260px; }
+}
 .seo-content{
     max-width:1240px;
     margin:28px auto 0;
@@ -1370,6 +1382,7 @@ input[type="range"]{
 .seo-card h3{ margin:0 0 6px; font-size:.95rem; }
 .seo-card p{ margin:0; font-size:.86rem; color:var(--tool-text-muted); }
 .seo-faq{ margin-top:16px; }
+.seo-faq h3{ margin:0 0 10px; font-size:1.02rem; letter-spacing:.2px; }
 .seo-faq details{
     border:1px solid var(--tool-border);
     border-radius:14px;
@@ -1628,35 +1641,40 @@ input[type="range"]{
 
 <section class="seo-content" aria-labelledby="pdf-jpg-seo-heading">
     <div class="seo-shell">
-        <span class="seo-kicker">SEO + FAQ</span>
-        <h2 id="pdf-jpg-seo-heading">PDF to JPG Converter Online</h2>
-        <p>Use SiRa Convert to convert PDF to JPG online in a fast browser workflow. Select page range, output quality, and render scale, then download image files or ZIP output in one step.</p>
+        <span class="seo-kicker">Guide + FAQ</span>
+        <h2 id="pdf-jpg-seo-heading">PDF to JPG Converter for Accurate Page Extraction and Fast Sharing</h2>
+        <p>Extract selected PDF pages as JPG or PNG with full control over range, render scale, and output quality. SiRa Convert is built for quick document reuse in presentations, chats, reports, and social sharing.</p>
         <div class="seo-grid">
             <article class="seo-card">
-                <h3>How to convert PDF pages to images</h3>
-                <p>Upload a PDF, set conversion controls, choose page range, and start conversion. Preview pages before download.</p>
+                <h3>Targeted page extraction</h3>
+                <p>Use ranges like 1-5,8,10 to export only the pages you need instead of converting the full document.</p>
             </article>
             <article class="seo-card">
-                <h3>Range and quality settings</h3>
-                <p>Convert all pages or specific ranges like 1-3,5. Tune quality and scale to balance sharpness and file size.</p>
+                <h3>Quality control for each export</h3>
+                <p>Adjust scale and compression to balance sharp text, smooth graphics, and download size based on your use case.</p>
             </article>
             <article class="seo-card">
-                <h3>Export options</h3>
-                <p>Download all converted images individually, save as ZIP, or share directly after processing.</p>
+                <h3>Flexible delivery options</h3>
+                <p>Download each page image separately, bundle all outputs as a ZIP, or share directly from supported devices.</p>
             </article>
         </div>
-        <div class="seo-faq" aria-label="PDF to JPG frequently asked questions">
+        <div class="seo-faq" aria-labelledby="pdf-jpg-faq-heading">
+            <h3 id="pdf-jpg-faq-heading">PDF to JPG FAQ</h3>
             <details>
-                <summary>Can I convert only selected pages from a PDF?</summary>
-                <p>Yes. Enter page ranges such as 1-4,7 to convert only the pages you need.</p>
+                <summary>Can I convert only selected pages from a PDF file?</summary>
+                <p>Yes. Enter ranges such as 1-4,7,10-12 to export only specific pages and skip the rest.</p>
             </details>
             <details>
-                <summary>Should I choose JPG or PNG output?</summary>
-                <p>JPG is better for smaller files. PNG is better for lossless quality and graphics with text edges.</p>
+                <summary>When should I choose JPG vs PNG output?</summary>
+                <p>Choose JPG for smaller files and faster sharing. Choose PNG when you need sharper edges and near-lossless quality.</p>
             </details>
             <details>
-                <summary>Can I batch download converted images?</summary>
-                <p>Yes. You can export all output images in a ZIP file for faster downloads.</p>
+                <summary>Can I download all converted pages at once?</summary>
+                <p>Yes. Export all converted images as a ZIP for one-click download and easier transfer.</p>
+            </details>
+            <details>
+                <summary>Can this tool handle password-protected PDFs?</summary>
+                <p>Yes. If the PDF is locked, you are prompted for the password so conversion can continue securely.</p>
             </details>
         </div>
     </div>

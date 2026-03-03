@@ -8,8 +8,9 @@ const state = {
     mergedUrl: null,
     dragIndex: -1
 };
-const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
-const MAX_CONVERT_PAGES = 100;
+const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
+const MAX_TOTAL_UPLOAD_BYTES = 800 * 1024 * 1024;
+const MAX_CONVERT_PAGES = 300;
 const analytics = window.SiRaAnalytics || null;
 
 const pdfInput = document.getElementById("pdfInput");
@@ -183,7 +184,12 @@ async function addFiles(files) {
     }
     const oversized = pdfFiles.find((file) => file.size > MAX_UPLOAD_BYTES);
     if (oversized) {
-        throw new Error(`${oversized.name || "PDF"} exceeds 100 MB upload limit.`);
+        throw new Error(`${oversized.name || "PDF"} exceeds ${toMegabytes(MAX_UPLOAD_BYTES)} MB upload limit.`);
+    }
+    const incomingBytes = pdfFiles.reduce((sum, file) => sum + file.size, 0);
+    const currentBytes = state.files.reduce((sum, item) => sum + item.size, 0);
+    if (currentBytes + incomingBytes > MAX_TOTAL_UPLOAD_BYTES) {
+        throw new Error(`Total upload size can be up to ${toMegabytes(MAX_TOTAL_UPLOAD_BYTES)} MB per merge run.`);
     }
     setStatus("Reading PDF files...");
     clearInlineError();
@@ -652,6 +658,10 @@ function formatBytes(bytes) {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function toMegabytes(bytes) {
+    return Math.round(bytes / (1024 * 1024));
 }
 
 function shortName(name) {

@@ -74,15 +74,15 @@
       "@graph": (function () {
         var graph = baseGraph(
           rootUrl + "/",
-          "SiRa Convert | Professional Document Suite",
-          "Private browser-based suite to convert JPG to PDF, PDF to JPG, and merge PDF files."
+          "SiRa Convert | Free Online JPG to PDF, PDF to JPG & Merge PDF Tool",
+          "Convert JPG to PDF, PDF to JPG, and merge PDF files online in seconds with private browser-first workflows."
         );
         graph.push({
           "@type": "SoftwareApplication",
           "name": "SiRa Convert",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser, Android, iOS, Windows, macOS",
-          "description": "Private browser-based suite to convert JPG to PDF, PDF to JPG, and merge PDF files.",
+          "description": "Convert JPG to PDF, PDF to JPG, and merge PDF files online in seconds with private browser-first workflows.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -92,30 +92,89 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "SiRa Convert FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Is SiRa Convert free to use?",
+              "name": "Is SiRa Convert free for regular use?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Core tools are available without paid setup and can be used directly from your browser."
+                "text": "Yes. Core tools are free to use with no account required for standard browser-based conversion and merge workflows."
               }
             },
             {
               "@type": "Question",
-              "name": "Which file tasks are available right now?",
+              "name": "Which tasks can I complete on this website?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "You can convert JPG to PDF, convert PDF to JPG, and merge multiple PDF files."
+                "text": "You can convert images to PDF, convert PDF pages to JPG or PNG, and merge multiple PDFs into a single output document."
               }
             },
             {
               "@type": "Question",
-              "name": "Where can I read product updates?",
+              "name": "Can I use SiRa Convert on mobile devices?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Visit the SiRa Convert blog for release notes, reliability updates, and roadmap items."
+                "text": "Yes. The interface is responsive for phones, tablets, and desktops, so uploads, previews, and downloads work across screen sizes."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I follow new updates and improvements?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Visit the SiRa Convert blog for release notes, conversion tips, and product improvement announcements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I convert PDF to JPG directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated PDF to JPG converter page for page-range extraction, quality controls, and ZIP export."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I convert JPG to PDF directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated JPG to PDF converter page to combine images into one PDF with layout controls."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I merge PDF files directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated Merge PDF page to combine multiple PDFs in your chosen order."
+              }
+            }
+          ]
+        });
+        graph.push({
+          "@type": "ItemList",
+          "name": "SiRa Convert Tools",
+          "itemListOrder": "https://schema.org/ItemListOrderAscending",
+          "numberOfItems": 3,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "JPG to PDF Converter",
+              "url": rootUrl + "/jpg-to-pdf.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "PDF to JPG Converter",
+              "url": rootUrl + "/pdf-to-jpg.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Merge PDF Tool",
+              "url": rootUrl + "/merge-pdf.html"
             }
           ]
         });
@@ -127,15 +186,15 @@
       "@graph": (function () {
         var graph = baseGraph(
           rootUrl + "/",
-          "SiRa Convert | Professional Document Suite",
-          "Private browser-based suite to convert JPG to PDF, PDF to JPG, and merge PDF files."
+          "SiRa Convert | Free Online JPG to PDF, PDF to JPG & Merge PDF Tool",
+          "Convert JPG to PDF, PDF to JPG, and merge PDF files online in seconds with private browser-first workflows."
         );
         graph.push({
           "@type": "SoftwareApplication",
           "name": "SiRa Convert",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser, Android, iOS, Windows, macOS",
-          "description": "Private browser-based suite to convert JPG to PDF, PDF to JPG, and merge PDF files.",
+          "description": "Convert JPG to PDF, PDF to JPG, and merge PDF files online in seconds with private browser-first workflows.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -145,30 +204,89 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "SiRa Convert FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Is SiRa Convert free to use?",
+              "name": "Is SiRa Convert free for regular use?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Core tools are available without paid setup and can be used directly from your browser."
+                "text": "Yes. Core tools are free to use with no account required for standard browser-based conversion and merge workflows."
               }
             },
             {
               "@type": "Question",
-              "name": "Which file tasks are available right now?",
+              "name": "Which tasks can I complete on this website?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "You can convert JPG to PDF, convert PDF to JPG, and merge multiple PDF files."
+                "text": "You can convert images to PDF, convert PDF pages to JPG or PNG, and merge multiple PDFs into a single output document."
               }
             },
             {
               "@type": "Question",
-              "name": "Where can I read product updates?",
+              "name": "Can I use SiRa Convert on mobile devices?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Visit the SiRa Convert blog for release notes, reliability updates, and roadmap items."
+                "text": "Yes. The interface is responsive for phones, tablets, and desktops, so uploads, previews, and downloads work across screen sizes."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I follow new updates and improvements?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Visit the SiRa Convert blog for release notes, conversion tips, and product improvement announcements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I convert PDF to JPG directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated PDF to JPG converter page for page-range extraction, quality controls, and ZIP export."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I convert JPG to PDF directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated JPG to PDF converter page to combine images into one PDF with layout controls."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I merge PDF files directly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the dedicated Merge PDF page to combine multiple PDFs in your chosen order."
+              }
+            }
+          ]
+        });
+        graph.push({
+          "@type": "ItemList",
+          "name": "SiRa Convert Tools",
+          "itemListOrder": "https://schema.org/ItemListOrderAscending",
+          "numberOfItems": 3,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "JPG to PDF Converter",
+              "url": rootUrl + "/jpg-to-pdf.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "PDF to JPG Converter",
+              "url": rootUrl + "/pdf-to-jpg.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Merge PDF Tool",
+              "url": rootUrl + "/merge-pdf.html"
             }
           ]
         });
@@ -181,8 +299,8 @@
         var pagePath = "/jpg-to-pdf.html";
         var graph = baseGraph(
           rootUrl + pagePath,
-          "JPG to PDF | SiRa Convert",
-          "Convert JPG, PNG, and WEBP images to high-quality PDF in-browser with advanced quality controls."
+          "JPG to PDF Converter Online | Free, High Quality & Private | SiRa Convert",
+          "Convert JPG, PNG, and WEBP to PDF online with page order, margin, and quality controls."
         );
         graph.push({
           "@type": "SoftwareApplication",
@@ -190,7 +308,7 @@
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser",
           "url": rootUrl + pagePath,
-          "description": "Convert JPG, PNG, and WEBP images to high-quality PDF in-browser with advanced quality controls.",
+          "description": "Convert JPG, PNG, and WEBP to PDF online with page order, margin, and quality controls.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -202,29 +320,38 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "JPG to PDF FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Can I convert PNG and WEBP files as well?",
+              "name": "Can I combine JPG, PNG, and WEBP in one PDF?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. The tool accepts JPG, PNG, and WEBP and combines them into one PDF in your selected order."
+                "text": "Yes. You can mix supported image formats and create one PDF while preserving your selected page order."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I keep high image quality in the PDF?",
+              "name": "How do I keep image quality high in the output PDF?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Use the quality and compression controls to keep output clarity high, especially for printing."
+                "text": "Choose higher quality settings, review image dimensions in preview, and use suitable margins for cleaner print output."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I rearrange pages before export?",
+              "name": "Can I rearrange pages before I download?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Reorder images in the queue before conversion so final PDF pages match your preferred sequence."
+                "text": "Yes. Drag and reorder images in the queue so the generated PDF follows your exact sequence."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I choose custom orientation, page size, and margins?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. You can set page orientation, target page size, fit behavior, and margins before creating the final PDF."
               }
             }
           ]
@@ -239,8 +366,8 @@
         var pagePath = "/pdf-to-jpg.html";
         var graph = baseGraph(
           rootUrl + pagePath,
-          "PDF to JPG | SiRa Convert",
-          "Convert PDF pages to JPG or PNG in-browser with high quality output, ZIP export, and private processing."
+          "PDF to JPG Converter Online | Extract PDF Pages as Images | SiRa Convert",
+          "Convert PDF pages to JPG or PNG with page-range and quality controls, then export individual files or ZIP."
         );
         graph.push({
           "@type": "SoftwareApplication",
@@ -248,7 +375,7 @@
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser",
           "url": rootUrl + pagePath,
-          "description": "Convert PDF pages to JPG or PNG in-browser with high quality output, ZIP export, and private processing.",
+          "description": "Convert PDF pages to JPG or PNG with page-range and quality controls, then export individual files or ZIP.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -260,29 +387,38 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "PDF to JPG FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Can I convert only selected pages from a PDF?",
+              "name": "Can I convert only selected pages from a PDF file?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Enter page ranges such as 1-4,7 to convert only the pages you need."
+                "text": "Yes. Enter ranges such as 1-4,7,10-12 to export only specific pages and skip the rest."
               }
             },
             {
               "@type": "Question",
-              "name": "Should I choose JPG or PNG output?",
+              "name": "When should I choose JPG vs PNG output?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "JPG is better for smaller files. PNG is better for lossless quality and graphics with text edges."
+                "text": "Choose JPG for smaller files and faster sharing. Choose PNG when you need sharper edges and near-lossless quality."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I batch download converted images?",
+              "name": "Can I download all converted pages at once?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. You can export all output images in a ZIP file for faster downloads."
+                "text": "Yes. Export all converted images as a ZIP for one-click download and easier transfer."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can this tool handle password-protected PDFs?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. If the PDF is locked, you are prompted for the password so conversion can continue securely."
               }
             }
           ]
@@ -297,8 +433,8 @@
         var pagePath = "/merge-pdf.html";
         var graph = baseGraph(
           rootUrl + pagePath,
-          "Merge PDF | SiRa Convert",
-          "Merge multiple PDF files into one high-quality output in your browser with private processing."
+          "Merge PDF Files Online | Fast, Secure & Free | SiRa Convert",
+          "Merge PDF files online with drag reorder, skip-locked option, and custom output naming."
         );
         graph.push({
           "@type": "SoftwareApplication",
@@ -306,7 +442,7 @@
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser",
           "url": rootUrl + pagePath,
-          "description": "Merge multiple PDF files into one high-quality output in your browser with private processing.",
+          "description": "Merge PDF files online with drag reorder, skip-locked option, and custom output naming.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -318,29 +454,38 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "Merge PDF FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Does merge order follow my selected queue?",
+              "name": "Does the final merge keep my selected file order?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. The final merged document follows the exact queue order shown before processing."
+                "text": "Yes. The merged PDF follows the exact queue order shown in the uploader before processing."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I skip locked or invalid PDF files?",
+              "name": "Can I continue even if one file is locked or invalid?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Enable the skip option to continue merging valid files while ignoring protected or unreadable inputs."
+                "text": "Yes. Enable skip mode to merge all valid PDFs while ignoring protected or unreadable files."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I rename the merged PDF output?",
+              "name": "Can I rename the output before download?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Set a custom output filename in the controls before downloading."
+                "text": "Yes. Set a custom output filename in controls so your merged document is easier to identify later."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are there size or page limits for merging?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Each file supports up to 200 MB and each merge run supports up to 300 total pages for stable performance."
               }
             }
           ]
@@ -355,8 +500,8 @@
         var pagePath = "/about.html";
         var graph = baseGraph(
           rootUrl + pagePath,
-          "About | SiRa Convert",
-          "About SiRa Convert, a browser-based document conversion toolkit."
+          "About SiRa Convert | Mission, Product Vision & Trust",
+          "Learn about SiRa Convert mission, roadmap, and product principles for fast and private document workflows."
         );
         graph.push({
           "@type": "AboutPage",
@@ -369,21 +514,22 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "About SiRa Convert FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "What is the main goal of SiRa Convert?",
+              "name": "What is the core mission of SiRa Convert?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The main goal is to provide fast and straightforward online document tools with a consistent interface across devices."
+                "text": "The mission is to make common PDF and image tasks faster, clearer, and more reliable without heavy software."
               }
             },
             {
               "@type": "Question",
-              "name": "Who is SiRa Convert designed for?",
+              "name": "Who is this product designed for?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Students, professionals, and creators who need simple PDF and image conversion tools without complex setup."
+                "text": "It is designed for students, professionals, and creators who need accurate document conversion with minimal setup."
               }
             }
           ]
@@ -398,8 +544,8 @@
         var pagePath = "/blog.html";
         var graph = baseGraph(
           rootUrl + pagePath,
-          "Blog | SiRa Convert",
-          "Updates and product notes from SiRa Convert."
+          "SiRa Convert Blog | PDF Workflow Tips, Updates & Release Notes",
+          "Read SiRa Convert release notes, workflow tips, and roadmap updates for online PDF tools."
         );
         graph.push({
           "@type": "Blog",
@@ -412,13 +558,14 @@
         });
         graph.push({
           "@type": "FAQPage",
+          "name": "SiRa Convert Blog FAQ",
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "How often is the blog updated?",
+              "name": "How often do you publish blog updates?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Updates are posted when major product improvements, fixes, and roadmap milestones are released."
+                "text": "New posts are published around meaningful releases, stability improvements, and important roadmap changes."
               }
             },
             {
@@ -426,7 +573,7 @@
               "name": "Does the blog include practical usage tips?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Posts include workflow recommendations that help users complete conversions and merges more efficiently."
+                "text": "Yes. Posts include practical recommendations to improve output quality and complete conversion or merge tasks faster."
               }
             }
           ]
@@ -442,7 +589,7 @@
         var graph = baseGraph(
           rootUrl + pagePath,
           "Privacy Policy | SiRa Convert",
-          "Privacy policy and data handling practices for SiRa Convert."
+          "Read SiRa Convert privacy policy for file handling, browser processing, analytics, and user controls."
         );
         graph.push({
           "@type": "WebPage",
@@ -463,7 +610,7 @@
         var graph = baseGraph(
           rootUrl + pagePath,
           "Terms of Use | SiRa Convert",
-          "Terms of use for SiRa Convert and related services."
+          "Terms covering usage responsibilities, acceptable behavior, and service limitations for SiRa Convert."
         );
         graph.push({
           "@type": "WebPage",

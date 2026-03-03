@@ -21,6 +21,30 @@ Install `qpdf`:
 3. Open:
    - `http://localhost:8080`
 
+## Frontend + Backend On Different Domains (Optional)
+If your frontend is hosted separately (for example Firebase Hosting) and backend runs elsewhere, set:
+
+- Backend env var:
+  - `UNLOCK_ALLOWED_ORIGINS=https://your-frontend-domain.com`
+  - Multiple domains: comma-separated
+  - If behind reverse proxy/load balancer, set `UNLOCK_TRUST_PROXY=true` (or hop count like `1`)
+- Optional (less secure):
+  - `UNLOCK_ALLOW_ANY_ORIGIN=true`
+
+And in frontend, set unlock API base URL before `shared-unlock.js` loads:
+
+```html
+<meta name="sira-unlock-api" content="https://your-backend-domain.com">
+```
+
+or:
+
+```html
+<script>window.SIRA_UNLOCK_API_BASE = "https://your-backend-domain.com";</script>
+```
+
+No paid API key is required for this unlock feature.
+
 ## API
 - `POST /api/unlock-pdf/start`
   - Form fields:
