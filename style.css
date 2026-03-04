@@ -1306,3 +1306,26 @@ button,
         scroll-behavior: auto !important;
     }
 }
+
+.ad-section {
+    width: 100%;
+    margin: 18px auto 24px;
+    padding: 0;
+}
+
+.ad-label {
+    margin: 0 0 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.sira-ad-slot {
+    min-height: 90px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}

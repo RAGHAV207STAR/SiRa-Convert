@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /offline.html
-Host: sira-452b7.web.app
+Host: siraconvert.vercel.app
 
 # Sitemap Location
-Sitemap: https://sira-452b7.web.app/sitemap.xml
+Sitemap: https://siraconvert.vercel.app/sitemap.xml

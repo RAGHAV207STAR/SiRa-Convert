@@ -13,7 +13,7 @@ const state = {
     activeIndex: -1
 };
 const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
-const MAX_CONVERT_PAGES = 300;
+const MAX_CONVERT_PAGES = 120;
 const MAX_ESTIMATED_RENDER_PIXELS = 420_000_000;
 const analytics = window.SiRaAnalytics || null;
 

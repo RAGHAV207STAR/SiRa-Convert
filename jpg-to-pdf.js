@@ -417,7 +417,7 @@ async function createPdf() {
 
         for (let i = 0; i < state.images.length; i += 1) {
             const image = state.images[i];
-            const payload = await fileToPdfImagePayload(image.file, imageQuality);
+            const payload = await fileToPdfImagePayload(image.file, imageQuality, mode);
             const imgMm = pixelToMm(image.width, image.height);
             const page = getPageConfig(sizeMode, orientationMode, imgMm.width, imgMm.height, margin);
 
@@ -442,7 +442,10 @@ async function createPdf() {
             const progress = Math.round(((i + 1) / state.images.length) * 100);
             progressBar.style.width = `${progress}%`;
             setStatus(`Processed image ${i + 1}/${state.images.length}.`);
-            await yieldToUi();
+            const shouldYield = i === state.images.length - 1 || (i + 1) % (mode === "fast" ? 4 : 2) === 0;
+            if (shouldYield) {
+                await yieldToUi();
+            }
         }
 
         if (!doc) throw new Error("No pages generated.");
@@ -571,13 +574,24 @@ function pixelToMm(pxW, pxH) {
     return { width: pxW * 0.264583, height: pxH * 0.264583 };
 }
 
-function fileToPdfImagePayload(file, qualityPercent) {
+function fileToPdfImagePayload(file, qualityPercent, mode) {
     return new Promise((resolve, reject) => {
+        const type = String(file.type || "").toLowerCase();
+        const isJpeg = type === "image/jpeg" || type === "image/jpg";
+        const keepPng = type === "image/png" && mode !== "fast";
+        const quality = Math.min(1, Math.max(0.8, qualityPercent / 100));
+
+        // Fast mode shortcut: keep JPEG payload as-is to avoid decode/re-encode overhead.
+        if (mode === "fast" && isJpeg) {
+            const rawReader = new FileReader();
+            rawReader.onload = () => resolve({ dataUrl: rawReader.result, format: "JPEG" });
+            rawReader.onerror = reject;
+            rawReader.readAsDataURL(file);
+            return;
+        }
+
         const img = new Image();
         const reader = new FileReader();
-        const quality = Math.min(1, Math.max(0.8, qualityPercent / 100));
-        const type = String(file.type || "").toLowerCase();
-        const usePng = type === "image/png";
 
         reader.onload = () => {
             img.onload = () => {
@@ -589,12 +603,12 @@ function fileToPdfImagePayload(file, qualityPercent) {
                     reject(new Error("Canvas renderer unavailable in this browser. Try a modern browser version."));
                     return;
                 }
-                if (!usePng) {
+                if (!keepPng) {
                     ctx.fillStyle = "#ffffff";
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
                 ctx.drawImage(img, 0, 0);
-                if (usePng) {
+                if (keepPng) {
                     resolve({ dataUrl: canvas.toDataURL("image/png"), format: "PNG" });
                     return;
                 }
@@ -700,15 +714,47 @@ function updateOutputPreview() {
         return;
     }
 
-    outputResultInfo.textContent = `Output ready: ${buildOutputName()}`;
+    const outputName = buildOutputName();
+    outputResultInfo.textContent = `Output ready: ${outputName}`;
     outputPreviewCanvas.innerHTML = `
         <div class="output-preview-card">
             <h4>PDF Generated Successfully</h4>
-            <p>File: ${escapeHtml(buildOutputName())}</p>
+            <p>File: ${escapeHtml(outputName)}</p>
             <p>Size: ${formatBytes(state.pdfBlob.size)}</p>
             <p>Pages: ${state.images.length}</p>
+            <div class="output-preview-actions">
+                <button type="button" class="output-action-btn" data-role="toggle-inline-preview">👁 Preview PDF</button>
+                <a class="output-action-btn primary" href="#" data-role="inline-download">⬇ Download PDF</a>
+            </div>
+            <div class="inline-pdf-preview" data-role="inline-preview-wrap" hidden>
+                <iframe title="Generated PDF preview" loading="lazy" data-role="inline-preview-frame"></iframe>
+            </div>
         </div>
     `;
+    bindOutputPreviewActions(outputName);
+}
+
+function bindOutputPreviewActions(outputName) {
+    if (!outputPreviewCanvas) return;
+    const toggleBtn = outputPreviewCanvas.querySelector('[data-role="toggle-inline-preview"]');
+    const inlineWrap = outputPreviewCanvas.querySelector('[data-role="inline-preview-wrap"]');
+    const inlineFrame = outputPreviewCanvas.querySelector('[data-role="inline-preview-frame"]');
+    const downloadInlineBtn = outputPreviewCanvas.querySelector('[data-role="inline-download"]');
+
+    if (downloadInlineBtn && state.pdfUrl) {
+        downloadInlineBtn.href = state.pdfUrl;
+        downloadInlineBtn.download = outputName;
+    }
+
+    if (!toggleBtn || !inlineWrap || !inlineFrame) return;
+    toggleBtn.addEventListener("click", () => {
+        const show = inlineWrap.hidden;
+        inlineWrap.hidden = !show;
+        if (show && state.pdfUrl && !inlineFrame.src) {
+            inlineFrame.src = `${state.pdfUrl}#view=FitH`;
+        }
+        toggleBtn.textContent = show ? "🙈 Hide Preview" : "👁 Preview PDF";
+    });
 }
 
 function revokePdfUrl() {

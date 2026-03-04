@@ -1,4 +1,4 @@
-const SW_VERSION = "v13";
+const SW_VERSION = "v14";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;

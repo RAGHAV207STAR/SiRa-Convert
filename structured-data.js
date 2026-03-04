@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var rootUrl = "https://sira-452b7.web.app";
+  var rootUrl = "https://siraconvert.vercel.app";
   var orgId = rootUrl + "/#organization";
   var websiteId = rootUrl + "/#website";
 
