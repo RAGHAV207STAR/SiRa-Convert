@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.google.com https://*.doubleclick.net; img-src 'self' data: blob: https:; script-src 'self' 'sha256-xVuWsg3TCPFmy2xzZ1BX17Bv1tdKxKUvYpFgF/kYYSw=' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://partner.googleadservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://cdn.jsdelivr.net https://tessdata.projectnaptha.com; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.google.com https://*.doubleclick.net; img-src 'self' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://partner.googleadservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://cdn.jsdelivr.net https://tessdata.projectnaptha.com; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; child-src 'self' blob:;">
 <title>OCR Online Free - Image to Text Converter | SiRa Convert</title>
 <meta name="description" content="Extract text from images instantly. 100% private browser-based Hindi &amp; English OCR, no signup required. Try OCR Online Free now!">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
@@ -24,7 +24,7 @@
 <meta property="og:title" content="OCR Online Free - Image to Text Converter | SiRa Convert">
 <meta property="og:description" content="Extract text from images instantly. 100% private browser-based Hindi &amp; English OCR, no signup required. Try OCR Online Free now!">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://siraconvert.vercel.app">
+<meta property="og:url" content="https://siraconvert.vercel.app/ocr.html">
 <meta property="og:site_name" content="SiRa Convert">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://siraconvert.vercel.app/logo.png">
@@ -68,7 +68,7 @@
      crossorigin="anonymous"></script>
 <script src="ads-init.js" defer></script>
 <script src="structured-data.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
 <script src="analytics.js" defer></script>
 </head>
 <body class="ocr-page">
@@ -113,56 +113,25 @@
 <main class="tool-wrapper">
     <section id="ocrToolCard" class="pro-card">
         <div class="tool-head">
-            <h1>OCR - Image to Text</h1>
-            <p>Upload JPG or PNG files, select language, and extract editable text with real-time OCR progress.</p>
+            <span class="tool-kicker">Vision Engine · AI-ready Workflow</span>
+            <h1>OCR to <span class="accent">Text</span></h1>
+            <p>Upload JPG or PNG files and extract editable text with auto language detection and real-time OCR progress.</p>
+            <div class="ocr-feature-strip" aria-label="OCR highlights">
+                <span>Private in-browser OCR</span>
+                <span>Auto language by default</span>
+                <span>Smart quality refinement</span>
+            </div>
         </div>
-
-        <section class="ocr-control-bar" aria-label="OCR controls">
-            <div class="control-inline">
-                <div class="field" style="margin-bottom:0;">
-                    <label for="languageSelect">OCR Language</label>
-                    <select id="languageSelect">
-                        <option value="eng">English</option>
-                        <option value="hin">Hindi</option>
-                    </select>
-                </div>
-                <div class="switch-row" style="margin-bottom:0;">
-                    <div>
-                        <div class="switch-label">Enhance Image</div>
-                        <p class="switch-hint">Grayscale + contrast + threshold for better OCR.</p>
-                    </div>
-                    <label class="switch" for="enhanceToggle">
-                        <input id="enhanceToggle" type="checkbox" checked />
-                        <span class="switch-slider"></span>
-                    </label>
-                </div>
-                <button id="extractBtn" class="btn btn-primary" type="button" disabled>Extract Text</button>
-            </div>
-        </section>
-
-        <section class="ocr-progress-dock" aria-label="OCR progress">
-            <div class="status-row">
-                <span id="statusText">Waiting for image upload.</span>
-                <strong id="progressText">0%</strong>
-            </div>
-            <div id="ocrLoading" class="ocr-loading" role="status" aria-live="polite" hidden>
-                <span class="ocr-spinner" aria-hidden="true"></span>
-                <span id="loadingLabel">Initializing Engine...</span>
-            </div>
-            <div class="progress-wrap" aria-hidden="true">
-                <div id="progressBar" class="progress-bar"></div>
-            </div>
-        </section>
 
         <div class="layout-grid">
             <section class="panel">
-                <div id="dropZone" class="drop-zone">
+                <p class="ocr-default-chip">Default: Auto language + Balanced mode + Enhance ON</p>
+                <div id="dropZone" class="drop-zone" role="button" tabindex="0" aria-label="Upload image">
                     <h2>Upload Image</h2>
                     <p>Drag & drop JPG/PNG here or click to select.</p>
                     <input id="imageInput" type="file" hidden accept="image/png,image/jpeg" />
                     <div class="upload-actions">
                         <button id="uploadBtn" class="btn btn-primary" type="button">Select Image</button>
-                        <button id="clearBtn" class="btn btn-ghost" type="button">Clear</button>
                     </div>
                 </div>
                 <div id="previewWrap" class="preview-wrap">
@@ -186,15 +155,91 @@
                 </div>
             </section>
 
-            <section class="panel result-panel" aria-labelledby="ocr-result-heading">
-                <h2 id="ocr-result-heading">Extracted Text</h2>
-                <textarea id="resultText" class="result-text" placeholder="Extracted text will appear here..." spellcheck="false"></textarea>
-                <div class="result-actions">
-                    <button id="copyBtn" class="btn btn-ghost" type="button">Copy to Clipboard</button>
-                    <button id="downloadBtn" class="btn btn-ghost" type="button">Download .txt</button>
+            <aside class="ocr-side-column">
+                <div class="action-panel">
+                    <p class="action-head">Quick Actions</p>
+                    <div class="action-grid">
+                        <button id="extractBtn" class="btn btn-primary" type="button" disabled>Extract Text</button>
+                        <button id="copyBtn" class="btn btn-ghost" type="button">Copy to Clipboard</button>
+                        <button id="downloadBtn" class="btn btn-ghost" type="button">Download .txt</button>
+                        <button id="clearBtn" class="btn btn-ghost" type="button">Clear</button>
+                    </div>
                 </div>
-            </section>
+
+                <details class="settings ocr-settings-panel">
+                    <summary class="settings-summary">
+                        <h3>OCR Controls</h3>
+                        <span class="settings-state">Optional</span>
+                    </summary>
+                    <div class="settings-body">
+                        <div class="control-inline">
+                            <div class="field" style="margin-bottom:0;">
+                                <label>Language</label>
+                                <p class="switch-hint">Auto detect (English + Hindi) is active by default.</p>
+                                <details id="manualLanguagePanel" class="language-advanced">
+                                    <summary>Advanced: Set language manually</summary>
+                                    <select id="languageSelect" aria-label="Manual OCR language">
+                                        <option value="eng" selected>English</option>
+                                        <option value="hin">Hindi</option>
+                                    </select>
+                                    <p class="switch-hint">Use manual mode only if auto output is not correct.</p>
+                                </details>
+                            </div>
+                            <div class="field" style="margin-bottom:0;">
+                                <label for="ocrModeSelect">OCR Mode</label>
+                                <select id="ocrModeSelect" aria-describedby="ocrModeHint">
+                                    <option value="fast">Fast (Quickest)</option>
+                                    <option value="balanced" selected>Balanced (Recommended)</option>
+                                    <option value="accurate">Accurate (Best Quality)</option>
+                                </select>
+                                <p id="ocrModeHint" class="switch-hint">Balanced mode is recommended for most images.</p>
+                                <p id="ocrModeSpeed" class="mode-speed-pill" aria-live="polite">Estimated speed: ~1.4x (Balanced)</p>
+                            </div>
+                            <div class="switch-row" style="margin-bottom:0;">
+                                <div>
+                                    <div class="switch-label">Enhance Image</div>
+                                    <p class="switch-hint">Grayscale + contrast + threshold for better OCR.</p>
+                                </div>
+                                <label class="switch" for="enhanceToggle">
+                                    <input id="enhanceToggle" type="checkbox" checked />
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <section class="ocr-progress-dock" aria-label="OCR progress">
+                    <div class="status-row">
+                        <span id="statusText">Waiting for image upload.</span>
+                        <strong id="progressText">0%</strong>
+                    </div>
+                    <p id="ocrRefineNote" class="ocr-refine-note" role="status" aria-live="polite" hidden>
+                        Quality improved automatically using a second OCR pass.
+                    </p>
+                    <div id="ocrLoading" class="ocr-loading" role="status" aria-live="polite" hidden>
+                        <span class="ocr-spinner" aria-hidden="true"></span>
+                        <span id="loadingLabel">Initializing Engine...</span>
+                    </div>
+                    <div class="progress-wrap" aria-hidden="true">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                </section>
+            </aside>
         </div>
+
+        <details class="preview-details ocr-output-panel" open>
+            <summary class="preview-summary">
+                <h3>Extracted Text</h3>
+                <span class="settings-state">Live</span>
+            </summary>
+            <div class="preview-body">
+                <section class="panel result-panel" aria-labelledby="ocr-result-heading">
+                    <h2 id="ocr-result-heading">OCR Output</h2>
+                    <textarea id="resultText" class="result-text" placeholder="Extracted text will appear here..." spellcheck="false"></textarea>
+                </section>
+            </div>
+        </details>
 
         <div id="processingOverlay" class="processing-overlay" hidden>
             <div class="overlay-card">
@@ -209,6 +254,16 @@
         </div>
     </section>
 </main>
+
+<section class="ad-section" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3291480910940190"
+         data-ad-slot="3391404887"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+</section>
 
 <footer class="ultra-footer">
     <div class="footer-grid">
@@ -273,7 +328,7 @@
 
 <div id="toast" class="toast info" role="status" aria-live="polite"></div>
 
-<script src="shared-ui.js"></script>
-<script src="ocr.js"></script>
+<script src="shared-ui.js" defer></script>
+<script src="ocr.js" defer></script>
 </body>
 </html>
