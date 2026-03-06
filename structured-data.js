@@ -45,11 +45,6 @@
         "inLanguage": "en-US",
         "publisher": {
           "@id": orgId
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": rootUrl + "/blog.html?q={search_term_string}",
-          "query-input": "required name=search_term_string"
         }
       },
       {

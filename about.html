@@ -6,8 +6,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.google.com https://*.doubleclick.net; img-src 'self' data: blob: https:; script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://partner.googleadservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
-<title>About SiRa Convert - Our Mission for Free &amp; Private PDF Tools</title>
-<meta name="description" content="Learn about SiRa Convert's mission to provide fast, private, and user-friendly PDF tools. Discover how we process files directly in your browser to ensure 100% document security." />
+<title>About SiRa Convert | Private PDF & Image Workflows</title>
+<meta name="description" content="Learn how SiRa Convert works: JPG to PDF, PDF to JPG, and Merge PDF tools built for fast browser-first document workflows with practical privacy and clean outputs." />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
 <meta name="author" content="Raghav Pratap" />
 <meta name="theme-color" content="#2563eb" />
@@ -20,17 +20,17 @@
 <link rel="canonical" href="https://siraconvert.vercel.app/about.html" />
 <link rel="alternate" hreflang="en" href="https://siraconvert.vercel.app/about.html">
 <link rel="alternate" hreflang="x-default" href="https://siraconvert.vercel.app/about.html">
-<meta property="og:title" content="About SiRa Convert - Our Mission for Free &amp; Private PDF Tools" />
-<meta property="og:description" content="Discover the mission, quality standards, and product direction behind SiRa Convert." />
+<meta property="og:title" content="About SiRa Convert | Private PDF & Image Workflows" />
+<meta property="og:description" content="See the mission, product architecture, and current feature set behind SiRa Convert's browser-first document tools." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://siraconvert.vercel.app/about.html" />
 <meta property="og:site_name" content="SiRa Convert" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:image" content="https://siraconvert.vercel.app/logo.png" />
-<meta property="og:image:alt" content="About SiRa Convert - Building Secure PDF Workflows." />
+<meta property="og:image:alt" content="About SiRa Convert - Browser-first document tools" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="About SiRa Convert - Our Mission for Free &amp; Private PDF Tools" />
-<meta name="twitter:description" content="See how SiRa Convert is built for practical speed, reliability, and document privacy." />
+<meta name="twitter:title" content="About SiRa Convert | Private PDF & Image Workflows" />
+<meta name="twitter:description" content="Understand how SiRa Convert builds fast and practical online document tools for students, teams, and creators." />
 <meta name="twitter:image" content="https://siraconvert.vercel.app/logo.png" />
 <meta name="twitter:image:alt" content="SiRa Convert logo and branding" />
 <meta name="twitter:site" content="@sira_convert" />
@@ -43,17 +43,18 @@
 <script src="structured-data.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190"
      crossorigin="anonymous"></script>
+<script src="ads-init.js" defer></script>
 <style>
 .page-shell {
-  max-width: 1080px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 4px 20px 72px;
+  padding: 6px 20px 72px;
 }
 .top-nav {
   position: sticky;
   top: 2px;
   z-index: 25;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .top-nav-inner {
   display: flex;
@@ -105,61 +106,76 @@
 .hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(145deg, rgba(37,99,235,0.2), rgba(16,185,129,0.12));
   border: 1px solid var(--border);
-  border-radius: 26px;
-  padding: 30px;
+  border-radius: 28px;
+  padding: 34px;
+  background: linear-gradient(135deg, rgba(2,132,199,0.22), rgba(14,116,144,0.14) 40%, rgba(34,197,94,0.14));
   box-shadow: var(--shadow);
 }
-.hero::after {
+.hero::before {
   content: "";
   position: absolute;
-  width: 280px;
-  height: 280px;
-  right: -90px;
-  top: -120px;
+  width: 300px;
+  height: 300px;
+  right: -120px;
+  top: -150px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(56,189,248,0.24), transparent 68%);
+  background: radial-gradient(circle, rgba(125,211,252,0.4), transparent 65%);
 }
 .badge {
   display: inline-flex;
-  padding: 6px 12px;
+  padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(16,185,129,0.2);
+  background: rgba(34,197,94,0.2);
   color: var(--text-main);
   font-weight: 700;
   font-size: 0.78rem;
   margin-bottom: 14px;
 }
 .hero h1 {
-  font-size: clamp(1.8rem, 5vw, 2.9rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   margin-bottom: 10px;
 }
 .hero p {
   color: var(--text-dim);
-  max-width: 760px;
+  max-width: 770px;
 }
-.grid {
-  margin-top: 20px;
+.metric-strip {
+  margin-top: 18px;
   display: grid;
-  gap: 18px;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.metric {
+  border: 1px solid rgba(148,163,184,0.3);
+  background: rgba(15,23,42,0.5);
+  border-radius: 14px;
+  padding: 12px;
+}
+.metric strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+.metric span {
+  color: #cbd5e1;
+  font-size: 0.82rem;
+}
+.section-grid {
+  margin-top: 22px;
+  display: grid;
+  gap: 16px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 22px;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 30px rgba(37,99,235,0.15);
+  padding: 20px;
 }
 .card h2 {
-  margin-bottom: 10px;
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+  margin-bottom: 9px;
 }
 .card p,
 .card li {
@@ -167,19 +183,68 @@
   font-size: 0.95rem;
 }
 .card ul {
-  padding-left: 18px;
   margin-top: 8px;
+  padding-left: 18px;
 }
-.owner {
-  margin-top: 20px;
+.tools-grid {
+  margin-top: 22px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.tool-card {
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(15,23,42,0.82), rgba(37,99,235,0.2));
-  box-shadow: 0 14px 34px rgba(2, 10, 24, 0.28);
+  padding: 16px;
+  background: linear-gradient(160deg, rgba(15,23,42,0.82), rgba(30,41,59,0.56));
+  box-shadow: 0 14px 24px rgba(2,10,24,0.24);
 }
-.owner h2 {
-  margin-bottom: 8px;
+.tool-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+.tool-card p {
+  color: #cbd5e1;
+  font-size: 0.84rem;
+  margin-bottom: 10px;
+}
+.tool-card a {
+  color: #93c5fd;
+  font-weight: 700;
+  text-decoration: none;
+}
+.timeline {
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 20px;
+}
+.timeline h2 {
+  margin-bottom: 10px;
+}
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.timeline-list li {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--text-dim);
+}
+.timeline-list strong {
+  color: var(--text-main);
+}
+.owner {
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  background: linear-gradient(130deg, rgba(15,23,42,0.9), rgba(14,116,144,0.28));
 }
 .owner p {
   color: #e2e8f0;
@@ -206,19 +271,43 @@
   border-radius: 10px;
   font-weight: 600;
 }
-@media (max-width: 900px) {
-  .top-nav-inner { flex-direction: column; align-items: flex-start; }
-  .grid { grid-template-columns: 1fr; }
+@media (max-width: 1024px) {
+  .metric-strip,
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
-
+@media (max-width: 860px) {
+  .top-nav-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .section-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 430px) {
-  .page-shell { padding: 4px 12px 56px; }
-  .top-nav-inner { padding: 10px; }
-  .nav-links { gap: 6px; }
-  .nav-link { font-size: 0.76rem; padding: 5px 8px; }
-  .hero { padding: 20px 14px; border-radius: 18px; }
-  .card { padding: 16px; }
-  .owner { padding: 16px 14px; }
+  .page-shell {
+    padding: 6px 12px 56px;
+  }
+  .top-nav-inner {
+    padding: 10px;
+  }
+  .nav-links {
+    gap: 6px;
+  }
+  .nav-link {
+    font-size: 0.76rem;
+    padding: 5px 8px;
+  }
+  .hero {
+    padding: 22px 14px;
+    border-radius: 18px;
+  }
+  .metric-strip,
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 <script src="analytics.js" defer></script>
@@ -242,75 +331,99 @@
   </nav>
 
   <section class="hero">
-    <span class="badge">About the Product</span>
+    <span class="badge">What We Build</span>
     <h1>About SiRa Convert</h1>
-    <p>SiRa Convert is a focused toolkit that helps users transform and manage PDF/image files quickly, directly from the web, with a clean and practical interface.</p>
+    <p>SiRa Convert is a browser-first toolkit for everyday document jobs: convert images to PDF, extract pages as JPG/PNG, and merge PDFs. The product is designed to stay fast, easy, and practical on both mobile and desktop.</p>
+    <div class="metric-strip" aria-label="Product highlights">
+      <div class="metric">
+        <strong>3 Core Tools</strong>
+        <span>JPG to PDF, PDF to JPG, Merge PDF</span>
+      </div>
+      <div class="metric">
+        <strong>Private Flow</strong>
+        <span>Core processing is designed for in-browser use</span>
+      </div>
+      <div class="metric">
+        <strong>PWA Ready</strong>
+        <span>Installable app with offline shell support</span>
+      </div>
+      <div class="metric">
+        <strong>Cross Device</strong>
+        <span>Built for Android, iOS, desktop, and tablets</span>
+      </div>
+    </div>
   </section>
 
-  <section class="grid" aria-label="About details">
-    <article class="card">
-      <h2>Our Mission</h2>
-      <p>Build fast, straightforward document tools that are easy to use for students, professionals, and creators on both desktop and mobile.</p>
+  <section class="tools-grid" aria-label="Current features">
+    <article class="tool-card">
+      <h3>JPG to PDF</h3>
+      <p>Combine images into one PDF with order control and clean output settings.</p>
+      <a href="jpg-to-pdf.html">Open tool</a>
     </article>
+    <article class="tool-card">
+      <h3>PDF to JPG/PNG</h3>
+      <p>Extract selected pages with page-range, quality, and ZIP export options.</p>
+      <a href="pdf-to-jpg.html">Open tool</a>
+    </article>
+    <article class="tool-card">
+      <h3>Merge PDF</h3>
+      <p>Merge multiple files with queue order control and quick final export.</p>
+      <a href="merge-pdf.html">Open tool</a>
+    </article>
+    
+  </section>
 
+  <section class="section-grid" aria-label="Product principles">
     <article class="card">
-      <h2>What Makes It Useful</h2>
+      <h2>Mission</h2>
+      <p>Reduce document friction. Every release focuses on fewer steps, reliable output, and clear controls for non-technical users.</p>
+    </article>
+    <article class="card">
+      <h2>How We Design</h2>
       <ul>
-        <li>Simple workflows with minimal clicks.</li>
-        <li>Browser-first experience for convenience.</li>
-        <li>Consistent design across all tools and info pages.</li>
+        <li>Single-purpose pages for each workflow.</li>
+        <li>Mobile-first interaction and readable controls.</li>
+        <li>Consistency across conversion, legal, and help pages.</li>
       </ul>
     </article>
-
     <article class="card">
-      <h2>Core Principles</h2>
-      <ul>
-        <li>Speed: complete tasks quickly.</li>
-        <li>Clarity: remove confusion from each step.</li>
-        <li>Privacy-minded design: avoid unnecessary complexity.</li>
-      </ul>
+      <h2>Who It Serves</h2>
+      <p>Students, freelancers, business users, and creators who need fast conversion without installing heavy desktop software.</p>
     </article>
-
     <article class="card">
-      <h2>Roadmap Direction</h2>
-      <p>SiRa Convert continues to improve output quality, UI accessibility, and additional utilities around PDF and image handling.</p>
+      <h2>Quality Direction</h2>
+      <p>Current improvement focus: better output defaults, smoother multi-file handling, and stronger accessibility coverage.</p>
     </article>
+  </section>
+
+  <section class="timeline" aria-labelledby="about-roadmap-heading">
+    <h2 id="about-roadmap-heading">2026 Product Direction</h2>
+    <ul class="timeline-list">
+      <li><strong>Q1:</strong> Better conversion UX with clearer progress and cleaner outputs.</li>
+      <li><strong>Q2:</strong> Faster large-file handling in merge and conversion flows with fewer interruptions.</li>
+      <li><strong>Q3:</strong> More output presets for document submissions, sharing, and print-ready workflows.</li>
+      <li><strong>Q4:</strong> Expanded reliability and policy transparency across all major pages.</li>
+    </ul>
   </section>
 
   <section class="owner">
     <h2>Ownership</h2>
-    <p>This app is owned and operated by <strong>RAGHAV PRATAP</strong>. Product strategy, updates, and policy oversight are managed by the owner.</p>
-  </section>
-
-  <section class="owner" aria-labelledby="about-seo-heading">
-    <h2 id="about-seo-heading">How SiRa Convert Builds Practical PDF Tools</h2>
-    <p>SiRa Convert is built around one goal: reduce document friction for real users. Every release prioritizes reliable output quality, fewer steps, and a cleaner experience across mobile and desktop devices.</p>
-    <div class="grid" style="margin-top:14px;">
-      <article class="card">
-        <h2>Core Conversion Workflows</h2>
-        <p>Explore dedicated pages for <a href="jpg-to-pdf.html">JPG to PDF</a>, <a href="pdf-to-jpg.html">PDF to JPG</a>, <a href="merge-pdf.html">Merge PDF</a>, and <a href="ocr.html">OCR Image to Text</a> with focused controls for each task.</p>
-      </article>
-      <article class="card">
-        <h2>Product Improvement Notes</h2>
-        <p>Track release notes, fixes, and roadmap direction in the <a href="blog.html">SiRa Convert blog</a> to see how tools evolve over time.</p>
-      </article>
-    </div>
-    <div style="margin-top:14px;">
-      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;">
-        <summary style="cursor:pointer;font-weight:700;">What is the core mission of SiRa Convert?</summary>
-        <p style="margin-top:8px;color:var(--text-dim);">The mission is to make common PDF and image tasks faster, clearer, and more reliable without forcing users into heavy software.</p>
-      </details>
-      <details style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;">
-        <summary style="cursor:pointer;font-weight:700;">Who is this product designed for?</summary>
-        <p style="margin-top:8px;color:var(--text-dim);">It is designed for students, professionals, and creators who need accurate document conversion with minimal setup and clean results.</p>
-      </details>
-    </div>
+    <p>SiRa Convert is owned and operated by <strong>RAGHAV PRATAP</strong>. Product strategy, roadmap updates, and policy oversight are handled directly by the owner.</p>
   </section>
 
   <div class="actions">
     <a class="back-link" href="index.html">Back to Home</a>
-    <a class="secondary-link" href="blog.html">Read Blog</a>
+    <a class="secondary-link" href="blog.html">Read Product Blog</a>
   </div>
+<section class="ad-section" aria-label="Advertisement">
+  <p class="ad-label">Advertisement</p>
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-3291480910940190"
+       data-ad-slot="3391404887"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+</section>
 </main>
 <script src="simple-sw-register.js"></script>
 </body>

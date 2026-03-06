@@ -291,6 +291,7 @@
     var deferredInstallPrompt = null;
     var fallbackNoticeTimer = null;
     var headerAutoHideTimer = null;
+    var installExperienceBootstrapped = false;
 
     var isIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
     var isSafariBrowser =
@@ -384,6 +385,7 @@
     function markAsInstalled() {
       safeSet(localStorage, installedKey, "true");
       deferredInstallPrompt = null;
+      window.__siraDeferredInstallPrompt = null;
       hideInstallExperience();
     }
 
@@ -453,16 +455,19 @@
       headerClose.dataset.boundInstallDismiss = "true";
     }
 
-    window.addEventListener("beforeinstallprompt", function (event) {
+    function handleBeforeInstallPrompt(event) {
       if (isInstalled()) {
         hideInstallExperience();
         return;
       }
       event.preventDefault();
       deferredInstallPrompt = event;
+      window.__siraDeferredInstallPrompt = event;
       showInstallExperience("Install this app for faster access and offline support.");
       if (notify) notify("Install SiRa for app-like speed and offline use.", "info");
-    });
+    }
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     window.addEventListener("appinstalled", function () {
       markAsInstalled();
@@ -481,10 +486,17 @@
       displayModeQuery.addListener(handleDisplayModeChange);
     }
 
-    window.addEventListener("load", function () {
+    function bootstrapInstallExperience() {
+      if (installExperienceBootstrapped) return;
+      installExperienceBootstrapped = true;
+
       if (isInstalled()) {
         hideInstallExperience();
         return;
+      }
+
+      if (window.__siraDeferredInstallPrompt) {
+        deferredInstallPrompt = window.__siraDeferredInstallPrompt;
       }
 
       detectInstalledRelatedApps().then(function (relatedInstalled) {
@@ -504,6 +516,17 @@
           }
         }, 3000);
       });
+    }
+
+    if (document.readyState === "complete") {
+      bootstrapInstallExperience();
+    } else {
+      window.addEventListener("load", bootstrapInstallExperience, { once: true });
+    }
+
+    window.addEventListener("pageshow", function () {
+      installExperienceBootstrapped = false;
+      bootstrapInstallExperience();
     });
 
     window.addEventListener("beforeunload", function () {
