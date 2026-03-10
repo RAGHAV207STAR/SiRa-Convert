@@ -28,6 +28,24 @@ test("POST /api/unlock-pdf/start with non-PDF file returns 400", async () => {
   assert.match(String(response.body.error || ""), /only pdf/i);
 });
 
+test("POST /api/unlock-pdf/start accepts octet-stream PDF when header is valid", async () => {
+  const fakePdf = Buffer.from("%PDF-1.7\n1 0 obj\n<<>>\nendobj\n", "utf8");
+  const response = await request(app)
+    .post("/api/unlock-pdf/start")
+    .field("password", "1234")
+    .attach("file", fakePdf, { filename: "sample.pdf", contentType: "application/octet-stream" });
+  assert.notEqual(response.status, 400);
+});
+
+test("POST /api/unlock-pdf/start rejects octet-stream file without PDF header", async () => {
+  const response = await request(app)
+    .post("/api/unlock-pdf/start")
+    .field("password", "1234")
+    .attach("file", Buffer.from("hello"), { filename: "fake.pdf", contentType: "application/octet-stream" });
+  assert.equal(response.status, 400);
+  assert.match(String(response.body.error || ""), /only pdf/i);
+});
+
 test("POST /api/unlock-pdf/cancel/:jobId unknown job returns 404", async () => {
   const response = await request(app).post("/api/unlock-pdf/cancel/does-not-exist");
   assert.equal(response.status, 404);
