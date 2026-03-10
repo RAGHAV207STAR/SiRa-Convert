@@ -51,7 +51,20 @@ const compressionValue = document.getElementById("compressionValue");
 const modeValue = document.getElementById("modeValue");
 const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
+const stepIndicator = document.getElementById("stepIndicator");
+const stepChips = stepIndicator ? stepIndicator.querySelectorAll(".step-chip") : [];
+const stepLines = stepIndicator ? stepIndicator.querySelectorAll(".step-line") : [];
+const controlsPanel = document.getElementById("controlsPanel");
+const uploadedPreviewPanel = document.getElementById("uploadedPreviewPanel");
+const outputPreviewPanel = document.getElementById("outputPreviewPanel");
+const progressWrap = progressBar ? progressBar.parentElement : null;
+const initialLayoutGrid = document.querySelector(".layout-grid");
+const initialSideColumn = initialLayoutGrid ? initialLayoutGrid.querySelector(".side-column") : null;
+const actionPanel = initialSideColumn ? initialSideColumn.querySelector(".action-panel") : null;
+const actionHead = actionPanel ? actionPanel.querySelector(".action-head") : null;
 let inlineAlert = null;
+let workflowView = null;
+let activeGalleryItem = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -104,9 +117,13 @@ initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     imageInput.click();
 });
-dropZone.addEventListener("click", () => imageInput.click());
+dropZone.addEventListener("click", () => {
+    if (state.busy) return;
+    imageInput.click();
+});
 dropZone.addEventListener("dragover", (event) => {
     event.preventDefault();
     dropZone.classList.add("dragging");
@@ -122,6 +139,7 @@ dropZone.addEventListener("drop", async (event) => {
 
 pasteBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     handlePasteButton();
 });
 document.addEventListener("paste", handlePasteShortcut);
@@ -138,6 +156,158 @@ downloadPdfBtn.addEventListener("click", downloadPdf);
 sharePdfBtn.addEventListener("click", sharePdf);
 prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
 nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
+
+initializeWorkflowLayout();
+
+function initializeWorkflowLayout() {
+    if (!stepIndicator || !dropZone || !uploadedPreviewPanel || !outputPreviewPanel || !initialLayoutGrid || !initialSideColumn) {
+        return;
+    }
+
+    const workflowShell = document.createElement("div");
+    workflowShell.className = "workflow-shell";
+
+    const stepUpload = document.createElement("section");
+    stepUpload.id = "stepUpload";
+    stepUpload.className = "tool-step";
+
+    const stepPreview = document.createElement("section");
+    stepPreview.id = "stepPreview";
+    stepPreview.className = "tool-step";
+    stepPreview.hidden = true;
+
+    const stepResult = document.createElement("section");
+    stepResult.id = "stepResult";
+    stepResult.className = "tool-step";
+    stepResult.hidden = true;
+
+    const uploadShell = document.createElement("div");
+    uploadShell.className = "upload-stage-only";
+    uploadShell.appendChild(dropZone);
+    const uploadStatusShell = document.createElement("div");
+    uploadStatusShell.className = "stage-stack";
+    uploadStatusShell.appendChild(statusText);
+    if (progressWrap) {
+        uploadStatusShell.appendChild(progressWrap);
+    }
+    uploadShell.appendChild(uploadStatusShell);
+    stepUpload.appendChild(uploadShell);
+
+    const previewPrimary = document.createElement("div");
+    previewPrimary.className = "stage-stack";
+    previewPrimary.appendChild(fileMeta);
+    const previewStatusShell = document.createElement("div");
+    previewStatusShell.className = "stage-stack";
+    previewPrimary.appendChild(previewStatusShell);
+    previewPrimary.appendChild(uploadedPreviewPanel);
+
+    const previewLayout = document.createElement("div");
+    previewLayout.className = "layout-grid";
+    previewLayout.appendChild(previewPrimary);
+    previewLayout.appendChild(initialSideColumn);
+    stepPreview.appendChild(previewLayout);
+
+    const resultPrimary = document.createElement("div");
+    resultPrimary.className = "stage-stack";
+    const resultStatusShell = document.createElement("div");
+    resultStatusShell.className = "stage-stack";
+    resultPrimary.appendChild(resultStatusShell);
+    resultPrimary.appendChild(outputPreviewPanel);
+
+    const resultLayout = document.createElement("div");
+    resultLayout.className = "layout-grid";
+    resultLayout.appendChild(resultPrimary);
+    stepResult.appendChild(resultLayout);
+
+    workflowShell.appendChild(stepUpload);
+    workflowShell.appendChild(stepPreview);
+    workflowShell.appendChild(stepResult);
+    stepIndicator.insertAdjacentElement("afterend", workflowShell);
+
+    initialLayoutGrid.remove();
+
+    workflowView = {
+        stepUpload,
+        stepPreview,
+        stepResult,
+        uploadStatusShell,
+        previewStatusShell,
+        resultStatusShell,
+        previewLayout,
+        resultLayout
+    };
+}
+
+function updateWorkflowStep() {
+    const stepOrder = ["upload", "preview", "result"];
+    let currentStep = "upload";
+
+    if (state.pdfBlob && !state.busy) {
+        currentStep = "result";
+    } else if (state.images.length > 0) {
+        currentStep = "preview";
+    }
+
+    const activeIndex = stepOrder.indexOf(currentStep);
+    Array.from(stepChips).forEach((chip, index) => {
+        chip.classList.toggle("is-active", index === activeIndex);
+        chip.classList.toggle("is-complete", index < activeIndex);
+    });
+    Array.from(stepLines).forEach((line, index) => {
+        line.classList.toggle("is-active", index < activeIndex);
+    });
+
+    applyWorkflowStep(currentStep);
+}
+
+function applyWorkflowStep(step) {
+    if (!workflowView) return;
+
+    workflowView.stepUpload.hidden = step !== "upload";
+    workflowView.stepPreview.hidden = step !== "preview";
+    workflowView.stepResult.hidden = step !== "result";
+
+    const statusTarget = step === "upload"
+        ? workflowView.uploadStatusShell
+        : (step === "result" ? workflowView.resultStatusShell : workflowView.previewStatusShell);
+    if (statusText.parentElement !== statusTarget) {
+        statusTarget.appendChild(statusText);
+    }
+    if (progressWrap && progressWrap.parentElement !== statusTarget) {
+        statusTarget.appendChild(progressWrap);
+    }
+    if (progressWrap) {
+        progressWrap.hidden = !state.busy;
+    }
+
+    if (step === "preview" && initialSideColumn.parentElement !== workflowView.previewLayout) {
+        workflowView.previewLayout.appendChild(initialSideColumn);
+    }
+    if (step === "result" && initialSideColumn.parentElement !== workflowView.resultLayout) {
+        workflowView.resultLayout.appendChild(initialSideColumn);
+    }
+
+    if (controlsPanel) {
+        controlsPanel.hidden = step !== "preview";
+        if (step === "preview") {
+            controlsPanel.open = true;
+        }
+    }
+    if (uploadedPreviewPanel) {
+        uploadedPreviewPanel.open = step === "preview";
+    }
+    if (outputPreviewPanel) {
+        outputPreviewPanel.open = step === "result";
+    }
+    if (actionHead) {
+        actionHead.textContent = step === "result" ? "Download Actions" : "Quick Actions";
+    }
+
+    convertBtn.hidden = step !== "preview";
+    downloadPdfBtn.hidden = step !== "result";
+    sharePdfBtn.hidden = step !== "result";
+    clearBtn.hidden = step === "upload";
+}
 
 async function handlePasteButton() {
     if (!navigator.clipboard || !navigator.clipboard.read) {
@@ -165,6 +335,7 @@ async function handlePasteButton() {
 }
 
 async function handlePasteShortcut(event) {
+    if (state.busy) return;
     const items = event.clipboardData && event.clipboardData.items;
     if (!items) return;
 
@@ -232,6 +403,7 @@ async function addFiles(files) {
     updateFileMeta();
     resultInfo.textContent = `${state.images.length} image(s) queued.`;
     setStatus("Images ready. Click Create PDF.");
+    updateWorkflowStep();
     showToast(`${valid.length} image(s) added.`, "success");
     trackAnalytics("tool_file_ready", {
         tool: "jpg_to_pdf",
@@ -282,6 +454,8 @@ function getImageDimensions(url) {
 function renderQueue() {
     gallery.innerHTML = "";
     galleryCount.textContent = `${state.images.length} file${state.images.length > 1 ? "s" : ""}`;
+    activeGalleryItem = null;
+    const fragment = document.createDocumentFragment();
 
     state.images.forEach((image, index) => {
         const card = document.createElement("article");
@@ -321,8 +495,9 @@ function renderQueue() {
             card.classList.remove("drag-over");
         });
 
-        gallery.appendChild(card);
+        fragment.appendChild(card);
     });
+    gallery.appendChild(fragment);
 
     if (state.images.length) {
         setPreviewByIndex(Math.max(0, Math.min(state.activeIndex, state.images.length - 1)));
@@ -344,9 +519,9 @@ function setPreviewByIndex(index) {
     prevPreviewBtn.disabled = index === 0;
     nextPreviewBtn.disabled = index === state.images.length - 1;
 
-    Array.from(gallery.children).forEach((item, idx) => {
-        item.classList.toggle("active", idx === index);
-    });
+    if (activeGalleryItem) activeGalleryItem.classList.remove("active");
+    activeGalleryItem = gallery.children[index] || null;
+    if (activeGalleryItem) activeGalleryItem.classList.add("active");
 }
 
 function removeImage(index) {
@@ -364,6 +539,7 @@ function removeImage(index) {
     updateFileMeta();
     resultInfo.textContent = state.images.length ? `${state.images.length} image(s) queued.` : "No images selected yet.";
     setStatus(state.images.length ? "Image removed." : "Waiting for image upload/paste.");
+    updateWorkflowStep();
 }
 
 function reorderImages(fromIndex, toIndex) {
@@ -380,6 +556,7 @@ function reorderImages(fromIndex, toIndex) {
     downloadPdfBtn.disabled = true;
     sharePdfBtn.disabled = true;
     setStatus("Image order updated.");
+    updateWorkflowStep();
 }
 
 async function createPdf() {
@@ -457,6 +634,7 @@ async function createPdf() {
         resultInfo.textContent = `PDF created from ${state.images.length} image(s) at ${imageQuality}% quality.`;
         updateOutputPreview();
         setStatus("PDF is ready. You can download or share.");
+        updateWorkflowStep();
         clearInlineError();
         downloadPdfBtn.disabled = false;
         sharePdfBtn.disabled = false;
@@ -482,6 +660,7 @@ async function createPdf() {
     } finally {
         state.busy = false;
         convertBtn.disabled = state.images.length === 0;
+        updateWorkflowStep();
     }
 }
 
@@ -692,6 +871,7 @@ function resetAll() {
     sharePdfBtn.disabled = true;
     resultInfo.textContent = "No images selected yet.";
     setStatus("Waiting for image upload/paste.");
+    updateWorkflowStep();
     clearInlineError();
 }
 
@@ -703,6 +883,10 @@ function clearPreview() {
     previewMeta.textContent = "Add images to inspect details before generating PDF.";
     prevPreviewBtn.disabled = true;
     nextPreviewBtn.disabled = true;
+    if (activeGalleryItem) {
+        activeGalleryItem.classList.remove("active");
+        activeGalleryItem = null;
+    }
 }
 
 function updateOutputPreview() {
@@ -711,6 +895,7 @@ function updateOutputPreview() {
     if (!state.pdfBlob) {
         outputResultInfo.textContent = "Create PDF to view output details.";
         outputPreviewCanvas.innerHTML = '<p class="preview-empty">Your generated PDF summary will appear here after conversion.</p>';
+        updateWorkflowStep();
         return;
     }
 
@@ -732,6 +917,7 @@ function updateOutputPreview() {
         </div>
     `;
     bindOutputPreviewActions(outputName);
+    updateWorkflowStep();
 }
 
 function bindOutputPreviewActions(outputName) {
@@ -777,8 +963,10 @@ function clearInlineError() {
 }
 
 function buildOutputName() {
-    const base = (outputNameInput.value || "sira-jpg-to-pdf").trim() || "sira-jpg-to-pdf";
-    return base.toLowerCase().endsWith(".pdf") ? base : `${base}.pdf`;
+    const firstImage = state.images[0];
+    const originalName = firstImage && firstImage.file ? firstImage.file.name : "";
+    const base = originalName.replace(/\.[^.]+$/, "").trim() || "document";
+    return `${base} sira convert.pdf`;
 }
 
 function setStatus(message) {
@@ -884,3 +1072,6 @@ function endAnalyticsTimer(timerId, meta) {
     if (!analytics || typeof analytics.endTimer !== "function") return;
     analytics.endTimer(timerId, meta || {});
 }
+
+updateOutputPreview();
+updateWorkflowStep();

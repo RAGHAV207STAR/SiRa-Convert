@@ -51,8 +51,21 @@ const modeValue = document.getElementById("modeValue");
 const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
 const uploadedInputCanvas = document.getElementById("uploadedInputCanvas");
+const stepIndicator = document.getElementById("stepIndicator");
+const stepChips = stepIndicator ? stepIndicator.querySelectorAll(".step-chip") : [];
+const stepLines = stepIndicator ? stepIndicator.querySelectorAll(".step-line") : [];
+const controlsPanel = document.getElementById("controlsPanel");
+const uploadedPreviewPanel = document.getElementById("uploadedPreviewPanel");
+const outputPreviewPanel = document.getElementById("outputPreviewPanel");
+const progressWrap = progressBar ? progressBar.parentElement : null;
+const initialLayoutGrid = document.querySelector(".layout-grid");
+const initialSideColumn = initialLayoutGrid ? initialLayoutGrid.querySelector(".side-column") : null;
+const actionPanel = initialSideColumn ? initialSideColumn.querySelector(".action-panel") : null;
+const actionHead = actionPanel ? actionPanel.querySelector(".action-head") : null;
 let inlineAlert = null;
 let unlockCancelController = null;
+let workflowView = null;
+let activeGalleryItem = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -97,9 +110,13 @@ initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     pdfInput.click();
 });
-dropZone.addEventListener("click", () => pdfInput.click());
+dropZone.addEventListener("click", () => {
+    if (state.busy) return;
+    pdfInput.click();
+});
 dropZone.addEventListener("dragover", (event) => {
     event.preventDefault();
     dropZone.classList.add("dragging");
@@ -122,6 +139,7 @@ dropZone.addEventListener("drop", async (event) => {
 
 pasteBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     handlePasteButton();
 });
 document.addEventListener("paste", handlePasteShortcut);
@@ -143,7 +161,161 @@ shareZipBtn.addEventListener("click", shareZip);
 prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
 nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
 
+initializeWorkflowLayout();
 bootstrapDependencies();
+updateWorkflowStep();
+
+function initializeWorkflowLayout() {
+    if (!stepIndicator || !dropZone || !uploadedPreviewPanel || !outputPreviewPanel || !initialLayoutGrid || !initialSideColumn) {
+        return;
+    }
+
+    const workflowShell = document.createElement("div");
+    workflowShell.className = "workflow-shell";
+
+    const stepUpload = document.createElement("section");
+    stepUpload.id = "stepUpload";
+    stepUpload.className = "tool-step";
+
+    const stepPreview = document.createElement("section");
+    stepPreview.id = "stepPreview";
+    stepPreview.className = "tool-step";
+    stepPreview.hidden = true;
+
+    const stepResult = document.createElement("section");
+    stepResult.id = "stepResult";
+    stepResult.className = "tool-step";
+    stepResult.hidden = true;
+
+    const uploadShell = document.createElement("div");
+    uploadShell.className = "upload-stage-only";
+    uploadShell.appendChild(dropZone);
+    const uploadStatusShell = document.createElement("div");
+    uploadStatusShell.className = "stage-stack";
+    uploadStatusShell.appendChild(statusText);
+    if (progressWrap) {
+        uploadStatusShell.appendChild(progressWrap);
+    }
+    uploadShell.appendChild(uploadStatusShell);
+    stepUpload.appendChild(uploadShell);
+
+    const previewPrimary = document.createElement("div");
+    previewPrimary.className = "stage-stack";
+    previewPrimary.appendChild(fileMeta);
+    const previewStatusShell = document.createElement("div");
+    previewStatusShell.className = "stage-stack";
+    previewPrimary.appendChild(previewStatusShell);
+    previewPrimary.appendChild(uploadedPreviewPanel);
+
+    const previewLayout = document.createElement("div");
+    previewLayout.className = "layout-grid";
+    previewLayout.appendChild(previewPrimary);
+    previewLayout.appendChild(initialSideColumn);
+    stepPreview.appendChild(previewLayout);
+
+    const resultPrimary = document.createElement("div");
+    resultPrimary.className = "stage-stack";
+    const resultStatusShell = document.createElement("div");
+    resultStatusShell.className = "stage-stack";
+    resultPrimary.appendChild(resultStatusShell);
+    resultPrimary.appendChild(outputPreviewPanel);
+
+    const resultLayout = document.createElement("div");
+    resultLayout.className = "layout-grid";
+    resultLayout.appendChild(resultPrimary);
+    stepResult.appendChild(resultLayout);
+
+    workflowShell.appendChild(stepUpload);
+    workflowShell.appendChild(stepPreview);
+    workflowShell.appendChild(stepResult);
+    stepIndicator.insertAdjacentElement("afterend", workflowShell);
+
+    initialLayoutGrid.remove();
+
+    workflowView = {
+        stepUpload,
+        stepPreview,
+        stepResult,
+        uploadStatusShell,
+        previewStatusShell,
+        resultStatusShell,
+        previewLayout,
+        resultLayout
+    };
+}
+
+function updateWorkflowStep() {
+    const stepOrder = ["upload", "preview", "result"];
+    let currentStep = "upload";
+
+    if (state.images.length > 0 && !state.busy) {
+        currentStep = "result";
+    } else if (state.file) {
+        currentStep = "preview";
+    }
+
+    const activeIndex = stepOrder.indexOf(currentStep);
+    Array.from(stepChips).forEach((chip, index) => {
+        chip.classList.toggle("is-active", index === activeIndex);
+        chip.classList.toggle("is-complete", index < activeIndex);
+    });
+    Array.from(stepLines).forEach((line, index) => {
+        line.classList.toggle("is-active", index < activeIndex);
+    });
+
+    applyWorkflowStep(currentStep);
+}
+
+function applyWorkflowStep(step) {
+    if (!workflowView) return;
+
+    workflowView.stepUpload.hidden = step !== "upload";
+    workflowView.stepPreview.hidden = step !== "preview";
+    workflowView.stepResult.hidden = step !== "result";
+
+    const statusTarget = step === "upload"
+        ? workflowView.uploadStatusShell
+        : (step === "result" ? workflowView.resultStatusShell : workflowView.previewStatusShell);
+    if (statusText.parentElement !== statusTarget) {
+        statusTarget.appendChild(statusText);
+    }
+    if (progressWrap && progressWrap.parentElement !== statusTarget) {
+        statusTarget.appendChild(progressWrap);
+    }
+    if (progressWrap) {
+        progressWrap.hidden = !state.busy;
+    }
+
+    if (step === "preview" && initialSideColumn.parentElement !== workflowView.previewLayout) {
+        workflowView.previewLayout.appendChild(initialSideColumn);
+    }
+    if (step === "result" && initialSideColumn.parentElement !== workflowView.resultLayout) {
+        workflowView.resultLayout.appendChild(initialSideColumn);
+    }
+
+    if (controlsPanel) {
+        controlsPanel.hidden = step !== "preview";
+        if (step === "preview") {
+            controlsPanel.open = true;
+        }
+    }
+    if (uploadedPreviewPanel) {
+        uploadedPreviewPanel.open = step === "preview";
+    }
+    if (outputPreviewPanel) {
+        outputPreviewPanel.open = step === "result";
+    }
+    if (actionHead) {
+        actionHead.textContent = step === "result" ? "Download Actions" : "Conversion Controls";
+    }
+
+    convertBtn.hidden = step !== "preview";
+    downloadZipBtn.hidden = step !== "result";
+    downloadAllBtn.hidden = step !== "result";
+    shareZipBtn.hidden = step !== "result";
+    cancelUnlockBtn.hidden = step !== "preview" || !unlockCancelController;
+    clearBtn.hidden = step === "upload";
+}
 
 async function handlePasteButton() {
     if (!navigator.clipboard || !navigator.clipboard.read) {
@@ -169,6 +341,7 @@ async function handlePasteButton() {
 }
 
 async function handlePasteShortcut(event) {
+    if (state.busy) return;
     const items = event.clipboardData && event.clipboardData.items;
     if (!items) return;
 
@@ -266,6 +439,7 @@ async function handlePickedFile(file) {
     updateUploadedInputPreview(file, validation.numPages, sizeMB);
     resultInfo.textContent = "Ready to convert.";
     setStatus("PDF loaded. Set options and click Convert JPG.");
+    updateWorkflowStep();
     showToast("PDF accepted. Ready to convert.", "success");
     trackAnalytics("tool_file_ready", {
         tool: "pdf_to_jpg",
@@ -346,6 +520,7 @@ function setUnlockCancelUi(active) {
     if (!cancelUnlockBtn) return;
     cancelUnlockBtn.hidden = !active;
     cancelUnlockBtn.disabled = !active;
+    updateWorkflowStep();
 }
 
 if (cancelUnlockBtn) {
@@ -385,6 +560,7 @@ function resetAll() {
     shareZipBtn.disabled = true;
     resultInfo.textContent = "No pages converted yet.";
     setStatus("Waiting for PDF upload/paste.");
+    updateWorkflowStep();
     setUnlockCancelUi(false);
     unlockCancelController = null;
     clearInlineError();
@@ -527,7 +703,9 @@ async function convertPdfToJpg() {
                 throw new Error(`Failed converting page ${pageNumber}.`);
             }
 
-            const fileName = `page-${String(pageNumber).padStart(3, "0")}.${output.ext}`;
+            const fileName = targetPages.length > 1
+                ? `${getSourcePdfBaseName()} sira convert page-${String(pageNumber).padStart(3, "0")}.${output.ext}`
+                : `${getSourcePdfBaseName()} sira convert.${output.ext}`;
             const url = URL.createObjectURL(blob);
             const imageFile = new File([blob], fileName, { type: output.mime });
             state.images.push({
@@ -559,6 +737,7 @@ async function convertPdfToJpg() {
         const seconds = ((performance.now() - startTime) / 1000).toFixed(2);
         resultInfo.textContent = `${state.images.length} ${output.label} file(s) ready in ${seconds}s.`;
         setStatus("Conversion complete. You can download or share files.");
+        updateWorkflowStep();
         downloadZipBtn.disabled = state.images.length === 0 || !hasZip;
         downloadAllBtn.disabled = state.images.length === 0;
         shareZipBtn.disabled = state.images.length === 0 || !hasZip;
@@ -588,6 +767,7 @@ async function convertPdfToJpg() {
         }
         state.busy = false;
         convertBtn.disabled = !state.file;
+        updateWorkflowStep();
     }
 }
 
@@ -674,6 +854,11 @@ function getImageOutputConfig(mode) {
     return { mime: "image/jpeg", ext: "jpg", label: "JPG" };
 }
 
+function getSourcePdfBaseName() {
+    const fileName = state.file && state.file.name ? state.file.name : "document.pdf";
+    return fileName.replace(/\.[^.]+$/, "").trim() || "document";
+}
+
 function yieldToUi() {
     return new Promise((resolve) => {
         if (typeof requestAnimationFrame === "function") {
@@ -724,9 +909,9 @@ function setPreviewByIndex(imageIndex) {
     prevPreviewBtn.disabled = imageIndex === 0;
     nextPreviewBtn.disabled = imageIndex === state.images.length - 1;
 
-    Array.from(gallery.children).forEach((item, idx) => {
-        item.classList.toggle("active", idx === imageIndex);
-    });
+    if (activeGalleryItem) activeGalleryItem.classList.remove("active");
+    activeGalleryItem = gallery.children[imageIndex] || null;
+    if (activeGalleryItem) activeGalleryItem.classList.add("active");
 }
 
 function clearPreview() {
@@ -738,7 +923,10 @@ function clearPreview() {
     previewMeta.textContent = "Convert a PDF to see image details and preview.";
     prevPreviewBtn.disabled = true;
     nextPreviewBtn.disabled = true;
-    Array.from(gallery.children).forEach((item) => item.classList.remove("active"));
+    if (activeGalleryItem) {
+        activeGalleryItem.classList.remove("active");
+        activeGalleryItem = null;
+    }
 }
 
 async function getZipBlob() {
@@ -764,7 +952,7 @@ async function downloadAllAsZip() {
         const zipUrl = URL.createObjectURL(zipBlob);
         const link = document.createElement("a");
         link.href = zipUrl;
-        link.download = "sira-pdf-to-jpg.zip";
+        link.download = `${getSourcePdfBaseName()} sira convert.zip`;
         document.body.appendChild(link);
         link.click();
         link.remove();

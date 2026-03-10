@@ -44,8 +44,21 @@ const sortValue = document.getElementById("sortValue");
 const modeValue = document.getElementById("modeValue");
 const modeHint = document.getElementById("modeHint");
 const toast = document.getElementById("toast");
+const stepIndicator = document.getElementById("stepIndicator");
+const stepChips = stepIndicator ? stepIndicator.querySelectorAll(".step-chip") : [];
+const stepLines = stepIndicator ? stepIndicator.querySelectorAll(".step-line") : [];
+const controlsPanel = document.getElementById("controlsPanel");
+const uploadedPreviewPanel = document.getElementById("uploadedPreviewPanel");
+const outputPreviewPanel = document.getElementById("outputPreviewPanel");
+const progressWrap = progressBar ? progressBar.parentElement : null;
+const initialLayoutGrid = document.querySelector(".layout-grid");
+const initialSideColumn = initialLayoutGrid ? initialLayoutGrid.querySelector(".side-column") : null;
+const actionPanel = initialSideColumn ? initialSideColumn.querySelector(".action-panel") : null;
+const actionHead = actionPanel ? actionPanel.querySelector(".action-head") : null;
 let inlineAlert = null;
 let unlockCancelController = null;
+let workflowView = null;
+let activeGalleryItem = null;
 if (window.SiRaShared) {
     window.SiRaShared.initTheme();
     window.SiRaShared.initUserMenu();
@@ -83,9 +96,13 @@ initializeModePreset();
 
 uploadBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     pdfInput.click();
 });
-dropZone.addEventListener("click", () => pdfInput.click());
+dropZone.addEventListener("click", () => {
+    if (state.busy) return;
+    pdfInput.click();
+});
 dropZone.addEventListener("dragover", (event) => {
     event.preventDefault();
     dropZone.classList.add("dragging");
@@ -101,6 +118,7 @@ dropZone.addEventListener("drop", async (event) => {
 
 pasteBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    if (state.busy) return;
     handlePasteButton();
 });
 document.addEventListener("paste", handlePasteShortcut);
@@ -117,6 +135,159 @@ downloadPdfBtn.addEventListener("click", downloadMergedPdf);
 sharePdfBtn.addEventListener("click", shareMergedPdf);
 prevPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex - 1));
 nextPreviewBtn.addEventListener("click", () => setPreviewByIndex(state.activeIndex + 1));
+
+initializeWorkflowLayout();
+
+function initializeWorkflowLayout() {
+    if (!stepIndicator || !dropZone || !uploadedPreviewPanel || !outputPreviewPanel || !initialLayoutGrid || !initialSideColumn) {
+        return;
+    }
+
+    const workflowShell = document.createElement("div");
+    workflowShell.className = "workflow-shell";
+
+    const stepUpload = document.createElement("section");
+    stepUpload.id = "stepUpload";
+    stepUpload.className = "tool-step";
+
+    const stepPreview = document.createElement("section");
+    stepPreview.id = "stepPreview";
+    stepPreview.className = "tool-step";
+    stepPreview.hidden = true;
+
+    const stepResult = document.createElement("section");
+    stepResult.id = "stepResult";
+    stepResult.className = "tool-step";
+    stepResult.hidden = true;
+
+    const uploadShell = document.createElement("div");
+    uploadShell.className = "upload-stage-only";
+    uploadShell.appendChild(dropZone);
+    const uploadStatusShell = document.createElement("div");
+    uploadStatusShell.className = "stage-stack";
+    uploadStatusShell.appendChild(statusText);
+    if (progressWrap) {
+        uploadStatusShell.appendChild(progressWrap);
+    }
+    uploadShell.appendChild(uploadStatusShell);
+    stepUpload.appendChild(uploadShell);
+
+    const previewPrimary = document.createElement("div");
+    previewPrimary.className = "stage-stack";
+    previewPrimary.appendChild(fileMeta);
+    const previewStatusShell = document.createElement("div");
+    previewStatusShell.className = "stage-stack";
+    previewPrimary.appendChild(previewStatusShell);
+    previewPrimary.appendChild(uploadedPreviewPanel);
+
+    const previewLayout = document.createElement("div");
+    previewLayout.className = "layout-grid";
+    previewLayout.appendChild(previewPrimary);
+    previewLayout.appendChild(initialSideColumn);
+    stepPreview.appendChild(previewLayout);
+
+    const resultPrimary = document.createElement("div");
+    resultPrimary.className = "stage-stack";
+    const resultStatusShell = document.createElement("div");
+    resultStatusShell.className = "stage-stack";
+    resultPrimary.appendChild(resultStatusShell);
+    resultPrimary.appendChild(outputPreviewPanel);
+
+    const resultLayout = document.createElement("div");
+    resultLayout.className = "layout-grid";
+    resultLayout.appendChild(resultPrimary);
+    stepResult.appendChild(resultLayout);
+
+    workflowShell.appendChild(stepUpload);
+    workflowShell.appendChild(stepPreview);
+    workflowShell.appendChild(stepResult);
+    stepIndicator.insertAdjacentElement("afterend", workflowShell);
+
+    initialLayoutGrid.remove();
+
+    workflowView = {
+        stepUpload,
+        stepPreview,
+        stepResult,
+        uploadStatusShell,
+        previewStatusShell,
+        resultStatusShell,
+        previewLayout,
+        resultLayout
+    };
+}
+
+function updateWorkflowStep() {
+    const stepOrder = ["upload", "preview", "result"];
+    let currentStep = "upload";
+
+    if (state.mergedBlob && !state.busy) {
+        currentStep = "result";
+    } else if (state.files.length > 0) {
+        currentStep = "preview";
+    }
+
+    const activeIndex = stepOrder.indexOf(currentStep);
+    Array.from(stepChips).forEach((chip, index) => {
+        chip.classList.toggle("is-active", index === activeIndex);
+        chip.classList.toggle("is-complete", index < activeIndex);
+    });
+    Array.from(stepLines).forEach((line, index) => {
+        line.classList.toggle("is-active", index < activeIndex);
+    });
+
+    applyWorkflowStep(currentStep);
+}
+
+function applyWorkflowStep(step) {
+    if (!workflowView) return;
+
+    workflowView.stepUpload.hidden = step !== "upload";
+    workflowView.stepPreview.hidden = step !== "preview";
+    workflowView.stepResult.hidden = step !== "result";
+
+    const statusTarget = step === "upload"
+        ? workflowView.uploadStatusShell
+        : (step === "result" ? workflowView.resultStatusShell : workflowView.previewStatusShell);
+    if (statusText.parentElement !== statusTarget) {
+        statusTarget.appendChild(statusText);
+    }
+    if (progressWrap && progressWrap.parentElement !== statusTarget) {
+        statusTarget.appendChild(progressWrap);
+    }
+    if (progressWrap) {
+        progressWrap.hidden = !state.busy;
+    }
+
+    if (step === "preview" && initialSideColumn.parentElement !== workflowView.previewLayout) {
+        workflowView.previewLayout.appendChild(initialSideColumn);
+    }
+    if (step === "result" && initialSideColumn.parentElement !== workflowView.resultLayout) {
+        workflowView.resultLayout.appendChild(initialSideColumn);
+    }
+
+    if (controlsPanel) {
+        controlsPanel.hidden = step !== "preview";
+        if (step === "preview") {
+            controlsPanel.open = true;
+        }
+    }
+    if (uploadedPreviewPanel) {
+        uploadedPreviewPanel.open = step === "preview";
+    }
+    if (outputPreviewPanel) {
+        outputPreviewPanel.open = step === "result";
+    }
+    if (actionHead) {
+        actionHead.textContent = step === "result" ? "Download Actions" : "Quick Actions";
+    }
+
+    mergeBtn.hidden = step !== "preview";
+    downloadPdfBtn.hidden = step !== "result";
+    sharePdfBtn.hidden = step !== "result";
+    cancelUnlockBtn.hidden = step !== "preview" || !unlockCancelController;
+    clearBtn.hidden = step === "upload";
+}
 
 async function handlePasteButton() {
     if (!navigator.clipboard || !navigator.clipboard.read) {
@@ -143,6 +314,7 @@ async function handlePasteButton() {
 }
 
 async function handlePasteShortcut(event) {
+    if (state.busy) return;
     const items = event.clipboardData && event.clipboardData.items;
     if (!items) return;
 
@@ -209,6 +381,7 @@ async function addFiles(files) {
     updateFileMeta();
     resultInfo.textContent = state.files.length ? `${state.files.length} PDF file(s) queued.` : "No PDF files selected yet.";
     setStatus(state.files.length ? "PDF files ready. Click Merge PDFs." : "Waiting for PDF upload/paste.");
+    updateWorkflowStep();
     showToast(`${pdfFiles.length} PDF file(s) added.`, "success");
     trackAnalytics("tool_file_ready", {
         tool: "merge_pdf",
@@ -273,6 +446,8 @@ function getSortedFiles() {
 function renderQueue() {
     gallery.innerHTML = "";
     galleryCount.textContent = `${state.files.length} file${state.files.length > 1 ? "s" : ""}`;
+    activeGalleryItem = null;
+    const fragment = document.createDocumentFragment();
 
     state.files.forEach((fileItem, index) => {
         const card = document.createElement("article");
@@ -310,8 +485,9 @@ function renderQueue() {
             state.dragIndex = -1;
             card.classList.remove("drag-over");
         });
-        gallery.appendChild(card);
+        fragment.appendChild(card);
     });
+    gallery.appendChild(fragment);
 
     if (state.files.length) {
         setPreviewByIndex(Math.max(0, Math.min(state.activeIndex, state.files.length - 1)));
@@ -340,9 +516,9 @@ function setPreviewByIndex(index) {
         </div>
     `;
 
-    Array.from(gallery.children).forEach((card, idx) => {
-        card.classList.toggle("active", idx === index);
-    });
+    if (activeGalleryItem) activeGalleryItem.classList.remove("active");
+    activeGalleryItem = gallery.children[index] || null;
+    if (activeGalleryItem) activeGalleryItem.classList.add("active");
 }
 
 function removePdf(index) {
@@ -359,6 +535,7 @@ function removePdf(index) {
     updateFileMeta();
     resultInfo.textContent = state.files.length ? `${state.files.length} PDF file(s) queued.` : "No PDF files selected yet.";
     setStatus(state.files.length ? "PDF removed." : "Waiting for PDF upload/paste.");
+    updateWorkflowStep();
 }
 
 function reorderPdfFiles(fromIndex, toIndex) {
@@ -375,6 +552,7 @@ function reorderPdfFiles(fromIndex, toIndex) {
     downloadPdfBtn.disabled = true;
     sharePdfBtn.disabled = true;
     setStatus("Queue order updated.");
+    updateWorkflowStep();
 }
 
 async function mergePdfFiles() {
@@ -449,6 +627,7 @@ async function mergePdfFiles() {
         resultInfo.textContent = `Merged ${mergedCount} PDF file(s) successfully.`;
         updateOutputPreview(mergedCount);
         setStatus("Merge complete. Original page quality preserved. You can download or share merged PDF.");
+        updateWorkflowStep();
         clearInlineError();
         downloadPdfBtn.disabled = false;
         sharePdfBtn.disabled = false;
@@ -475,6 +654,7 @@ async function mergePdfFiles() {
     } finally {
         state.busy = false;
         mergeBtn.disabled = state.files.length < 2;
+        updateWorkflowStep();
     }
 }
 
@@ -548,8 +728,7 @@ async function shareMergedPdf() {
 }
 
 function buildOutputName() {
-    const base = (outputNameInput.value || "sira-merged-pdf").trim() || "sira-merged-pdf";
-    return base.toLowerCase().endsWith(".pdf") ? base : `${base}.pdf`;
+    return "siraconvert-merge.pdf";
 }
 
 function updateFileMeta() {
@@ -589,6 +768,7 @@ function resetAll() {
     sharePdfBtn.disabled = true;
     resultInfo.textContent = "No PDF files selected yet.";
     setStatus("Waiting for PDF upload/paste.");
+    updateWorkflowStep();
     setUnlockCancelUi(false);
     unlockCancelController = null;
     clearInlineError();
@@ -600,6 +780,10 @@ function clearPreview() {
     previewMeta.textContent = "Upload PDFs to inspect queue details.";
     prevPreviewBtn.disabled = true;
     nextPreviewBtn.disabled = true;
+    if (activeGalleryItem) {
+        activeGalleryItem.classList.remove("active");
+        activeGalleryItem = null;
+    }
 }
 
 function updateOutputPreview(mergedCount) {
@@ -608,6 +792,7 @@ function updateOutputPreview(mergedCount) {
     if (!state.mergedBlob) {
         outputResultInfo.textContent = "Merge PDFs to view output details.";
         outputPreviewCanvas.innerHTML = '<p class="preview-empty">Your merged PDF summary will appear here after processing.</p>';
+        updateWorkflowStep();
         return;
     }
 
@@ -621,6 +806,7 @@ function updateOutputPreview(mergedCount) {
             <p>${pagesText}</p>
         </div>
     `;
+    updateWorkflowStep();
 }
 
 function revokeMergedUrl() {
@@ -740,6 +926,7 @@ function setUnlockCancelUi(active) {
     if (!cancelUnlockBtn) return;
     cancelUnlockBtn.hidden = !active;
     cancelUnlockBtn.disabled = !active;
+    updateWorkflowStep();
 }
 
 if (cancelUnlockBtn) {
@@ -784,3 +971,6 @@ function endAnalyticsTimer(timerId, meta) {
     if (!analytics || typeof analytics.endTimer !== "function") return;
     analytics.endTimer(timerId, meta || {});
 }
+
+updateOutputPreview();
+updateWorkflowStep();

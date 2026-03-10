@@ -1,51 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://siraconvert.vercel.app/</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/jpg-to-pdf.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/pdf-to-jpg.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/merge-pdf.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/about.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/privacy.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/terms.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://siraconvert.vercel.app/blog.html</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://siraconvert.vercel.app/</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <!-- Core tools -->
+  <url><loc>https://siraconvert.vercel.app/photo-compressor.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://siraconvert.vercel.app/image-compressor.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/online-photo-compressor.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/image-compression-sizes.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/reduce-image-size.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/reduce-photo-size.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/bulk-image-compressor.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <!-- Size-focused pages -->
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-10kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-20kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.92</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-30kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-40kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-50kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.92</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-60kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-70kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-80kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-90kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-100kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.92</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-120kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-150kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-180kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-200kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.92</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-250kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-300kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-350kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-400kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-450kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-to-500kb.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+
+  <!-- File-type pages -->
+  <url><loc>https://siraconvert.vercel.app/compress-jpg.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-jpeg.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-png.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-webp.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
+
+  <!-- Use-case pages -->
+  <url><loc>https://siraconvert.vercel.app/compress-image-for-passport.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-for-online-form.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-for-government-form.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://siraconvert.vercel.app/compress-image-for-job-application.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.88</priority></url>
+
+  <!-- Other site pages -->
+  <url><loc>https://siraconvert.vercel.app/jpg-to-pdf.html</loc><lastmod>2026-03-05</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://siraconvert.vercel.app/pdf-to-jpg.html</loc><lastmod>2026-03-05</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://siraconvert.vercel.app/merge-pdf.html</loc><lastmod>2026-03-05</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://siraconvert.vercel.app/about.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://siraconvert.vercel.app/privacy.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://siraconvert.vercel.app/terms.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://siraconvert.vercel.app/blog.html</loc><lastmod>2026-03-10</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

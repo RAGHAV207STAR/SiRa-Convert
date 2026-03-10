@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="format-detection" content="telephone=no">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.google.com https://*.doubleclick.net; img-src 'self' data: blob: https:; script-src 'self' 'sha256-lT2u58L/YsENja24Iflkjbp6TYRqVrC92cdunr7s02Y=' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://partner.googleadservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.google.com https://*.doubleclick.net https://ep2.adtrafficquality.google; img-src 'self' data: blob: https:; script-src 'self' 'sha256-lT2u58L/YsENja24Iflkjbp6TYRqVrC92cdunr7s02Y=' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://partner.googleadservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; worker-src 'self' blob: https://cdnjs.cloudflare.com;">
 <title>PDF to JPG Converter Online Free - Convert PDF in JPG | SiRa Convert</title>
 <meta name="description" content="Convert PDF to JPG online free. Extract selected pages as JPG or PNG, control output quality, and download all images as ZIP in one click.">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
@@ -1118,6 +1118,76 @@ input[type="range"]{
     color:var(--tool-text-muted);
 }
 
+.step-indicator{
+    width:min(100%, 980px);
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.step-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid var(--tool-pill-border);
+    background:linear-gradient(145deg, var(--tool-pill-bg), rgba(255,255,255,.01));
+    color:var(--tool-text-muted);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+    transform:scale(.98);
+    transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease, color .22s ease, opacity .22s ease, background .22s ease;
+}
+
+.step-chip.is-active{
+    color:var(--text-main);
+    border-color:var(--tool-border-strong);
+    box-shadow:0 12px 24px rgba(0, 10, 22, 0.14);
+    transform:scale(1.03);
+}
+
+.step-chip.is-complete{
+    color:var(--tool-text-soft);
+    border-color:rgba(86,194,255,.28);
+}
+
+.step-number{
+    width:28px;
+    height:28px;
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    border:1px solid var(--tool-pill-border);
+    background:var(--tool-surface-soft);
+    font-size:.78rem;
+    font-weight:800;
+    transition:inherit;
+}
+
+.step-chip.is-active .step-number{
+    background:linear-gradient(135deg, rgba(56,189,248,.28), rgba(37,99,235,.18));
+    border-color:rgba(56,189,248,.42);
+}
+
+.step-line{
+    width:42px;
+    height:1px;
+    background:linear-gradient(90deg, rgba(125,156,204,.18), rgba(125,156,204,.5), rgba(125,156,204,.18));
+    transition:opacity .22s ease, transform .22s ease, background .22s ease;
+}
+
+.step-line.is-active{
+    background:linear-gradient(90deg, rgba(56,189,248,.22), rgba(37,99,235,.64), rgba(56,189,248,.22));
+}
+
+.workflow-shell{ display:grid; gap:22px; }
+.tool-step{ display:grid; gap:18px; }
+.tool-step[hidden]{ display:none !important; }
+.stage-stack{ display:grid; gap:16px; }
+.upload-stage-only{ width:min(100%, 920px); margin:0 auto; }
+
 [data-theme="light"]{
     --tool-panel: rgba(255, 255, 255, 0.94);
     --tool-surface: rgba(255, 255, 255, 0.95);
@@ -1317,6 +1387,10 @@ input[type="range"]{
     .action-grid{
         grid-template-columns:1fr;
     }
+    .step-indicator{ gap:6px; margin-bottom:14px; }
+    .step-chip{ padding:8px 10px; gap:6px; }
+    .step-number{ width:24px; height:24px; font-size:.72rem; }
+    .step-line{ width:18px; }
     .btn{
         padding:11px 14px;
     }
@@ -1457,6 +1531,23 @@ input[type="range"]{
         <div class="tool-head">
             <h1>PDF to <span class="accent">JPG</span></h1>
             <p>Convert PDF pages to high-quality JPG images directly in your browser.</p>
+        </div>
+
+        <div id="stepIndicator" class="step-indicator" aria-label="PDF to JPG workflow steps">
+            <div class="step-chip is-active" data-step="upload">
+                <span class="step-number">1</span>
+                <span class="step-label">Upload</span>
+            </div>
+            <span class="step-line" aria-hidden="true"></span>
+            <div class="step-chip" data-step="preview">
+                <span class="step-number">2</span>
+                <span class="step-label">Preview</span>
+            </div>
+            <span class="step-line" aria-hidden="true"></span>
+            <div class="step-chip" data-step="result">
+                <span class="step-number">3</span>
+                <span class="step-label">Download</span>
+            </div>
         </div>
 
         <div class="layout-grid">
