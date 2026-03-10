@@ -1,4 +1,4 @@
-const SW_VERSION = "v17";
+const SW_VERSION = "v18";
 const STATIC_CACHE = `sira-static-${SW_VERSION}`;
 const RUNTIME_CACHE = `sira-runtime-${SW_VERSION}`;
 const MAX_RUNTIME_ENTRIES = 120;
@@ -6,6 +6,7 @@ const MAX_RUNTIME_ENTRIES = 120;
 const APP_SHELL = [
     "/",
     "/index.html",
+    "/photo-compressor.html",
     "/jpg-to-pdf.html",
     "/pdf-to-jpg.html",
     "/merge-pdf.html",
@@ -18,6 +19,7 @@ const APP_SHELL = [
     "/shared-ui.js",
     "/shared-unlock.js",
     "/index.js",
+    "/js/photo-compressor.js",
     "/jpg-to-pdf.js",
     "/merge-pdf.js",
     "/pdf-to-jpg.js",

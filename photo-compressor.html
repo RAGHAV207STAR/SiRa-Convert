@@ -12,7 +12,12 @@
 <meta name="keywords" content="compress image to 20kb, compress image to 50kb, compress image to 100kb, compress image online, reduce image size in kb, compress photo online, compress jpg image online, reduce photo size without losing quality, free image compressor online, bulk image compressor">
 <meta name="author" content="SiRa Convert">
 <meta name="application-name" content="SiRa Convert">
-<meta name="theme-color" content="#0f6cff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SiRa Convert">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7fbff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#030812">
 <link rel="canonical" href="https://siraconvert.vercel.app/photo-compressor.html">
 <meta property="og:title" content="Compress Image to 20KB, 50KB, 100KB Online Free | SiRa Convert">
 <meta property="og:description" content="Reduce image size online with exact KB targets, multiple presets, browser-side compression, and one-click downloads.">
@@ -32,6 +37,21 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="style.css" />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&family=Outfit:wght@600;900&display=swap" rel="stylesheet" />
+<script>
+// Keep the PWA status bar aligned with current theme.
+(function syncThemeColor() {
+  var root = document.documentElement;
+  var lightMeta = document.querySelector('meta[name="theme-color"][media*="light"]');
+  var darkMeta = document.querySelector('meta[name="theme-color"][media*="dark"]');
+  var update = function () {
+    var theme = root.getAttribute("data-theme") || "light";
+    if (theme === "dark" && darkMeta) darkMeta.setAttribute("content", "#030812");
+    if (theme !== "dark" && lightMeta) lightMeta.setAttribute("content", "#f7fbff");
+  };
+  update();
+  new MutationObserver(update).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ1PPS64C"></script>
 <script src="gtag-init.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190" crossorigin="anonymous"></script>
