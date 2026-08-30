@@ -1,236 +1,226 @@
-# Query: <head>
+# Query: </head>
+# Flags: CaseSensitive RegExp
 # ContextLines: 1
 
 44 results - 44 files
 
 about.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  313  <script src="analytics.js" defer></script>
+  314: </head>
+  315  <body>
 
 blog.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  290  <script src="analytics.js" defer></script>
+  291: </head>
+  292  <body>
 
 bulk-image-compressor.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-for-government-form.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-for-job-application.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-for-online-form.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-for-passport.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-10kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-20kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-30kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-40kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-50kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-60kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-70kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-80kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-90kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-100kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-120kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-150kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-180kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-200kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-250kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-300kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-350kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-400kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-450kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-image-to-500kb.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-jpeg.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-jpg.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-png.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 compress-webp.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 image-compression-sizes.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 image-compressor.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 index.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4      <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
+  79  <script src="analytics.js" defer></script>
+  80: </head>
+  81  <body>
 
 jpg-to-pdf.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  566  <script src="analytics.js" defer></script>
+  567: </head>
+  568  <body>
 
 merge-pdf.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  479  <script src="analytics.js" defer></script>
+  480: </head>
+  481  <body>
 
 offline.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4    <meta charset="UTF-8" />
+  56    </style>
+  57: </head>
+  58  <body>
 
 online-photo-compressor.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 pdf-to-jpg.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1489  <script src="analytics.js" defer></script>
+  <script src="https://quge5.com/88/tag.min.js" data-zone="274654" async data-cfasync="false"></script>
+  1490: </head>
+  1491  <body>
 
 photo-compressor.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1142  </style>
+  1143: </head>
+  1144  <body>
 
 privacy.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  271  <script src="analytics.js" defer></script>
+  272: </head>
+  273  <body>
 
 reduce-image-size.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 reduce-photo-size.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  1122  </style>
+  1123: </head>
+  1124  <body>
 
 terms.html:
-  2  <html lang="en" data-theme="light">
-  3: <head>
-  4  <meta charset="UTF-8" />
+  246  <script src="analytics.js" defer></script>
+  247: </head>
+  248  <body>
